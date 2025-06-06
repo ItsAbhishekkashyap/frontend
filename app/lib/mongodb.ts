@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 let isConnected = false;
 
 export const connectToDB = async () => {
-  const MONGODB_URI = process.env.MONGODB_URI;
+  const MONGODB_URI = 'mongodb+srv://abhi47025:mCW3vxV8109BWP0X@cluster0.2gqdjtq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
   console.log('[DEBUG] Full env:', process.env);
 
 
