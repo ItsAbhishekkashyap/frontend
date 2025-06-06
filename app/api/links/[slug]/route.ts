@@ -1,20 +1,29 @@
 import { connectToDB } from '@/lib/mongodb';
 import { Url } from '@/models/Url';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(_: Request, { params }: { params: { slug: string } }) {
+export async function GET(
+  request: NextRequest,
+  context: { params: { slug: string } }
+) {
+  const { params } = context; // ✅ Access params from awaited context
+  const { slug } = params;
+
   try {
     await connectToDB();
-    const { slug } = params;
 
-    const urlDoc = await Url.findOne({ slug });
+    const urlEntry = await Url.findOne({ slug });
 
-    if (!urlDoc) {
-      return new Response(JSON.stringify({ error: 'URL not found' }), { status: 404 });
+    if (!urlEntry) {
+      return NextResponse.json({ error: 'Slug not found' }, { status: 404 });
     }
 
-    return Response.redirect(urlDoc.originalUrl, 302);
+    return NextResponse.json({ originalUrl: urlEntry.originalUrl });
   } catch (error) {
-    console.error('[ERROR_REDIRECT_LINK]', error);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
+    console.error('[GET /api/links/[slug]]', error);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+
+
+

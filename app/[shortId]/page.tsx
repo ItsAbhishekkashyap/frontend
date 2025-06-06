@@ -1,21 +1,24 @@
 import { redirect } from 'next/navigation';
 
 export default async function RedirectPage({ params }: { params: { shortId: string } }) {
-  const { shortId } = params;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  
-  const res = await fetch(`${backendUrl}/api/links/${shortId}`, {
+  const res = await fetch(`${baseUrl}/api/links/${params.shortId}`, {
     cache: 'no-store',
   });
 
   if (!res.ok) {
+    // fallback redirect if slug not found
     redirect('/');
   }
 
   const data = await res.json();
+
+  // ✅ finally redirect user
   redirect(data.originalUrl);
 }
+
+
 
 
 
