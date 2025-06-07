@@ -6,14 +6,19 @@ type ClickData = { date: string; count: number };
 
 export default function ClickTrendChart({ slug }: { slug: string }) {
   const [data, setData] = useState<ClickData[]>([]);
+  console.log("🔍 Slug received in ClickTrendChart:", slug);
+
 
   useEffect(() => {
-    fetch(`/api/links/analytics/${slug}`)
-      .then((res) => res.json())
-      .then((json) => {
-        setData(json.clickData || []);
-      });
-  }, [slug]);
+  fetch(`/api/links/analytics/${slug}`)
+    .then((res) => res.json())
+    .then((json) => {
+      console.log('✅ Fetched chart data:', json);  // ✅ Add this line
+      setData(json.clickData || []);
+    });
+}, [slug]);
+
+
 
   function exportToCSV(data: ClickData[], filename = 'click_report.csv') {
     const csvRows = [
@@ -98,4 +103,5 @@ export default function ClickTrendChart({ slug }: { slug: string }) {
 
   );
 }
+
 

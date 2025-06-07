@@ -27,7 +27,10 @@ export async function GET(
       const date = new Date(clickDate);
       const dateStr = date.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
       clickCounts[dateStr] = (clickCounts[dateStr] || 0) + 1;
+       
     });
+
+
 
     // Convert grouped data into array sorted by date
     const clickData = Object.entries(clickCounts)
@@ -35,6 +38,7 @@ export async function GET(
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return NextResponse.json({ clickData });
+       
   } catch (error) {
     console.error('Error fetching analytics:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

@@ -19,6 +19,7 @@ export async function GET(
     // ✅ Update clicks and lastAccessed
     found.clicks = (found.clicks || 0) + 1;
     found.lastAccessed = new Date();
+    found.clickHistory.push(new Date());
     await found.save();
 
     return NextResponse.redirect(found.originalUrl);

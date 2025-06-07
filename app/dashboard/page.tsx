@@ -1,290 +1,263 @@
+
+
+
 // 'use client';
 
-// import { useState, useEffect } from 'react';
-// import { useRouter } from 'next/navigation';
+// import { useEffect, useState } from 'react';
+// import { FiCopy, FiExternalLink } from 'react-icons/fi';
 // import { motion } from 'framer-motion';
-// import { FiLogOut, FiUser, FiZap, FiLink, FiBarChart2, FiSettings } from 'react-icons/fi';
+// import ClickTrendChart from '@/components/ClickTrendChart';
+
+// type LinkType = {
+//     _id: string;
+//     originalUrl: string;
+//     alias: string;
+//     createdAt: string;
+//     clicks: number;
+//     lastAccessed: string | null;
+// };
 
 // export default function Dashboard() {
-//   const router = useRouter();
-//   const [user, setUser] = useState<{ email?: string; premium?: boolean } | null>(null);
-//   const [loading, setLoading] = useState(true);
-//   const [loggingOut, setLoggingOut] = useState(false);
-//   const [activeTab, setActiveTab] = useState('links');
+//     const [originalUrl, setOriginalUrl] = useState('');
+//     const [customAlias, setCustomAlias] = useState('');
+//     const [premium, setPremium] = useState(false);
+//     const [slug, setSlug] = useState('');
+//     const [error, setError] = useState('');
+//     const [baseUrl, setBaseUrl] = useState('');
+//     const [links, setLinks] = useState<LinkType[]>([]);
 
-//   useEffect(() => {
-//     async function fetchUser() {
-//       try {
-//         const res = await fetch('/api/auth/me', { credentials: 'include' });
-//         if (!res.ok) throw new Error('Not authenticated');
-//         const data = await res.json();
-//         setUser(data.user || {});
-//       } catch {
-//         router.push('/login');
-//       } finally {
-//         setLoading(false);
-//       }
+//     // Get base URL and user info
+//     useEffect(() => {
+//         if (typeof window !== 'undefined') {
+//             setBaseUrl(window.location.origin);
+//         }
+
+//         async function fetchUserAndLinks() {
+//             const res = await fetch('/api/auth/me', { credentials: 'include' });
+//             const user = await res.json();
+
+//             if (user?.user?.id) {
+//                 setPremium(user.user.premium);
+
+//                 const linksRes = await fetch('/api/links/user', { credentials: 'include' });
+//                 if (linksRes.ok) {
+//                     const linkData = await linksRes.json();
+//                     setLinks(linkData.links);
+//                 }
+//             }
+//         }
+
+//         fetchUserAndLinks();
+//     }, []);
+
+//     async function handleSubmit(e: React.FormEvent) {
+//         e.preventDefault();
+//         setError('');
+//         setSlug('');
+
+//         try {
+//             const res = await fetch('/api/links/create', {
+//                 method: 'POST',
+//                 credentials: 'include',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({
+//                     originalUrl,
+//                     ...(customAlias ? { customAlias } : {})
+//                 }),
+//             });
+
+//             const data = await res.json();
+//             if (!res.ok) {
+//                 setError(data.error || 'Failed to shorten URL');
+//                 return;
+//             }
+
+//             setSlug(data.slug);
+//             setOriginalUrl('');
+//             setCustomAlias('');
+
+//             setLinks((prev) => [
+//                 {
+//                     _id: data._id,
+//                     originalUrl: data.originalUrl,
+//                     alias: data.slug,
+//                     createdAt: data.createdAt,
+//                     clicks: data.clicks || 0,
+//                     lastAccessed: data.lastAccessed || null,
+//                 },
+//                 ...prev,
+//             ]);
+//         } catch {
+//             setError('Something went wrong');
+//         }
 //     }
-//     fetchUser();
-//   }, [router]);
 
-//   async function handleLogout() {
-//     setLoggingOut(true);
-//     await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-//     router.push('/login');
-//   }
+//     async function handleDelete(alias: string) {
+//         const res = await fetch(`/api/links/${alias}`, {
+//             method: 'DELETE',
+//             credentials: 'include',
+//         });
 
-//   if (loading) {
+//         if (res.ok) {
+//             setLinks((prev) => prev.filter((link) => link.alias !== alias));
+//         } else {
+//             console.error('Failed to delete');
+//         }
+//     }
+
+
+
+//     const fullShortUrl = slug ? `${baseUrl}/${slug}` : '';
+
 //     return (
-//       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-//         <div className="text-center">
-//           <div className="inline-flex items-center justify-center mb-4">
-//             <svg className="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-//               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-//               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-//             </svg>
-//           </div>
-//           <p className="text-lg text-gray-700">Loading your dashboard...</p>
-//         </div>
-//       </div>
-//     );
-//   }
+//         <main className="max-w-5xl mx-auto p-4">
+//             <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-//   // Safe way to get username from email
-//   const getUsername = () => {
-//     if (!user?.email) return 'User';
-//     return user.email.split('@')[0] || 'User';
-//   };
+//             {/* Shorten URL form */}
+//             <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
+//                 <input
+//                     type="text"
+//                     value={originalUrl}
+//                     onChange={(e) => setOriginalUrl(e.target.value)}
+//                     placeholder="Enter original URL"
+//                     className="w-full border p-2 rounded"
+//                     required
+//                 />
 
-//   return (
-//     <div className="min-h-screen bg-gray-50 flex">
-//       {/* Sidebar */}
-//       <div className="hidden md:flex md:flex-shrink-0">
-//         <div className="flex flex-col w-64 border-r border-gray-200 bg-white">
-//           <div className="flex items-center h-16 px-4 border-b border-gray-200">
-//             <FiLink className="text-indigo-600 text-xl mr-2" />
-//             <h1 className="text-xl font-bold text-gray-900">ShortLink</h1>
-//           </div>
-//           <div className="flex flex-col flex-grow p-4 overflow-y-auto">
-//             <nav className="flex-1 space-y-2">
-//               <button
-//                 onClick={() => setActiveTab('links')}
-//                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg w-full text-left ${activeTab === 'links' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
-//               >
-//                 <FiLink className="mr-3" />
-//                 My Links
-//               </button>
-//               <button
-//                 onClick={() => setActiveTab('analytics')}
-//                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg w-full text-left ${activeTab === 'analytics' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
-//               >
-//                 <FiBarChart2 className="mr-3" />
-//                 Analytics
-//               </button>
-//               <button
-//                 onClick={() => setActiveTab('settings')}
-//                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg w-full text-left ${activeTab === 'settings' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
-//               >
-//                 <FiSettings className="mr-3" />
-//                 Settings
-//               </button>
-//             </nav>
-//           </div>
-//           <div className="p-4 border-t border-gray-200">
-//             <div className="flex items-center justify-between">
-//               <div className="flex items-center">
-//                 <div className="flex-shrink-0 bg-indigo-100 p-2 rounded-full">
-//                   <FiUser className="text-indigo-600" />
-//                 </div>
-//                 <div className="ml-3">
-//                   <p className="text-sm font-medium text-gray-900">{user?.email || 'User'}</p>
-//                   <p className="text-xs text-gray-500">
-//                     {user?.premium ? (
-//                       <span className="text-indigo-600">Premium</span>
-//                     ) : (
-//                       <span>Free Account</span>
-//                     )}
-//                   </p>
-//                 </div>
-//               </div>
-//               <button
-//                 onClick={handleLogout}
-//                 disabled={loggingOut}
-//                 className="text-gray-400 hover:text-gray-500"
-//                 title="Logout"
-//               >
-//                 <FiLogOut />
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Main Content */}
-//       <div className="flex-1 flex flex-col overflow-hidden">
-//         {/* Top Navigation (Mobile) */}
-//         <div className="md:hidden bg-white shadow-sm">
-//           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-//             <h1 className="text-lg font-bold text-gray-900">Dashboard</h1>
-//             <div className="flex items-center space-x-2">
-//               <div className="flex-shrink-0 bg-indigo-100 p-1 rounded-full">
-//                 <FiUser className="text-indigo-600 text-sm" />
-//               </div>
-//               <button
-//                 onClick={handleLogout}
-//                 disabled={loggingOut}
-//                 className="text-gray-400 hover:text-gray-500"
-//                 title="Logout"
-//               >
-//                 <FiLogOut />
-//               </button>
-//             </div>
-//           </div>
-//           <div className="flex border-b border-gray-200">
-//             <button
-//               onClick={() => setActiveTab('links')}
-//               className={`flex-1 py-3 text-sm font-medium text-center ${activeTab === 'links' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
-//             >
-//               <FiLink className="inline mr-1" /> Links
-//             </button>
-//             <button
-//               onClick={() => setActiveTab('analytics')}
-//               className={`flex-1 py-3 text-sm font-medium text-center ${activeTab === 'analytics' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
-//             >
-//               <FiBarChart2 className="inline mr-1" /> Analytics
-//             </button>
-//             <button
-//               onClick={() => setActiveTab('settings')}
-//               className={`flex-1 py-3 text-sm font-medium text-center ${activeTab === 'settings' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
-//             >
-//               <FiSettings className="inline mr-1" /> Settings
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* Content Area */}
-//         <div className="flex-1 overflow-y-auto p-4 md:p-6">
-//           <motion.div
-//             initial={{ opacity: 0 }}
-//             animate={{ opacity: 1 }}
-//             transition={{ duration: 0.5 }}
-//           >
-//             {/* Welcome Card */}
-//             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-//               <div className="flex items-center justify-between">
-//                 <div>
-//                   <h2 className="text-2xl font-bold text-gray-900 mb-1">Welcome back, {getUsername()}!</h2>
-//                   <p className="text-gray-600">
-//                     {user?.premium ? (
-//                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-//                         <FiZap className="mr-1" /> Premium Member
-//                       </span>
-//                     ) : (
-//                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-//                         Free Account
-//                       </span>
-//                     )}
-//                   </p>
-//                 </div>
-//                 {!user?.premium && (
-//                   <button
-//                     onClick={() => router.push('/premium')}
-//                     className="hidden md:inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-//                   >
-//                     Upgrade to Premium <FiZap className="ml-2" />
-//                   </button>
+//                 {premium && (
+//                     <input
+//                         type="text"
+//                         value={customAlias}
+//                         onChange={(e) => setCustomAlias(e.target.value)}
+//                         placeholder="Custom alias (optional)"
+//                         className="w-full border p-2 rounded"
+//                     />
 //                 )}
-//               </div>
+
+//                 <button
+//                     type="submit"
+//                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+//                 >
+//                     Shorten URL
+//                 </button>
+//             </form>
+
+//             {slug && (
+//                 <motion.div
+//                     initial={{ opacity: 0, height: 0 }}
+//                     animate={{ opacity: 1, height: 'auto' }}
+//                     transition={{ duration: 0.3 }}
+//                     className="mt-8 p-4 bg-indigo-50 rounded-lg"
+//                 >
+//                     <p className="text-sm font-medium text-gray-700 mb-2">Your shortened URL:</p>
+//                     <div className="flex items-center">
+//                         <a
+//                             href={fullShortUrl}
+//                             target="_blank"
+//                             rel="noopener noreferrer"
+//                             className="flex-1 text-indigo-600 font-medium truncate hover:underline"
+//                         >
+//                             {fullShortUrl}
+//                         </a>
+//                         <div className="flex space-x-2 ml-2">
+//                             <button
+//                                 onClick={() => navigator.clipboard.writeText(fullShortUrl)}
+//                                 className="p-2 rounded-full hover:bg-indigo-100 transition"
+//                                 title="Copy to clipboard"
+//                             >
+//                                 <FiCopy className="text-indigo-600" />
+//                             </button>
+//                             <a
+//                                 href={fullShortUrl}
+//                                 target="_blank"
+//                                 rel="noopener noreferrer"
+//                                 className="p-2 rounded-full hover:bg-indigo-100 transition"
+//                                 title="Open in new tab"
+//                             >
+//                                 <FiExternalLink className="text-indigo-600" />
+//                             </a>
+//                         </div>
+//                     </div>
+//                 </motion.div>
+//             )}
+
+//             {error && <p className="text-red-600 mt-2">{error}</p>}
+
+//             {/* Shortened URLs Table */}
+//             <div className="mt-10 overflow-x-auto">
+//                 <h2 className="text-xl font-semibold mb-4">Your Shortened URLs</h2>
+//                 <table className="min-w-full text-sm text-left border border-gray-300">
+//                     <thead className="bg-gray-800 text-white">
+//                         <tr>
+//                             <th className="py-2 px-4 border">Original URL</th>
+//                             <th className="py-2 px-4 border">Short URL</th>
+//                             <th className="py-2 px-4 border">Created At</th>
+//                             <th className="py-2 px-4 border">Clicks</th>
+//                             <th className="py-2 px-4 border">Last Accessed</th>
+//                             <th className="py-2 px-4 border">Actions</th>
+//                         </tr>
+//                     </thead>
+//                     <tbody>
+//                         {links.map((link) => (
+//                             <tr key={link._id} className="hover:bg-gray-50">
+//                                 <td className="py-2 px-4 border max-w-xs truncate">
+//                                     <a href={link.originalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+//                                         {link.originalUrl}
+//                                     </a>
+//                                 </td>
+//                                 <td className="py-2 px-4 border text-indigo-700">
+//                                     <a
+//                                         href={`${baseUrl}/${link.alias}`}
+//                                         target="_blank"
+//                                         rel="noopener noreferrer"
+//                                         className="hover:underline"
+//                                     >
+//                                         {baseUrl}/{link.alias}
+//                                     </a>
+//                                 </td>
+//                                 <td className="py-2 px-4 border">{new Date(link.createdAt).toLocaleString()}</td>
+//                                 <td className="py-2 px-4 border text-center">{link.clicks}</td>
+//                                 <td className="py-2 px-4 border">
+//                                     {link.lastAccessed ? new Date(link.lastAccessed).toLocaleString() : '-'}
+//                                 </td>
+//                                 <td className="py-2 px-4 border">
+//                                     <button
+//                                         onClick={() => handleDelete(link.alias)}
+//                                         className="text-red-600 hover:underline font-medium"
+//                                     >
+//                                         Delete
+//                                     </button>
+//                                 </td>
+//                             </tr>
+//                         ))}
+//                         {links.length === 0 && (
+//                             <tr>
+//                                 <td colSpan={6} className="text-center py-4 text-gray-500">
+//                                     No links created yet.
+//                                 </td>
+//                             </tr>
+//                         )}
+//                     </tbody>
+//                 </table>
 //             </div>
 
-//             {/* Tab Content */}
-//             {activeTab === 'links' && (
-//               <div className="bg-white rounded-xl shadow-sm p-6">
-//                 <div className="flex items-center justify-between mb-6">
-//                   <h3 className="text-lg font-medium text-gray-900">My Links</h3>
-//                   <button className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
-//                     + New Link
-//                   </button>
-//                 </div>
-//                 {/* Links list would go here */}
-//                 <div className="text-center py-12 text-gray-500">
-//                   <FiLink className="mx-auto text-4xl mb-3 text-gray-300" />
-//                   <p>You haven&#39;t created any links yet</p>
-//                   <button 
-//                     onClick={() => router.push('/')}
-//                     className="mt-3 text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-//                   >
-//                     Create your first link
-//                   </button>
-//                 </div>
-//               </div>
-//             )}
+//             <div className="mt-10">
+//                 <ClickTrendChart slug={slug} />
+//             </div>
 
-//             {activeTab === 'analytics' && (
-//               <div className="bg-white rounded-xl shadow-sm p-6">
-//                 <h3 className="text-lg font-medium text-gray-900 mb-6">Analytics</h3>
-//                 {/* Analytics content would go here */}
-//                 <div className="text-center py-12 text-gray-500">
-//                   <FiBarChart2 className="mx-auto text-4xl mb-3 text-gray-300" />
-//                   <p>No analytics data available yet</p>
-//                 </div>
-//               </div>
-//             )}
-
-//             {activeTab === 'settings' && (
-//               <div className="bg-white rounded-xl shadow-sm p-6">
-//                 <h3 className="text-lg font-medium text-gray-900 mb-6">Account Settings</h3>
-//                 <div className="space-y-4">
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-//                     <div className="mt-1 flex rounded-md shadow-sm">
-//                       <input
-//                         type="email"
-//                         value={user?.email || ''}
-//                         readOnly
-//                         className="flex-1 min-w-0 block w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-100"
-//                       />
-//                     </div>
-//                   </div>
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
-//                     <div className="mt-1">
-//                       {user?.premium ? (
-//                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-//                           <FiZap className="mr-1" /> Premium Account
-//                         </span>
-//                       ) : (
-//                         <div className="flex items-center">
-//                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 mr-3">
-//                             Free Account
-//                           </span>
-//                           <button
-//                             onClick={() => router.push('/premium')}
-//                             className="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
-//                           >
-//                             Upgrade <FiZap className="ml-1" />
-//                           </button>
-//                         </div>
-//                       )}
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-//             )}
-//           </motion.div>
-//         </div>
-//       </div>
-//     </div>
-//   );
+//         </main>
+//     );
 // }
 
 
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FiCopy, FiExternalLink } from 'react-icons/fi';
-import { motion } from 'framer-motion';
+import { FiCopy, FiExternalLink, FiTrash2,  FiBarChart2, FiLink, FiClock, FiActivity } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
 import ClickTrendChart from '@/components/ClickTrendChart';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 type LinkType = {
     _id: string;
@@ -303,6 +276,7 @@ export default function Dashboard() {
     const [error, setError] = useState('');
     const [baseUrl, setBaseUrl] = useState('');
     const [links, setLinks] = useState<LinkType[]>([]);
+    const [activeTab, setActiveTab] = useState('links');
 
     // Get base URL and user info
     useEffect(() => {
@@ -383,147 +357,291 @@ export default function Dashboard() {
         }
     }
 
-
-
     const fullShortUrl = slug ? `${baseUrl}/${slug}` : '';
 
     return (
-        <main className="max-w-5xl mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
 
-            {/* Shorten URL form */}
-            <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
-                <input
-                    type="text"
-                    value={originalUrl}
-                    onChange={(e) => setOriginalUrl(e.target.value)}
-                    placeholder="Enter original URL"
-                    className="w-full border p-2 rounded"
-                    required
-                />
-
-                {premium && (
-                    <input
-                        type="text"
-                        value={customAlias}
-                        onChange={(e) => setCustomAlias(e.target.value)}
-                        placeholder="Custom alias (optional)"
-                        className="w-full border p-2 rounded"
-                    />
-                )}
-
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                    Shorten URL
-                </button>
-            </form>
-
-            {slug && (
-                <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-8 p-4 bg-indigo-50 rounded-lg"
-                >
-                    <p className="text-sm font-medium text-gray-700 mb-2">Your shortened URL:</p>
-                    <div className="flex items-center">
-                        <a
-                            href={fullShortUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 text-indigo-600 font-medium truncate hover:underline"
-                        >
-                            {fullShortUrl}
-                        </a>
-                        <div className="flex space-x-2 ml-2">
-                            <button
-                                onClick={() => navigator.clipboard.writeText(fullShortUrl)}
-                                className="p-2 rounded-full hover:bg-indigo-100 transition"
-                                title="Copy to clipboard"
-                            >
-                                <FiCopy className="text-indigo-600" />
-                            </button>
-                            <a
-                                href={fullShortUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-2 rounded-full hover:bg-indigo-100 transition"
-                                title="Open in new tab"
-                            >
-                                <FiExternalLink className="text-indigo-600" />
-                            </a>
+            {/* Header  */}
+            <Navbar/>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="flex flex-col md:flex-row gap-8">
+                    {/* Sidebar */}
+                    <div className="w-full md:w-64 flex-shrink-0">
+                        <div className="bg-white rounded-xl shadow-sm p-6 sticky top-8">
+                            <h1 className="text-2xl font-bold text-gray-800 mb-8">Short.ly</h1>
+                            
+                            <nav className="space-y-1">
+                                <button
+                                    onClick={() => setActiveTab('links')}
+                                    className={`flex items-center w-full px-4 py-3 rounded-lg text-left transition ${activeTab === 'links' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
+                                >
+                                    <FiLink className="mr-3" />
+                                    My Links
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('analytics')}
+                                    className={`flex items-center w-full px-4 py-3 rounded-lg text-left transition ${activeTab === 'analytics' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
+                                >
+                                    <FiBarChart2 className="mr-3" />
+                                    Analytics
+                                </button>
+                            </nav>
+                            
+                            {/* <div className="mt-8 pt-6 border-t border-gray-200">
+                                <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center transition">
+                                    <FiPlus className="mr-2" />
+                                    New Link
+                                </button>
+                            </div> */}
                         </div>
                     </div>
-                </motion.div>
-            )}
+                    
+                    {/* Main Content */}
+                    <div className="flex-1">
+                        {/* URL Shortener Card */}
+                        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+                            <h2 className="text-xl font-semibold text-gray-800 mb-4">Shorten a URL</h2>
+                            
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div>
+                                    <label htmlFor="originalUrl" className="block text-sm font-medium text-gray-700 mb-1">
+                                        Destination URL
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="originalUrl"
+                                        value={originalUrl}
+                                        onChange={(e) => setOriginalUrl(e.target.value)}
+                                        placeholder="https://example.com/long-url"
+                                        className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                                        required
+                                    />
+                                </div>
 
-            {error && <p className="text-red-600 mt-2">{error}</p>}
+                                {premium && (
+                                    <div>
+                                        <label htmlFor="customAlias" className="block text-sm font-medium text-gray-700 mb-1">
+                                            Custom Alias (optional)
+                                        </label>
+                                        <div className="flex">
+                                            <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                                                {baseUrl}/
+                                            </span>
+                                            <input
+                                                type="text"
+                                                id="customAlias"
+                                                value={customAlias}
+                                                onChange={(e) => setCustomAlias(e.target.value)}
+                                                placeholder="mylink"
+                                                className="flex-1 min-w-0 block w-full px-3 py-2 text-gray-600 rounded-none rounded-r-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
 
-            {/* Shortened URLs Table */}
-            <div className="mt-10 overflow-x-auto">
-                <h2 className="text-xl font-semibold mb-4">Your Shortened URLs</h2>
-                <table className="min-w-full text-sm text-left border border-gray-300">
-                    <thead className="bg-gray-800 text-white">
-                        <tr>
-                            <th className="py-2 px-4 border">Original URL</th>
-                            <th className="py-2 px-4 border">Short URL</th>
-                            <th className="py-2 px-4 border">Created At</th>
-                            <th className="py-2 px-4 border">Clicks</th>
-                            <th className="py-2 px-4 border">Last Accessed</th>
-                            <th className="py-2 px-4 border">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {links.map((link) => (
-                            <tr key={link._id} className="hover:bg-gray-50">
-                                <td className="py-2 px-4 border max-w-xs truncate">
-                                    <a href={link.originalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                                        {link.originalUrl}
-                                    </a>
-                                </td>
-                                <td className="py-2 px-4 border text-indigo-700">
-                                    <a
-                                        href={`${baseUrl}/${link.alias}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:underline"
+                                <button
+                                    type="submit"
+                                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition flex items-center justify-center"
+                                >
+                                    <FiLink className="mr-2" />
+                                    Shorten URL
+                                </button>
+                            </form>
+
+                            <AnimatePresence>
+                                {error && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0 }}
+                                        className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm"
                                     >
-                                        {baseUrl}/{link.alias}
-                                    </a>
-                                </td>
-                                <td className="py-2 px-4 border">{new Date(link.createdAt).toLocaleString()}</td>
-                                <td className="py-2 px-4 border text-center">{link.clicks}</td>
-                                <td className="py-2 px-4 border">
-                                    {link.lastAccessed ? new Date(link.lastAccessed).toLocaleString() : '-'}
-                                </td>
-                                <td className="py-2 px-4 border">
-                                    <button
-                                        onClick={() => handleDelete(link.alias)}
-                                        className="text-red-600 hover:underline font-medium"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                        {links.length === 0 && (
-                            <tr>
-                                <td colSpan={6} className="text-center py-4 text-gray-500">
-                                    No links created yet.
-                                </td>
-                            </tr>
+                                        {error}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            {slug && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    transition={{ duration: 0.3 }}
+                                    className="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-100"
+                                >
+                                    <p className="text-sm font-medium text-indigo-800 mb-2">Your shortened URL</p>
+                                    <div className="flex items-center">
+                                        <a
+                                            href={fullShortUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex-1 text-indigo-600 font-medium truncate hover:underline"
+                                        >
+                                            {fullShortUrl}
+                                        </a>
+                                        <div className="flex space-x-2 ml-2">
+                                            <button
+                                                onClick={() => navigator.clipboard.writeText(fullShortUrl)}
+                                                className="p-2 rounded-lg hover:bg-indigo-100 transition"
+                                                title="Copy to clipboard"
+                                            >
+                                                <FiCopy className="text-indigo-600" />
+                                            </button>
+                                            <a
+                                                href={fullShortUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-2 rounded-lg hover:bg-indigo-100 transition"
+                                                title="Open in new tab"
+                                            >
+                                                <FiExternalLink className="text-indigo-600" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </div>
+
+                        {/* Links/Content Section */}
+                        {activeTab === 'links' ? (
+                            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                                <div className="p-6 border-b border-gray-200">
+                                    <div className="flex items-center justify-between">
+                                        <h2 className="text-xl font-semibold text-gray-800">My Links</h2>
+                                        <div className="text-sm text-gray-500">
+                                            {links.length} {links.length === 1 ? 'link' : 'links'}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {links.length > 0 ? (
+                                    <div className="divide-y divide-gray-200">
+                                        {links.map((link) => (
+                                            <motion.div
+                                                key={link._id}
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                className="p-6 hover:bg-gray-50 transition"
+                                            >
+                                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <a
+                                                                href={`${baseUrl}/${link.alias}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="font-medium text-indigo-600 hover:underline truncate"
+                                                            >
+                                                                {baseUrl}/{link.alias}
+                                                            </a>
+                                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                                {link.clicks} clicks
+                                                            </span>
+                                                        </div>
+                                                        <a
+                                                            href={link.originalUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-sm text-gray-500 hover:text-gray-700 truncate block"
+                                                        >
+                                                            {link.originalUrl}
+                                                        </a>
+                                                        <div className="flex items-center mt-2 text-xs text-gray-500">
+                                                            <FiClock className="mr-1" />
+                                                            <span>Created {new Date(link.createdAt).toLocaleDateString()}</span>
+                                                            {link.lastAccessed && (
+                                                                <>
+                                                                    <span className="mx-2">•</span>
+                                                                    <FiActivity className="mr-1" />
+                                                                    <span>Last clicked {new Date(link.lastAccessed).toLocaleDateString()}</span>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={() => navigator.clipboard.writeText(`${baseUrl}/${link.alias}`)}
+                                                            className="p-2 rounded-lg hover:bg-gray-100 transition"
+                                                            title="Copy"
+                                                        >
+                                                            <FiCopy className="text-gray-500 hover:text-gray-700" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(link.alias)}
+                                                            className="p-2 rounded-lg hover:bg-red-50 transition"
+                                                            title="Delete"
+                                                        >
+                                                            <FiTrash2 className="text-red-500 hover:text-red-700" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="p-12 text-center">
+                                        <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                            <FiLink className="text-gray-400 text-3xl" />
+                                        </div>
+                                        <h3 className="text-lg font-medium text-gray-900 mb-1">No links yet</h3>
+                                        <p className="text-gray-500 max-w-md mx-auto">
+                                            Create your first shortened URL by entering a long URL above.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="bg-white rounded-xl shadow-sm p-6">
+                                <h2 className="text-xl font-semibold text-gray-800 mb-6">Analytics</h2>
+                                {links.length > 0 ? (
+                                    <div>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                            <div className="bg-indigo-50 rounded-lg p-4">
+                                                <p className="text-sm font-medium text-indigo-700 mb-1">Total Links</p>
+                                                <p className="text-2xl font-bold text-indigo-900">{links.length}</p>
+                                            </div>
+                                            <div className="bg-green-50 rounded-lg p-4">
+                                                <p className="text-sm font-medium text-green-700 mb-1">Total Clicks</p>
+                                                <p className="text-2xl font-bold text-green-900">
+                                                    {links.reduce((sum, link) => sum + link.clicks, 0)}
+                                                </p>
+                                            </div>
+                                            <div className="bg-purple-50 rounded-lg p-4">
+                                                <p className="text-sm font-medium text-purple-700 mb-1">Most Popular</p>
+                                                <p className="text-lg font-bold text-purple-900 truncate">
+                                                    {links.length > 0 
+                                                        ? `${baseUrl}/${links.reduce((prev, current) => (prev.clicks > current.clicks) ? prev : current).alias}`
+                                                        : '-'
+                                                    }
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="border border-gray-200 rounded-lg p-4">
+                                            <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends</h3>
+                                            <ClickTrendChart slug={slug} />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-12">
+                                        <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                            <FiBarChart2 className="text-gray-400 text-3xl" />
+                                        </div>
+                                        <h3 className="text-lg font-medium text-gray-900 mb-1">No analytics data yet</h3>
+                                        <p className="text-gray-500 max-w-md mx-auto">
+                                            Create some links and start tracking their performance.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
                         )}
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
 
-            <div className="mt-10">
-                <ClickTrendChart slug={slug} />
-            </div>
-
-        </main>
+            {/* Footer section */}
+            <Footer/>
+        </div>
     );
 }
 
