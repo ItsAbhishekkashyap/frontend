@@ -5,16 +5,21 @@ import { Url } from '@/models/Url';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { shortId: string } }
+  context: { params: { shortId: string } }
 ) {
   try {
     await connectToDB();
-    const shortId = params.shortId;
+    const { shortId } = context.params;
     const found = await Url.findOne({ slug: shortId });
 
     if (!found) {
       return NextResponse.redirect(new URL('/', req.url));
     }
+
+    // ✅ Update clicks and lastAccessed
+    found.clicks = (found.clicks || 0) + 1;
+    found.lastAccessed = new Date();
+    await found.save();
 
     return NextResponse.redirect(found.originalUrl);
   } catch (error) {
@@ -22,6 +27,7 @@ export async function GET(
     return NextResponse.redirect(new URL('/', req.url));
   }
 }
+
 
 
 

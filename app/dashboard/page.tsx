@@ -284,239 +284,247 @@
 import { useEffect, useState } from 'react';
 import { FiCopy, FiExternalLink } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import ClickTrendChart from '@/components/ClickTrendChart';
 
 type LinkType = {
-  _id: string;
-  originalUrl: string;
-  alias: string;
-  createdAt: string;
-  clicks: number;
-  lastAccessed: string | null;
+    _id: string;
+    originalUrl: string;
+    alias: string;
+    createdAt: string;
+    clicks: number;
+    lastAccessed: string | null;
 };
 
 export default function Dashboard() {
-  const [originalUrl, setOriginalUrl] = useState('');
-  const [customAlias, setCustomAlias] = useState('');
-  const [premium, setPremium] = useState(false);
-  const [slug, setSlug] = useState('');
-  const [error, setError] = useState('');
-  const [baseUrl, setBaseUrl] = useState('');
-  const [links, setLinks] = useState<LinkType[]>([]);
+    const [originalUrl, setOriginalUrl] = useState('');
+    const [customAlias, setCustomAlias] = useState('');
+    const [premium, setPremium] = useState(false);
+    const [slug, setSlug] = useState('');
+    const [error, setError] = useState('');
+    const [baseUrl, setBaseUrl] = useState('');
+    const [links, setLinks] = useState<LinkType[]>([]);
 
-  // Get base URL and user info
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setBaseUrl(window.location.origin);
-    }
-
-    async function fetchUserAndLinks() {
-      const res = await fetch('/api/auth/me', { credentials: 'include' });
-      const user = await res.json();
-
-      if (user?.user?.id) {
-        setPremium(user.user.premium);
-
-        const linksRes = await fetch('/api/links/user', { credentials: 'include' });
-        if (linksRes.ok) {
-          const linkData = await linksRes.json();
-          setLinks(linkData.links);
+    // Get base URL and user info
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setBaseUrl(window.location.origin);
         }
-      }
+
+        async function fetchUserAndLinks() {
+            const res = await fetch('/api/auth/me', { credentials: 'include' });
+            const user = await res.json();
+
+            if (user?.user?.id) {
+                setPremium(user.user.premium);
+
+                const linksRes = await fetch('/api/links/user', { credentials: 'include' });
+                if (linksRes.ok) {
+                    const linkData = await linksRes.json();
+                    setLinks(linkData.links);
+                }
+            }
+        }
+
+        fetchUserAndLinks();
+    }, []);
+
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        setError('');
+        setSlug('');
+
+        try {
+            const res = await fetch('/api/links/create', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    originalUrl,
+                    ...(customAlias ? { customAlias } : {})
+                }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                setError(data.error || 'Failed to shorten URL');
+                return;
+            }
+
+            setSlug(data.slug);
+            setOriginalUrl('');
+            setCustomAlias('');
+
+            setLinks((prev) => [
+                {
+                    _id: data._id,
+                    originalUrl: data.originalUrl,
+                    alias: data.slug,
+                    createdAt: data.createdAt,
+                    clicks: data.clicks || 0,
+                    lastAccessed: data.lastAccessed || null,
+                },
+                ...prev,
+            ]);
+        } catch {
+            setError('Something went wrong');
+        }
     }
 
-    fetchUserAndLinks();
-  }, []);
+    async function handleDelete(alias: string) {
+        const res = await fetch(`/api/links/${alias}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    setSlug('');
-
-    try {
-      const res = await fetch('/api/links/create', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          originalUrl,
-          ...(customAlias ? { customAlias } : {})
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || 'Failed to shorten URL');
-        return;
-      }
-
-      setSlug(data.slug);
-      setOriginalUrl('');
-      setCustomAlias('');
-
-      setLinks((prev) => [
-        {
-          _id: data._id,
-          originalUrl: data.originalUrl,
-          alias: data.slug,
-          createdAt: data.createdAt,
-          clicks: data.clicks || 0,
-          lastAccessed: data.lastAccessed || null,
-        },
-        ...prev,
-      ]);
-    } catch {
-      setError('Something went wrong');
+        if (res.ok) {
+            setLinks((prev) => prev.filter((link) => link.alias !== alias));
+        } else {
+            console.error('Failed to delete');
+        }
     }
-  }
 
-  async function handleDelete(id: string) {
-    const res = await fetch(`/api/links/${id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
 
-    if (res.ok) {
-      setLinks((prev) => prev.filter((link) => link._id !== id));
-    } else {
-      console.error('Failed to delete');
-    }
-  }
 
-  const fullShortUrl = slug ? `${baseUrl}/${slug}` : '';
+    const fullShortUrl = slug ? `${baseUrl}/${slug}` : '';
 
-  return (
-    <main className="max-w-5xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+    return (
+        <main className="max-w-5xl mx-auto p-4">
+            <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-      {/* Shorten URL form */}
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
-        <input
-          type="text"
-          value={originalUrl}
-          onChange={(e) => setOriginalUrl(e.target.value)}
-          placeholder="Enter original URL"
-          className="w-full border p-2 rounded"
-          required
-        />
+            {/* Shorten URL form */}
+            <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
+                <input
+                    type="text"
+                    value={originalUrl}
+                    onChange={(e) => setOriginalUrl(e.target.value)}
+                    placeholder="Enter original URL"
+                    className="w-full border p-2 rounded"
+                    required
+                />
 
-        {premium && (
-          <input
-            type="text"
-            value={customAlias}
-            onChange={(e) => setCustomAlias(e.target.value)}
-            placeholder="Custom alias (optional)"
-            className="w-full border p-2 rounded"
-          />
-        )}
+                {premium && (
+                    <input
+                        type="text"
+                        value={customAlias}
+                        onChange={(e) => setCustomAlias(e.target.value)}
+                        placeholder="Custom alias (optional)"
+                        className="w-full border p-2 rounded"
+                    />
+                )}
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Shorten URL
-        </button>
-      </form>
+                <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                    Shorten URL
+                </button>
+            </form>
 
-      {slug && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          transition={{ duration: 0.3 }}
-          className="mt-8 p-4 bg-indigo-50 rounded-lg"
-        >
-          <p className="text-sm font-medium text-gray-700 mb-2">Your shortened URL:</p>
-          <div className="flex items-center">
-            <a
-              href={fullShortUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 text-indigo-600 font-medium truncate hover:underline"
-            >
-              {fullShortUrl}
-            </a>
-            <div className="flex space-x-2 ml-2">
-              <button
-                onClick={() => navigator.clipboard.writeText(fullShortUrl)}
-                className="p-2 rounded-full hover:bg-indigo-100 transition"
-                title="Copy to clipboard"
-              >
-                <FiCopy className="text-indigo-600" />
-              </button>
-              <a
-                href={fullShortUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full hover:bg-indigo-100 transition"
-                title="Open in new tab"
-              >
-                <FiExternalLink className="text-indigo-600" />
-              </a>
-            </div>
-          </div>
-        </motion.div>
-      )}
-
-      {error && <p className="text-red-600 mt-2">{error}</p>}
-
-      {/* Shortened URLs Table */}
-      <div className="mt-10 overflow-x-auto">
-        <h2 className="text-xl font-semibold mb-4">Your Shortened URLs</h2>
-        <table className="min-w-full text-sm text-left border border-gray-300">
-          <thead className="bg-gray-800 text-white">
-            <tr>
-              <th className="py-2 px-4 border">Original URL</th>
-              <th className="py-2 px-4 border">Short URL</th>
-              <th className="py-2 px-4 border">Created At</th>
-              <th className="py-2 px-4 border">Clicks</th>
-              <th className="py-2 px-4 border">Last Accessed</th>
-              <th className="py-2 px-4 border">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {links.map((link) => (
-              <tr key={link._id} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border max-w-xs truncate">
-                  <a href={link.originalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                    {link.originalUrl}
-                  </a>
-                </td>
-                <td className="py-2 px-4 border text-indigo-700">
-                  <a
-                    href={`${baseUrl}/${link.alias}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline"
-                  >
-                    {baseUrl}/{link.alias}
-                  </a>
-                </td>
-                <td className="py-2 px-4 border">{new Date(link.createdAt).toLocaleString()}</td>
-                <td className="py-2 px-4 border text-center">{link.clicks}</td>
-                <td className="py-2 px-4 border">
-                  {link.lastAccessed ? new Date(link.lastAccessed).toLocaleString() : '-'}
-                </td>
-                <td className="py-2 px-4 border">
-                  <button
-                    onClick={() => handleDelete(link._id)}
-                    className="text-red-600 hover:underline font-medium"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {links.length === 0 && (
-              <tr>
-                <td colSpan={6} className="text-center py-4 text-gray-500">
-                  No links created yet.
-                </td>
-              </tr>
+            {slug && (
+                <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    transition={{ duration: 0.3 }}
+                    className="mt-8 p-4 bg-indigo-50 rounded-lg"
+                >
+                    <p className="text-sm font-medium text-gray-700 mb-2">Your shortened URL:</p>
+                    <div className="flex items-center">
+                        <a
+                            href={fullShortUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 text-indigo-600 font-medium truncate hover:underline"
+                        >
+                            {fullShortUrl}
+                        </a>
+                        <div className="flex space-x-2 ml-2">
+                            <button
+                                onClick={() => navigator.clipboard.writeText(fullShortUrl)}
+                                className="p-2 rounded-full hover:bg-indigo-100 transition"
+                                title="Copy to clipboard"
+                            >
+                                <FiCopy className="text-indigo-600" />
+                            </button>
+                            <a
+                                href={fullShortUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 rounded-full hover:bg-indigo-100 transition"
+                                title="Open in new tab"
+                            >
+                                <FiExternalLink className="text-indigo-600" />
+                            </a>
+                        </div>
+                    </div>
+                </motion.div>
             )}
-          </tbody>
-        </table>
-      </div>
-    </main>
-  );
+
+            {error && <p className="text-red-600 mt-2">{error}</p>}
+
+            {/* Shortened URLs Table */}
+            <div className="mt-10 overflow-x-auto">
+                <h2 className="text-xl font-semibold mb-4">Your Shortened URLs</h2>
+                <table className="min-w-full text-sm text-left border border-gray-300">
+                    <thead className="bg-gray-800 text-white">
+                        <tr>
+                            <th className="py-2 px-4 border">Original URL</th>
+                            <th className="py-2 px-4 border">Short URL</th>
+                            <th className="py-2 px-4 border">Created At</th>
+                            <th className="py-2 px-4 border">Clicks</th>
+                            <th className="py-2 px-4 border">Last Accessed</th>
+                            <th className="py-2 px-4 border">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {links.map((link) => (
+                            <tr key={link._id} className="hover:bg-gray-50">
+                                <td className="py-2 px-4 border max-w-xs truncate">
+                                    <a href={link.originalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                                        {link.originalUrl}
+                                    </a>
+                                </td>
+                                <td className="py-2 px-4 border text-indigo-700">
+                                    <a
+                                        href={`${baseUrl}/${link.alias}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:underline"
+                                    >
+                                        {baseUrl}/{link.alias}
+                                    </a>
+                                </td>
+                                <td className="py-2 px-4 border">{new Date(link.createdAt).toLocaleString()}</td>
+                                <td className="py-2 px-4 border text-center">{link.clicks}</td>
+                                <td className="py-2 px-4 border">
+                                    {link.lastAccessed ? new Date(link.lastAccessed).toLocaleString() : '-'}
+                                </td>
+                                <td className="py-2 px-4 border">
+                                    <button
+                                        onClick={() => handleDelete(link.alias)}
+                                        className="text-red-600 hover:underline font-medium"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        {links.length === 0 && (
+                            <tr>
+                                <td colSpan={6} className="text-center py-4 text-gray-500">
+                                    No links created yet.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="mt-10">
+                <ClickTrendChart slug={slug} />
+            </div>
+
+        </main>
+    );
 }
 
 
