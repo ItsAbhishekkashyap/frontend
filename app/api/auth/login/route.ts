@@ -1,23 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { connectToDB } from '@/lib/mongodb';
+import { User } from '@/models/User';
 import bcrypt from 'bcryptjs';
-import { connectToDB } from '@/app/lib/mongodb';
-import { User } from '@/app/models/User';
-import { signToken } from '@/app/lib/auth';
+import jwt from 'jsonwebtoken';
+
+
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 export async function POST(req: NextRequest) {
-  const { email, password } = await req.json();
+  try {
+    await connectToDB();
+    const { email, password } = await req.json();
 
-  if (!email || !password)
-    return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
 
-  await connectToDB();
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) {
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
 
-  const user = await User.findOne({ email });
-  if (!user) return NextResponse.json({ error: 'User not found' }, { status: 400 });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
+    // ✅ Set cookie manually to avoid auto redirect
+    // set cookie
 
-  const token = signToken({ id: user._id, email: user.email });
-  return NextResponse.json({ token, user: { email: user.email } });
+    const response = NextResponse.json({ message: 'Login successful' });
+
+    response.headers.set(
+      'Set-Cookie',
+      `token=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 60 * 60}`
+    );
+
+    return response;
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+  }
 }
+
+

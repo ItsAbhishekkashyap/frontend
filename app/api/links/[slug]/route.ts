@@ -6,24 +6,27 @@ export async function GET(
   request: NextRequest,
   context: { params: { slug: string } }
 ) {
-  const { params } = context; // ✅ Access params from awaited context
-  const { slug } = params;
+  const { slug } = context.params;
 
   try {
     await connectToDB();
 
+    // 🔍 Find the URL document by slug
     const urlEntry = await Url.findOne({ slug });
 
     if (!urlEntry) {
-      return NextResponse.json({ error: 'Slug not found' }, { status: 404 });
+      // 🔁 If slug not found, redirect to your 404 or home page
+      return NextResponse.redirect(new URL('/', request.url));
     }
 
-    return NextResponse.json({ originalUrl: urlEntry.originalUrl });
+    // ✅ Redirect to original URL
+    return NextResponse.redirect(urlEntry.originalUrl);
   } catch (error) {
     console.error('[GET /api/links/[slug]]', error);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    return NextResponse.redirect(new URL('/', request.url));
   }
 }
+
 
 
 

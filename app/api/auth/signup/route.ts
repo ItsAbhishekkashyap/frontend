@@ -1,24 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { connectToDB } from '@/lib/mongodb';
+import { User } from '@/models/User';
 import bcrypt from 'bcryptjs';
-import { connectToDB } from '@/app/lib/mongodb';
-import { User } from '@/app/models/User';
-import { signToken } from '@/app/lib/auth';
 
 export async function POST(req: NextRequest) {
-  const { email, password } = await req.json();
+  try {
+    await connectToDB();
+    const { email, password } = await req.json();
 
-  if (!email || !password)
-    return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return NextResponse.json({ error: 'User already exists' }, { status: 400 });
+    }
 
-  await connectToDB();
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ email, password: hashedPassword });
+    await user.save();
 
-  const userExists = await User.findOne({ email });
-  if (userExists)
-    return NextResponse.json({ error: 'User already exists' }, { status: 400 });
-
-  const hashed = await bcrypt.hash(password, 10);
-  const user = await User.create({ email, password: hashed });
-  const token = signToken({ id: user._id, email: user.email });
-
-  return NextResponse.json({ token, user: { email: user.email } });
+    return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+  }
 }
+

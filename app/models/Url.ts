@@ -4,7 +4,10 @@ export interface IUrl extends Document {
   slug: string;
   originalUrl: string;
   createdAt: Date;
-  createdBy?: string; // Optional: for user-based shortening
+  createdBy?: string; 
+  clicks?: number; 
+  lastAccessed?: Date;
+  // Optional: for user-based shortening
 }
 
 const UrlSchema = new Schema<IUrl>(
@@ -13,6 +16,8 @@ const UrlSchema = new Schema<IUrl>(
     originalUrl: { type: String, required: true },
     createdBy: { type: String }, // Optional: User ID/email
     createdAt: { type: Date, default: Date.now },
+    clicks: { type: Number, default: 0 },
+    lastAccessed: { type: Date, default: null },
   },
   { collection: 'urls' }
 );
