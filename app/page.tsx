@@ -7,7 +7,27 @@ import { FiCopy, FiExternalLink, FiLink } from 'react-icons/fi';
 import { BsCheckLg } from 'react-icons/bs';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Script from 'next/script';
 
+// export const metadata = {
+//   title: "AshrtL – The Smarter URL Shortener",
+//   description: "Create short links, monitor clicks, and manage your URLs with ease. AshrtL makes link shortening smarter.",
+//   keywords: ["URL shortener", "AshrtL", "smart links", "link analytics", "free short link"],
+//   openGraph: {
+//     title: "AshrtL",
+//     description: "Smart, fast and reliable URL shortening for modern web.",
+//     url: "https://ashrtl.xyz",
+//     type: "website",
+//     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "AshrtL OG" }],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     site: "@AshrtL",
+//     title: "AshrtL",
+//     description: "Smarter URL Shortener",
+//     images: ["/og-image.png"],
+//   },
+// };
 
 
 
@@ -54,7 +74,19 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-
+<Script id="ld-json" type="application/ld+json">
+  {JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "AshrtL",
+    "url": "https://ashrtl.xyz",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://ashrtl.xyz/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  })}
+</Script>
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-indigo-50 to-blue-50">
       {/* Header section */}

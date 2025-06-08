@@ -4,6 +4,26 @@ import Navbar from '@/components/Navbar';
 import {motion} from 'framer-motion';
 // import Link from 'next/link';
 
+// export const metadata = {
+//   title: "Privacy Policy | AshrtL",
+//   description: "Read AshrtL's privacy policy to understand how we protect your data and your rights.",
+//   keywords: ["privacy policy", "AshrtL privacy", "data protection"],
+//   openGraph: {
+//     title: "Privacy Policy – AshrtL",
+//     description: "How we protect and handle your data at AshrtL.",
+//     url: "https://ashrtl.xyz/privacy-policy",
+//     type: "website",
+//     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Privacy Policy" }],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     site: "@AshrtL",
+//     title: "Privacy Policy",
+//     description: "Read our commitment to privacy and data protection.",
+//     images: ["/og-image.png"],
+//   },
+// };
+
 export default function PrivacyPolicyPage() {
   return (
     <div className="bg-gradient-to-b from-indigo-50 to-white min-h-screen">

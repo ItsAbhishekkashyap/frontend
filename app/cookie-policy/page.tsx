@@ -6,6 +6,26 @@ import { motion } from 'framer-motion';
 import {  FiShield, FiSettings, FiPieChart } from 'react-icons/fi';
 import { MdCookie } from 'react-icons/md';
 
+// export const metadata = {
+//   title: "Cookie Policy | AshrtL",
+//   description: "Learn how AshrtL uses cookies to improve user experience and analyze traffic.",
+//   keywords: ["cookie policy", "AshrtL cookies", "cookie usage"],
+//   openGraph: {
+//     title: "Cookie Policy – AshrtL",
+//     description: "Details on AshrtL's use of cookies and user tracking.",
+//     url: "https://ashrtl.xyz/cookie-policy",
+//     type: "website",
+//     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Cookie Policy" }],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     site: "@AshrtL",
+//     title: "Cookie Policy",
+//     description: "Understand how we use cookies at AshrtL",
+//     images: ["/og-image.png"],
+//   },
+// };
+
 export default function CookiePolicyPage() {
   return (
     <div className="bg-gradient-to-b from-indigo-50 to-white min-h-screen">

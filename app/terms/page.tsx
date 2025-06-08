@@ -6,6 +6,26 @@ import { motion } from 'framer-motion';
 // import Link from 'next/link';
 import { FiAlertTriangle, FiShield, FiTerminal, FiZap, FiMail } from 'react-icons/fi';
 
+// export const metadata = {
+//   title: "Terms of Service | AshrtL",
+//   description: "Review AshrtL's terms of service and user agreement for using our URL shortener.",
+//   keywords: ["terms of service", "user agreement", "AshrtL terms"],
+//   openGraph: {
+//     title: "Terms of Service – AshrtL",
+//     description: "Terms and conditions for using AshrtL services.",
+//     url: "https://ashrtl.xyz/terms",
+//     type: "website",
+//     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Terms Page" }],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     site: "@AshrtL",
+//     title: "Terms of Service",
+//     description: "AshrtL's user agreement and service terms",
+//     images: ["/og-image.png"],
+//   },
+// };
+
 export default function TermsPage() {
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">

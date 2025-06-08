@@ -5,6 +5,26 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { FiCheck } from 'react-icons/fi';
 
+// export const metadata = {
+//   title: "Pricing | AshrtL – Affordable Link Management",
+//   description: "Discover flexible pricing plans for AshrtL. Start free, upgrade as you grow.",
+//   keywords: ["AshrtL pricing", "link shortener plans", "premium short link", "custom domain"],
+//   openGraph: {
+//     title: "AshrtL Pricing",
+//     description: "Affordable link shortening and tracking solutions.",
+//     url: "https://ashrtl.xyz/pricing",
+//     type: "website",
+//     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "AshrtL Pricing" }],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     site: "@AshrtL",
+//     title: "AshrtL Pricing",
+//     description: "Affordable short link management",
+//     images: ["/og-image.png"],
+//   },
+// };
+
 export default function Price() {
     const [upgrading, setUpgrading] = useState(false);
     const [error, setError] = useState<string | null>(null);

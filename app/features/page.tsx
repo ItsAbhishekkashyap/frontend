@@ -1,7 +1,35 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+export const metadata = {
+  title: "Features | AshrtL – Smarter URL Shortening",
+  description: "Explore powerful features of AshrtL including analytics, custom short links, and more.",
+  keywords: ["URL shortener", "AshrtL features", "short links", "custom URLs", "link analytics"],
+  openGraph: {
+    title: "AshrtL Features",
+    description: "Powerful tools to manage and track your shortened URLs",
+    url: "https://ashrtl.xyz/features",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "AshrtL Open Graph",
+      },
+    ],
+    twitter: {
+  card: 'summary_large_image',
+  site: '@AshrtL',
+  title: 'AshrtL',
+  description: 'Smart URL Shortener',
+  images: ['/og-image.png'],
+}
+  },
+};
 
 export default function FeaturesPage() {
+
+  
   const features = [
     {
       icon: (
