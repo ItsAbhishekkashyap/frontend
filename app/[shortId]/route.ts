@@ -1,7 +1,4 @@
-
-
-
-
+// ✅ app/[shortId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongodb';
 import { Url } from '@/models/Url';
@@ -10,9 +7,7 @@ export async function GET(req: NextRequest) {
   try {
     await connectToDB();
 
-    // Get slug from pathname (e.g., /abc123)
-    const pathname = req.nextUrl.pathname;
-    const shortId = pathname.split('/').pop(); // gets the last part of the URL
+    const shortId = req.nextUrl.pathname.split('/').pop(); // Extract from the path
 
     if (!shortId) {
       return NextResponse.redirect(new URL('/', req.url));
@@ -24,7 +19,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.redirect(new URL('/', req.url));
     }
 
-    // Update analytics
     found.clicks = (found.clicks || 0) + 1;
     found.lastAccessed = new Date();
     found.clickHistory.push(new Date());
@@ -36,6 +30,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url));
   }
 }
+
 
 
 
