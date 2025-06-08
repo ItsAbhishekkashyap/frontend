@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 export default function ResetPasswordPage() {
-  const { token } = useParams();
   const router = useRouter();
+  const token = (useParams() as { token: string }).token;
+
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 
@@ -18,6 +19,9 @@ export default function ResetPasswordPage() {
 
     const res = await fetch(`/api/auth/reset-password/${token}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ password }),
     });
 
@@ -58,3 +62,4 @@ export default function ResetPasswordPage() {
     </main>
   );
 }
+
