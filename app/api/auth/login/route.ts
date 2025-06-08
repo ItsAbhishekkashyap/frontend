@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ userId: user._id, premium: user.premium }, JWT_SECRET, { expiresIn: '7d' });
 
     // ✅ Set cookie manually to avoid auto redirect
     // set cookie

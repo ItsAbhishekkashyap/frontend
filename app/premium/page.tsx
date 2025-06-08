@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { FiCheck, FiZap, FiArrowRight, FiStar, FiShield, FiBarChart2, FiGlobe } from 'react-icons/fi';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export default function PremiumPage() {
   const router = useRouter();
@@ -75,6 +77,8 @@ export default function PremiumPage() {
   }
 
   return (
+    <div className="w-full h-full">
+      <Navbar/>
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -204,6 +208,8 @@ export default function PremiumPage() {
           </div>
         )}
       </motion.div>
+    </div>
+      <Footer/>
     </div>
   );
 }

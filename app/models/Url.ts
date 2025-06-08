@@ -17,7 +17,8 @@ const UrlSchema = new Schema<IUrl>(
     createdBy: {                                // ✅ changed from `user`
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
+      default: null,
     },
     createdAt: { type: Date, default: Date.now },
     clicks: { type: Number, default: 0 },

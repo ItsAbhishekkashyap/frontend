@@ -18,38 +18,32 @@ function generateSlug(length = 6) {
 export async function POST(request: NextRequest) {
   try {
     await connectToDB();
-
     const { originalUrl, customAlias } = await request.json();
 
     if (!originalUrl || typeof originalUrl !== 'string') {
       return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
     }
 
-    // Extract token
+    // Attempt to extract and verify token (optional)
+    let user = null;
     const token =
       request.cookies.get('token')?.value ||
       request.headers.get('Authorization')?.replace('Bearer ', '');
 
-    if (!token) {
-      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    if (token) {
+      try {
+        const payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
+        user = await User.findById(payload.userId);
+      } catch (err) {
+        console.error('Error verifying token:', err);
+        console.warn('Invalid token, proceeding as anonymous user.');
+      }
     }
 
-    let payload: JwtPayload;
-    try {
-      payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    } catch {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
-    const user = await User.findById(payload.userId);
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 401 });
-    }
-
+    // Custom alias only for premium users
     let slug = '';
-
     if (customAlias) {
-      if (!user.premium) {
+      if (!user || !user.premium) {
         return NextResponse.json(
           { error: 'Only premium users can create custom aliases' },
           { status: 403 }
@@ -68,18 +62,17 @@ export async function POST(request: NextRequest) {
 
       slug = customAlias;
     } else {
-      // Generate a unique random slug
+      // Auto-generate slug
       slug = generateSlug();
       while (await Url.findOne({ slug })) {
         slug = generateSlug();
       }
     }
 
-    // ✅ Save to DB with createdBy
     const newUrl = await Url.create({
       originalUrl,
       slug,
-      createdBy: user._id,
+      createdBy: user?._id || null,
       createdAt: new Date(),
       clicks: 0,
       lastAccessed: null,
@@ -101,6 +94,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+
 
 
 

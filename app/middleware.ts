@@ -3,53 +3,50 @@ import type { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-
 const PUBLIC_FILE = /\.(.*)$/;
-const PUBLIC_PATHS = ['/', '/login', '/signup', '/api/auth/login', '/api/auth/signup', '/api/auth/forgot-password', '/api/auth/reset-password'];
 
-export async function middleware(req: NextRequest) {
+const PUBLIC_PATHS = [
+  '/',
+  '/login',
+  '/signup',
+  '/api/auth/login',
+  '/api/auth/signup',
+  '/api/auth/forgot-password',
+  '/api/auth/reset-password',
+  '/api/links/create',
+];
+
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Allow public files (images, fonts, etc.) and public paths without auth
-  if (
-    PUBLIC_FILE.test(pathname) ||
-    PUBLIC_PATHS.some(path => pathname.startsWith(path))
-  ) {
-    // If user is authenticated and visiting login/signup page, redirect to homepage
-    if ((pathname === '/login' || pathname === '/signup') && hasValidToken(req)) {
-      return NextResponse.redirect(new URL('/', req.url));
-    }
+  // ✅ Allow static files and public paths
+  if (PUBLIC_FILE.test(pathname) || PUBLIC_PATHS.includes(pathname)) {
     return NextResponse.next();
   }
 
-  // For other routes: protect them (require auth)
-  if (!hasValidToken(req)) {
-    // Redirect to login if no valid token
+  // ✅ Get token from cookies
+  const token = req.cookies.get('token')?.value;
+
+  if (!token) {
+    console.log('No token found — redirecting to /login');
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
-  return NextResponse.next();
-}
-
-function hasValidToken(req: NextRequest): boolean {
   try {
-    const token = req.cookies.get('token')?.value;
-    if (!token) return false;
+    // ✅ Verify token (no need to extract payload if unused)
     jwt.verify(token, JWT_SECRET);
-    return true;
+    return NextResponse.next(); // Token valid — allow request
   } catch (err) {
-    console.error(err);
-    return false;
+    console.error('JWT verification failed:', err);
+    return NextResponse.redirect(new URL('/login', req.url));
   }
 }
 
-// Specify paths where this middleware should run
+// ✅ Match all routes except static files and public paths
 export const config = {
-  matcher: [
-    /*
-      Match all paths except for _next/static, _next/image, favicon.ico, and api/auth/logout if needed
-      You can customize the matcher as per your routes
-    */
-    '/((?!api/auth/logout|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
+
+
+
+

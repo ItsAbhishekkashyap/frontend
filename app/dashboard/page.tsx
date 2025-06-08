@@ -253,11 +253,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FiCopy, FiExternalLink, FiTrash2,  FiBarChart2, FiLink, FiClock, FiActivity } from 'react-icons/fi';
+import { FiCopy, FiExternalLink, FiTrash2, FiBarChart2, FiLink, FiClock, FiActivity, FiLock } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import ClickTrendChart from '@/components/ClickTrendChart';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 type LinkType = {
     _id: string;
@@ -363,14 +364,14 @@ export default function Dashboard() {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
 
             {/* Header  */}
-            <Navbar/>
+            <Navbar />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex flex-col md:flex-row gap-8">
                     {/* Sidebar */}
                     <div className="w-full md:w-64 flex-shrink-0">
                         <div className="bg-white rounded-xl shadow-sm p-6 sticky top-8">
                             <h1 className="text-2xl font-bold text-gray-800 mb-8">Short.ly</h1>
-                            
+
                             <nav className="space-y-1">
                                 <button
                                     onClick={() => setActiveTab('links')}
@@ -387,7 +388,7 @@ export default function Dashboard() {
                                     Analytics
                                 </button>
                             </nav>
-                            
+
                             {/* <div className="mt-8 pt-6 border-t border-gray-200">
                                 <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center transition">
                                     <FiPlus className="mr-2" />
@@ -396,13 +397,13 @@ export default function Dashboard() {
                             </div> */}
                         </div>
                     </div>
-                    
+
                     {/* Main Content */}
                     <div className="flex-1">
                         {/* URL Shortener Card */}
                         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
                             <h2 className="text-xl font-semibold text-gray-800 mb-4">Shorten a URL</h2>
-                            
+
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
                                     <label htmlFor="originalUrl" className="block text-sm font-medium text-gray-700 mb-1">
@@ -504,143 +505,183 @@ export default function Dashboard() {
 
                         {/* Links/Content Section */}
                         {activeTab === 'links' ? (
-                            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                                <div className="p-6 border-b border-gray-200">
-                                    <div className="flex items-center justify-between">
-                                        <h2 className="text-xl font-semibold text-gray-800">My Links</h2>
-                                        <div className="text-sm text-gray-500">
-                                            {links.length} {links.length === 1 ? 'link' : 'links'}
+                            premium ? (
+                                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                                    <div className="p-6 border-b border-gray-200">
+                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                            <h2 className="text-xl font-semibold text-gray-800">My Links</h2>
+                                            <div className="text-sm text-gray-500">
+                                                {links.length} {links.length === 1 ? 'link' : 'links'}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                {links.length > 0 ? (
-                                    <div className="divide-y divide-gray-200">
-                                        {links.map((link) => (
-                                            <motion.div
-                                                key={link._id}
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                className="p-6 hover:bg-gray-50 transition"
-                                            >
-                                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                                    <div className="flex-1 min-w-0">
-                                                        <div className="flex items-center gap-2 mb-1">
+                                    {links.length > 0 ? (
+                                        <div className="divide-y divide-gray-200">
+                                            {links.map((link) => (
+                                                <motion.div
+                                                    key={link._id}
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    className="p-4 sm:p-6 hover:bg-gray-50 transition"
+                                                >
+                                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex flex-wrap items-center gap-2 mb-1">
+                                                                <a
+                                                                    href={`${baseUrl}/${link.alias}`}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="font-medium text-indigo-600 hover:underline break-all"
+                                                                >
+                                                                    {baseUrl}/{link.alias}
+                                                                </a>
+                                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                                    {link.clicks} clicks
+                                                                </span>
+                                                            </div>
                                                             <a
-                                                                href={`${baseUrl}/${link.alias}`}
+                                                                href={link.originalUrl}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
-                                                                className="font-medium text-indigo-600 hover:underline truncate"
+                                                                className="text-sm text-gray-500 hover:text-gray-700 break-all block"
                                                             >
-                                                                {baseUrl}/{link.alias}
+                                                                {link.originalUrl}
                                                             </a>
-                                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
-                                                                {link.clicks} clicks
-                                                            </span>
+                                                            <div className="flex flex-wrap items-center mt-2 text-xs text-gray-500 gap-2">
+                                                                <div className="flex items-center">
+                                                                    <FiClock className="mr-1" />
+                                                                    <span>Created {new Date(link.createdAt).toLocaleDateString()}</span>
+                                                                </div>
+                                                                {link.lastAccessed && (
+                                                                    <div className="flex items-center">
+                                                                        <FiActivity className="mr-1" />
+                                                                        <span>Last clicked {new Date(link.lastAccessed).toLocaleDateString()}</span>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         </div>
-                                                        <a
-                                                            href={link.originalUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-sm text-gray-500 hover:text-gray-700 truncate block"
-                                                        >
-                                                            {link.originalUrl}
-                                                        </a>
-                                                        <div className="flex items-center mt-2 text-xs text-gray-500">
-                                                            <FiClock className="mr-1" />
-                                                            <span>Created {new Date(link.createdAt).toLocaleDateString()}</span>
-                                                            {link.lastAccessed && (
-                                                                <>
-                                                                    <span className="mx-2">•</span>
-                                                                    <FiActivity className="mr-1" />
-                                                                    <span>Last clicked {new Date(link.lastAccessed).toLocaleDateString()}</span>
-                                                                </>
-                                                            )}
+
+                                                        <div className="flex items-center gap-2 shrink-0">
+                                                            <button
+                                                                onClick={() => navigator.clipboard.writeText(`${baseUrl}/${link.alias}`)}
+                                                                className="p-2 rounded-lg hover:bg-gray-100 transition"
+                                                                title="Copy"
+                                                            >
+                                                                <FiCopy className="text-gray-500 hover:text-gray-700" />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDelete(link.alias)}
+                                                                className="p-2 rounded-lg hover:bg-red-50 transition"
+                                                                title="Delete"
+                                                            >
+                                                                <FiTrash2 className="text-red-500 hover:text-red-700" />
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <button
-                                                            onClick={() => navigator.clipboard.writeText(`${baseUrl}/${link.alias}`)}
-                                                            className="p-2 rounded-lg hover:bg-gray-100 transition"
-                                                            title="Copy"
-                                                        >
-                                                            <FiCopy className="text-gray-500 hover:text-gray-700" />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDelete(link.alias)}
-                                                            className="p-2 rounded-lg hover:bg-red-50 transition"
-                                                            title="Delete"
-                                                        >
-                                                            <FiTrash2 className="text-red-500 hover:text-red-700" />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="p-12 text-center">
-                                        <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                            <FiLink className="text-gray-400 text-3xl" />
+                                                </motion.div>
+                                            ))}
                                         </div>
-                                        <h3 className="text-lg font-medium text-gray-900 mb-1">No links yet</h3>
-                                        <p className="text-gray-500 max-w-md mx-auto">
-                                            Create your first shortened URL by entering a long URL above.
-                                        </p>
+                                    ) : (
+                                        <div className="p-12 text-center">
+                                            <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                                <FiLink className="text-gray-400 text-3xl" />
+                                            </div>
+                                            <h3 className="text-lg font-medium text-gray-900 mb-1">No links yet</h3>
+                                            <p className="text-gray-500 max-w-md mx-auto">
+                                                Create your first shortened URL by entering a long URL above.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                // 🔒 Locked for non-premium users
+                                <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
+                                    <div className="mx-auto w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                                        <FiLock className="text-yellow-500 text-3xl" />
                                     </div>
-                                )}
-                            </div>
+                                    <h3 className="text-lg font-medium text-gray-900 mb-1">Upgrade Required</h3>
+                                    <p className="text-gray-500 max-w-md mx-auto mb-4">
+                                        Viewing your created links is a premium feature. Upgrade your account to unlock access.
+                                    </p>
+                                    <Link
+                                        href="/pricing"
+                                        className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition"
+                                    >
+                                        Upgrade to Premium
+                                    </Link>
+                                </div>
+                            )
+                        )
+                        : premium ? (
+
+
+                        <div className="bg-white rounded-xl shadow-sm p-6">
+                            <h2 className="text-xl font-semibold text-gray-800 mb-6">Analytics</h2>
+                            {links.length > 0 ? (
+                                <div>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                        <div className="bg-indigo-50 rounded-lg p-4">
+                                            <p className="text-sm font-medium text-indigo-700 mb-1">Total Links</p>
+                                            <p className="text-2xl font-bold text-indigo-900">{links.length}</p>
+                                        </div>
+                                        <div className="bg-green-50 rounded-lg p-4">
+                                            <p className="text-sm font-medium text-green-700 mb-1">Total Clicks</p>
+                                            <p className="text-2xl font-bold text-green-900">
+                                                {links.reduce((sum, link) => sum + link.clicks, 0)}
+                                            </p>
+                                        </div>
+                                        <div className="bg-purple-50 rounded-lg p-4">
+                                            <p className="text-sm font-medium text-purple-700 mb-1">Most Popular</p>
+                                            <p className="text-lg font-bold text-purple-900 truncate">
+                                                {links.length > 0
+                                                    ? `${baseUrl}/${links.reduce((prev, current) => (prev.clicks > current.clicks) ? prev : current).alias}`
+                                                    : '-'
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="border border-gray-200 rounded-lg p-4">
+                                        <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends</h3>
+                                        <ClickTrendChart slug={slug} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="text-center py-12">
+                                    <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                        <FiBarChart2 className="text-gray-400 text-3xl" />
+                                    </div>
+                                    <h3 className="text-lg font-medium text-gray-900 mb-1">No analytics data yet</h3>
+                                    <p className="text-gray-500 max-w-md mx-auto">
+                                        Create some links and start tracking their performance.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                         ) : (
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-800 mb-6">Analytics</h2>
-                                {links.length > 0 ? (
-                                    <div>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                                            <div className="bg-indigo-50 rounded-lg p-4">
-                                                <p className="text-sm font-medium text-indigo-700 mb-1">Total Links</p>
-                                                <p className="text-2xl font-bold text-indigo-900">{links.length}</p>
-                                            </div>
-                                            <div className="bg-green-50 rounded-lg p-4">
-                                                <p className="text-sm font-medium text-green-700 mb-1">Total Clicks</p>
-                                                <p className="text-2xl font-bold text-green-900">
-                                                    {links.reduce((sum, link) => sum + link.clicks, 0)}
-                                                </p>
-                                            </div>
-                                            <div className="bg-purple-50 rounded-lg p-4">
-                                                <p className="text-sm font-medium text-purple-700 mb-1">Most Popular</p>
-                                                <p className="text-lg font-bold text-purple-900 truncate">
-                                                    {links.length > 0 
-                                                        ? `${baseUrl}/${links.reduce((prev, current) => (prev.clicks > current.clicks) ? prev : current).alias}`
-                                                        : '-'
-                                                    }
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="border border-gray-200 rounded-lg p-4">
-                                            <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends</h3>
-                                            <ClickTrendChart slug={slug} />
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="text-center py-12">
-                                        <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                            <FiBarChart2 className="text-gray-400 text-3xl" />
-                                        </div>
-                                        <h3 className="text-lg font-medium text-gray-900 mb-1">No analytics data yet</h3>
-                                        <p className="text-gray-500 max-w-md mx-auto">
-                                            Create some links and start tracking their performance.
-                                        </p>
-                                    </div>
-                                )}
+                        <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
+                            <div className="mx-auto w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                                <FiLock className="text-yellow-500 text-3xl" />
                             </div>
+                            <h3 className="text-lg font-medium text-gray-900 mb-1">Upgrade Required</h3>
+                            <p className="text-gray-500 max-w-md mx-auto mb-4">
+                                Analytics is a premium feature. Upgrade to unlock detailed performance insights.
+                            </p>
+                            <Link
+                                href="/pricing"
+                                className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition"
+                            >
+                                Upgrade to Premium
+                            </Link>
+                        </div>
                         )}
                     </div>
                 </div>
             </div>
 
             {/* Footer section */}
-            <Footer/>
+            <Footer />
         </div>
     );
 }

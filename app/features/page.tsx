@@ -10,7 +10,7 @@ export default function FeaturesPage() {
         </svg>
       ),
       title: "Blazing Fast",
-      description: "Instant URL shortening with 99.9% uptime and global CDN"
+      description: "Instant URL shortening with 99.9% uptime guarantee"
     },
     {
       icon: (
@@ -19,7 +19,7 @@ export default function FeaturesPage() {
         </svg>
       ),
       title: "Powerful Analytics",
-      description: "Track clicks, locations, devices, and daily trends"
+      description: "Track clicks and daily trends"
     },
     {
       icon: (
@@ -28,7 +28,8 @@ export default function FeaturesPage() {
         </svg>
       ),
       title: "Secure & Private",
-      description: "End-to-end encrypted links with optional password protection"
+      description: "End-to-end encrypted links with password protection"
+
     },
     {
       icon: (
@@ -38,7 +39,7 @@ export default function FeaturesPage() {
         </svg>
       ),
       title: "Customization",
-      description: "Branded domains, custom aliases, and QR code generation"
+      description: " Custom aliases, and QR code generation"
     }
   ];
 

@@ -53,7 +53,7 @@ export default function Navbar() {
           <nav className="hidden md:flex space-x-8">
             <Link href="/features" className="text-gray-600 hover:text-indigo-600 transition">Features</Link>
             <Link href="/pricing" className="text-gray-600 hover:text-indigo-600 transition">Pricing</Link>
-            <Link href="#" className="text-gray-600 hover:text-indigo-600 transition">Analytics</Link>
+            <Link href="/dashboard" className="text-gray-600 hover:text-indigo-600 transition">Analytics</Link>
             <Link href="/blog" className="text-gray-600 hover:text-indigo-600 transition">Blog</Link>
           </nav>
 
