@@ -1,4 +1,3 @@
-// ✅ app/[shortId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongodb';
 import { Url } from '@/models/Url';
@@ -10,13 +9,14 @@ export async function GET(
   try {
     await connectToDB();
     const { shortId } = context.params;
+
     const found = await Url.findOne({ slug: shortId });
 
     if (!found) {
       return NextResponse.redirect(new URL('/', req.url));
     }
 
-    // ✅ Update clicks and lastAccessed
+    // Update analytics
     found.clicks = (found.clicks || 0) + 1;
     found.lastAccessed = new Date();
     found.clickHistory.push(new Date());
@@ -28,6 +28,7 @@ export async function GET(
     return NextResponse.redirect(new URL('/', req.url));
   }
 }
+
 
 
 
