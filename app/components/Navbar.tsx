@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from 'react';
 
-import { FiLink } from 'react-icons/fi';
+// import { FiLink } from 'react-icons/fi';
 
 import { FiMenu, FiX } from 'react-icons/fi';
 import Link from 'next/link';
+import Image from 'next/image';
 
 
 
 
 export default function Navbar() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -28,25 +29,29 @@ export default function Navbar() {
     checkAuth();
   }, []);
 
-   async function handleLogout() {
+  async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     setIsAuthenticated(false);
     setMobileMenuOpen(false);
     window.location.href = '/'; // Redirect to homepage after logout
   }
 
-  return(
-<header className="bg-white shadow-sm sticky top-0 z-50">
+  return (
+    <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/">
-          <div  className="flex items-center space-x-2">
-            
-            <FiLink className="text-indigo-600 text-2xl" />
-            <h1 className="text-xl font-bold text-gray-800">ShortLink</h1>
-            
-          </div>
+            <div className="relative w-[200px] h-[50px] flex items-center justify-center border border-dashed"> {/* Debug border */}
+              <Image
+                src="/ashrtll.svg"
+                alt="AshrtL Logo"
+                width={200}
+                height={50}
+                className="object-contain"
+                
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

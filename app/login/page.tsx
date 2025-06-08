@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { FiMail, FiLock, FiArrowRight, FiUserPlus } from 'react-icons/fi';
 
+import Footer from '@/components/Footer';
+import Navbar from '@/components/loginNavbar';
+
+
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -41,6 +45,10 @@ export default function LoginPage() {
   };
 
   return (
+<div className="">
+
+   <Navbar/>
+      
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -160,6 +168,8 @@ export default function LoginPage() {
           </div>
         </div>
       </motion.div>
+    </div>
+    <Footer/>
     </div>
   );
 }

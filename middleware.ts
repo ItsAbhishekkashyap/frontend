@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 const PUBLIC_FILE = /\.(.*)$/;
 
 const PUBLIC_PATHS = [
-  '/',
-  '/login',
-  '/signup',
+  '/', 
+  '/login', 
+  '/signup', 
   '/api/auth/login',
   '/api/auth/signup',
   '/api/auth/forgot-password',
@@ -16,36 +16,34 @@ const PUBLIC_PATHS = [
   '/api/links/create',
 ];
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // ✅ Allow static files and public paths
   if (PUBLIC_FILE.test(pathname) || PUBLIC_PATHS.includes(pathname)) {
     return NextResponse.next();
   }
 
-  // ✅ Get token from cookies
   const token = req.cookies.get('token')?.value;
-
   if (!token) {
-    console.log('No token found — redirecting to /login');
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
   try {
-    // ✅ Verify token (no need to extract payload if unused)
-    jwt.verify(token, JWT_SECRET);
-    return NextResponse.next(); // Token valid — allow request
+    const secret = new TextEncoder().encode(JWT_SECRET);
+    await jwtVerify(token, secret); // This will throw if invalid
+
+    return NextResponse.next(); // ✅ valid token
   } catch (err) {
     console.error('JWT verification failed:', err);
     return NextResponse.redirect(new URL('/login', req.url));
   }
 }
 
-// ✅ Match all routes except static files and public paths
+// ✅ Matcher config
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
+
 
 
 
