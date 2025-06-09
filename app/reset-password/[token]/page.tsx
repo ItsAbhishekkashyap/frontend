@@ -5,30 +5,31 @@ import { useParams, useRouter } from 'next/navigation';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-  const token = (useParams() as { token: string }).token;
+  const { token } = useParams() as { token: string };
 
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (password !== confirm) {
       alert('Passwords do not match');
       return;
     }
 
-    const res = await fetch(`/api/auth/reset-password/${token}`, {
+    const res = await fetch('/api/auth/reset-password', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ token, password }),
     });
 
     const data = await res.json();
 
     if (res.ok) {
-      alert('Password updated! Login now.');
+      alert('Password updated! Please login.');
       router.push('/login');
     } else {
       alert(data.error || 'Error resetting password.');
@@ -62,4 +63,5 @@ export default function ResetPasswordPage() {
     </main>
   );
 }
+
 
