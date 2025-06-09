@@ -20,19 +20,17 @@ export default function ResetPasswordPage() {
 
     const res = await fetch('/api/auth/reset-password', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token, password }),
     });
 
     const data = await res.json();
 
     if (res.ok) {
-      alert('Password updated! Please login.');
+      alert('Password reset successful!');
       router.push('/login');
     } else {
-      alert(data.error || 'Error resetting password.');
+      alert(data.error || 'Something went wrong');
     }
   };
 
@@ -63,5 +61,6 @@ export default function ResetPasswordPage() {
     </main>
   );
 }
+
 
 

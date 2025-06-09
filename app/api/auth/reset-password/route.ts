@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     const { token, password } = await req.json();
 
     if (!token || !password) {
-      return NextResponse.json({ error: 'Token and password required' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing token or password' }, { status: 400 });
     }
 
     await connectToDB();
@@ -23,8 +23,8 @@ export async function POST(req: NextRequest) {
     await user.save();
 
     return NextResponse.json({ message: 'Password reset successful' });
-  } catch (error) {
-    console.error('Reset error:', error);
-    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
+  } catch (err) {
+    console.error('Password reset error:', err);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
