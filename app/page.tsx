@@ -155,7 +155,7 @@ export default function Home() {
                         required
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
-                        placeholder="https://example.com/very-long-url..."
+                        placeholder="https://example.com/url..."
                         className="w-full px-5 py-4 border-2 text-gray-400 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-lg"
                       />
                       <FiLink className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
