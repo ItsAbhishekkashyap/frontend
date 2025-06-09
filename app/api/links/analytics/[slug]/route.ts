@@ -2,15 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongodb';
 import { Url } from '@/models/Url';
 
+type Context = {
+  params: { slug: string }
+};
 
 export async function GET(
   request: NextRequest,
-  context: { params: { slug: string } } // ✅ Use `context` here
+  context: Context
 ) {
   try {
     await connectToDB();
 
-    const { slug } = context.params; // ✅ Correctly access params here
+    const { slug } = context.params;
 
     const urlEntry = await Url.findOne({ slug });
 
@@ -24,7 +27,7 @@ export async function GET(
 
     clickHistory.forEach((clickDate) => {
       const date = new Date(clickDate);
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = date.toISOString().split('T')[0]; 
       clickCounts[dateStr] = (clickCounts[dateStr] || 0) + 1;
     });
 
@@ -33,10 +36,12 @@ export async function GET(
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return NextResponse.json({ clickData });
+
   } catch (error) {
     console.error('Error fetching analytics:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+
 
 
