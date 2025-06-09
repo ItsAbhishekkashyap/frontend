@@ -345,18 +345,21 @@ export default function Dashboard() {
         }
     }
 
-    async function handleDelete(alias: string) {
-        const res = await fetch(`/api/links/${alias}`, {
-            method: 'DELETE',
-            credentials: 'include',
-        });
+   async function handleDelete(alias: string) {
+    const res = await fetch('/api/links/delete', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: alias }), // send 'slug' in POST body
+    });
 
-        if (res.ok) {
-            setLinks((prev) => prev.filter((link) => link.alias !== alias));
-        } else {
-            console.error('Failed to delete');
-        }
+    if (res.ok) {
+        setLinks((prev) => prev.filter((link) => link.alias !== alias));
+    } else {
+        console.error('Failed to delete');
     }
+}
+
 
     const fullShortUrl = slug ? `${baseUrl}/${slug}` : '';
 
