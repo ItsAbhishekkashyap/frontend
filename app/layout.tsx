@@ -13,14 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-   title: {
+  title: {
     default: 'AshrtL | Smart URL Shortener',
     template: '%s | AshrtL',
   },
   description: 'Shorten links, track performance, and optimize engagement with AshrtL.',
   alternates: {
-  canonical: 'https://ashrtl.xyz',
-},
+    canonical: 'https://ashrtl.xyz',
+  },
 
   icons: {
     icon: '/favicon.png', // Path from /public
@@ -40,12 +40,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <link rel="icon" href="/favicon.ico" />
-<link rel="manifest" href="/site.webmanifest" />
-<meta name="theme-color" content="#ffffff" />
+      <head>
+
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#ffffff" />
+
+
+      </head>
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable}  antialiased`}
       >
         {children}
       </body>

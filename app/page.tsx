@@ -1,13 +1,25 @@
 'use client';
 
 
-import {  useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiCopy, FiExternalLink, FiLink } from 'react-icons/fi';
+import { FiActivity, FiAlertCircle, FiClipboard, FiCopy, FiExternalLink, FiLink, FiLink2, FiLock, FiPieChart, FiShare2, FiSliders, FiZap } from 'react-icons/fi';
 import { BsCheckLg } from 'react-icons/bs';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Script from 'next/script';
+import FeatureCard from './components/FeatureCard';
+
+import { 
+  FiTwitter, 
+  FiInstagram, 
+  FiFacebook, 
+  FiMail, 
+  FiPrinter, 
+  FiArrowRight 
+} from 'react-icons/fi';
+import StepCard from './components/StepCard';
+
 
 // export const metadata = {
 //   title: "AshrtL – The Smarter URL Shortener",
@@ -74,144 +86,415 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-<Script id="ld-json" type="application/ld+json">
-  {JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "AshrtL",
-    "url": "https://ashrtl.xyz",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://ashrtl.xyz/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  })}
-</Script>
+  <Script id="ld-json" type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AshrtL",
+      "url": "https://ashrtl.xyz",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://ashrtl.xyz/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    })}
+  </Script>
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-indigo-50 to-blue-50">
       {/* Header section */}
 
-    <Navbar/>
+      <Navbar />
 
       {/* Main Content */}
-      <main className="flex-grow flex items-center  justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-lg"
-        >
-          <div className="bg-white rounded-xl shadow-lg p-8 sm:p-10">
-            <div className="text-center mb-8">
+      <main className="flex-grow">
+        {/* Hero Section with Gradient Background */}
+        <section className="bg-gradient-to-br from-indigo-50 to-indigo-100 py-16 md:py-24">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="max-w-2xl mx-auto text-center mb-12"
+            >
               <motion.div
-                initial={{ scale: 0.8 }}
+                initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 200 }}
-                className="inline-flex items-center justify-center bg-indigo-100 p-4 rounded-full mb-4"
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="inline-flex items-center justify-center bg-white p-5 rounded-2xl shadow-lg mb-6"
               >
-                <FiLink className="text-indigo-600 text-3xl" />
+                <FiLink className="text-indigo-600 text-4xl" />
               </motion.div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Shorten Your Links</h1>
-              <p className="text-gray-600">Create short, memorable URLs in seconds</p>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Shorten, Share & <span className="text-indigo-600">Track</span>
+              </h1>
+              <p className="text-xl text-gray-600 max-w-lg mx-auto">
+                Transform long links into powerful, trackable URLs with our premium shortening service
+              </p>
+            </motion.div>
+
+            {/* URL Shortener Card with Floating Effect */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden"
+            >
+              <div className="p-8 md:p-10">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label htmlFor="url" className="block text-sm font-medium text-gray-700">
+                        Paste your long URL
+                      </label>
+                      <span className="text-xs text-indigo-600">No registration required</span>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="url"
+                        id="url"
+                        required
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        placeholder="https://example.com/very-long-url..."
+                        className="w-full px-5 py-4 border-2 text-gray-400 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-lg"
+                      />
+                      <FiLink className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+                    </div>
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    disabled={isLoading}
+                    className={`w-full py-4 px-6 rounded-xl font-semibold text-white text-lg transition-all ${isLoading ? 'bg-indigo-400' : 'bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 shadow-md'}`}
+                  >
+                    {isLoading ? (
+                      <span className="flex items-center justify-center">
+                        <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Shortening...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center">
+                        <FiZap className="mr-2" />
+                        Shorten URL
+                      </span>
+                    )}
+                  </motion.button>
+
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100"
+                    >
+                      <div className="flex items-start">
+                        <FiAlertCircle className="flex-shrink-0 mr-2 text-lg" />
+                        <span>{error}</span>
+                      </div>
+                    </motion.div>
+                  )}
+                </form>
+
+                {shortUrl && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    transition={{ duration: 0.4 }}
+                    className="mt-8 p-5 bg-indigo-50 rounded-xl border border-indigo-100"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-medium text-gray-700">Your shortened URL:</p>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <span className="w-2 h-2 rounded-full bg-green-500 mr-1"></span>
+                        Active
+                      </span>
+                    </div>
+                    <div className="flex items-center bg-white p-3 rounded-lg border border-gray-200">
+                      <a
+                        href={shortUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 text-indigo-600 font-medium truncate hover:underline text-lg"
+                      >
+                        {shortUrl}
+                      </a>
+                      <div className="flex space-x-2 ml-3">
+                        <button
+                          onClick={copyToClipboard}
+                          className="p-2 rounded-lg hover:bg-indigo-100 transition flex items-center justify-center"
+                          title="Copy to clipboard"
+                        >
+                          {copied ? (
+                            <BsCheckLg className="text-green-500 text-xl" />
+                          ) : (
+                            <FiCopy className="text-indigo-600 text-xl" />
+                          )}
+                        </button>
+                        <a
+                          href={shortUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-lg hover:bg-indigo-100 transition flex items-center justify-center"
+                          title="Open in new tab"
+                        >
+                          <FiExternalLink className="text-indigo-600 text-xl" />
+                        </a>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex items-center text-sm text-gray-500">
+                      <BsCheckLg className="mr-1.5 text-green-500" />
+                      <span>Link is ready to use • </span>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+
+
+        {/* Features Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <span className="inline-block px-3 py-1 text-sm font-semibold text-indigo-600 bg-indigo-100 rounded-full mb-4">
+                Powerful Features
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                More Than Just Link Shortening
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Advanced tools to help you understand and optimize your links
+              </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-1">
-                  Enter your long URL
-                </label>
-                <input
-                  type="url"
-                  id="url"
-                  required
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  placeholder="https://example.com/very-long-url..."
-                  className="w-full px-4 py-3 border text-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                />
-              </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              <FeatureCard
+                icon={<FiLock className="text-indigo-600 text-3xl" />}
+                title="Secure Links"
+                description="Password protection and encrypted links for sensitive content"
+                badge="Security"
+              />
+              <FeatureCard
+                icon={<FiPieChart className="text-indigo-600 text-3xl" />}
+                title="Advanced Analytics"
+                description="Real-time tracking of clicks, locations, and devices"
+                badge="Insights"
+              />
+              {/* <FeatureCard
+                icon={<FiCalendar className="text-indigo-600 text-3xl" />}
+                title="Link Expiration"
+                description="Set automatic expiration for temporary campaigns"
+                badge="Control"
+              /> */}
+              {/* <FeatureCard
+                icon={<FiSmartphone className="text-indigo-600 text-3xl" />}
+                title="QR Codes"
+                description="Generate QR codes for print materials and offline use"
+                badge="Versatility"
+              /> */}
+              <FeatureCard
+                icon={<FiLink2 className="text-indigo-600 text-3xl" />}
+                title="Custom Alias"
+                description="Use your own alias for branded short links"
+                badge="Branding"
+              />
+              {/* <FeatureCard
+                icon={<FiUsers className="text-indigo-600 text-3xl" />}
+                title="Team Collaboration"
+                description="Share links and analytics with your team"
+                badge="Productivity"
+              /> */}
+            </div>
+          </div>
+        </section>
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                disabled={isLoading}
-                className={`w-full py-3 px-4 rounded-lg font-medium text-white transition ${isLoading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'}`}
-              >
-                {isLoading ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Shortening...
-                  </span>
-                ) : 'Shorten URL'}
-              </motion.button>
+        {/* How It Works - Animated Steps */}
+        <section className="py-20 bg-gradient-to-b from-white to-indigo-50">
+  <div className="container mx-auto px-4">
+    {/* Header */}
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="text-center mb-16"
+    >
+      <span className="inline-block px-4 py-2 text-sm font-semibold text-indigo-600 bg-indigo-100 rounded-full mb-4 shadow-sm">
+        ✨ Simple Process
+      </span>
+      <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-clip-text  bg-gradient-to-r from-indigo-600 to-indigo-400">
+        How It Works
+      </h2>
+      <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        Transform your links in just a few clicks with our intuitive platform
+      </p>
+    </motion.div>
 
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="p-3 bg-red-50 text-red-600 rounded-lg text-sm"
-                >
-                  {error}
-                </motion.div>
-              )}
-            </form>
+    {/* Steps */}
+    <div className="max-w-5xl mx-auto">
+      <div className="grid md:grid-cols-4 gap-8">
+        {/* Step 1 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="relative"
+        >
+          <div className="absolute -left-4 md:-left-8 top-10 h-full w-0.5 bg-indigo-100 md:block hidden"></div>
+          <StepCard
+            number={1}
+            title="Paste URL"
+            description="Enter any long web address"
+            icon={<FiClipboard className="text-indigo-600" />}
+            accentColor="bg-indigo-100"
+          />
+        </motion.div>
 
-            {shortUrl && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                transition={{ duration: 0.3 }}
-                className="mt-8 p-4 bg-indigo-50 rounded-lg"
-              >
-                <p className="text-sm font-medium text-gray-700 mb-2">Your shortened URL:</p>
-                <div className="flex items-center">
-                  <a
-                    href={shortUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 text-indigo-600 font-medium truncate hover:underline"
-                  >
-                    {shortUrl}
-                  </a>
-                  <div className="flex space-x-2 ml-2">
-                    <button
-                      onClick={copyToClipboard}
-                      className="p-2 rounded-full hover:bg-indigo-100 transition"
-                      title="Copy to clipboard"
-                    >
-                      {copied ? (
-                        <BsCheckLg className="text-green-500" />
-                      ) : (
-                        <FiCopy className="text-indigo-600" />
-                      )}
-                    </button>
-                    <a
-                      href={shortUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 rounded-full hover:bg-indigo-100 transition"
-                      title="Open in new tab"
-                    >
-                      <FiExternalLink className="text-indigo-600" />
-                    </a>
+        {/* Step 2 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="relative"
+        >
+          <StepCard
+            number={2}
+            title="Customize"
+            description="Add aliases or set expiration"
+            icon={<FiSliders className="text-indigo-600" />}
+            accentColor="bg-blue-100"
+          />
+        </motion.div>
+
+        {/* Step 3 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="relative"
+        >
+          <StepCard
+            number={3}
+            title="Share"
+            description="Use your compact link anywhere"
+            icon={<FiShare2 className="text-indigo-600" />}
+            accentColor="bg-purple-100"
+          />
+        </motion.div>
+
+        {/* Step 4 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <StepCard
+            number={4}
+            title="Track"
+            description="Monitor clicks and engagement"
+            icon={<FiActivity className="text-indigo-600" />}
+            accentColor="bg-pink-100"
+          />
+        </motion.div>
+      </div>
+    </div>
+
+    {/* Animated Arrow Connectors (Desktop Only) */}
+    <div className="hidden md:flex justify-center mt-8">
+      <div className="flex items-center space-x-2">
+        {[1, 2, 3].map((item) => (
+          <motion.div
+            key={item}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 + item * 0.1 }}
+            className="flex items-center"
+          >
+            <div className="w-16 h-1 bg-indigo-200 rounded-full"></div>
+            <FiArrowRight className="text-indigo-400 mx-1" />
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+        {/* Use Cases */}
+        <section className="py-16 bg-gradient-to-br from-indigo-50 to-indigo-100">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <span className="inline-block px-3 py-1 text-sm font-semibold text-indigo-600 bg-indigo-100 rounded-full mb-4">
+                Perfect For
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Where You`&#39;ll Use It
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Optimize your links for every platform and purpose
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {/* Social Media Card */}
+              <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100">
+                <div className="bg-pink-100 w-22 h-16 rounded-lg flex items-center justify-center mb-6">
+                  <div className="flex space-x-1">
+                    <FiTwitter className="text-pink-600 text-2xl" />
+                    <FiInstagram className="text-pink-600 text-2xl" />
+                    <FiFacebook className="text-pink-600 text-2xl" />
                   </div>
                 </div>
-                <div className="mt-3 flex items-center text-xs text-gray-500">
-                  <span className="inline-block w-3 h-3 rounded-full bg-green-400 mr-1"></span>
-                  <span>Link is active and ready to use</span>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Social Media</h3>
+                <p className="text-gray-600 mb-4">Overcome character limits and track engagement across platforms</p>
+                <div className="flex items-center text-sm text-pink-600 font-medium">
+                  <FiArrowRight className="mr-2" />
+                  Learn more
                 </div>
-              </motion.div>
-            )}
+              </div>
+
+              {/* Email Marketing Card */}
+              <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100">
+                <div className="bg-blue-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                  <FiMail className="text-blue-600 text-3xl" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Email Marketing</h3>
+                <p className="text-gray-600 mb-4">Clean, trackable links for newsletters and campaigns</p>
+                <div className="flex items-center text-sm text-blue-600 font-medium">
+                  <FiArrowRight className="mr-2" />
+                  Learn more
+                </div>
+              </div>
+
+              {/* Print Materials Card */}
+              <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100">
+                <div className="bg-purple-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                  <FiPrinter className="text-purple-600 text-3xl" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Print Materials</h3>
+                <p className="text-gray-600 mb-4">Convert long URLs to scannable QR codes for offline use</p>
+                <div className="flex items-center text-sm text-purple-600 font-medium">
+                  <FiArrowRight className="mr-2" />
+                  Learn more
+                </div>
+              </div>
+            </div>
           </div>
-        </motion.div>
+        </section>
       </main>
 
       {/* Professional & Brilliant Footer */}
-      <Footer/>
+      <Footer />
     </div>
   );
 }
