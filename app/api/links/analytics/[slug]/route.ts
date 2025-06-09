@@ -2,14 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongodb';
 import { Url } from '@/models/Url';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
     await connectToDB();
 
-    const { slug } = params;
+    // ✅ Extract slug from the URL like this:
+    const url = new URL(request.url);
+    const slug = url.pathname.split('/').pop();
+
+    if (!slug) {
+      return NextResponse.json({ error: 'Slug not provided' }, { status: 400 });
+    }
 
     const urlEntry = await Url.findOne({ slug });
 
@@ -38,7 +41,3 @@ export async function GET(
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
-
-
-
-
