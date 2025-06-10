@@ -9,7 +9,7 @@ export interface IUser extends Document {
   premium: boolean;
   name?: string;      // Google provides name
   picture?: string;   // Google provides picture
-  provider?: string;  // 'google' or 'credentials'
+   provider: 'credentials' | 'google'; // 'google' or 'credentials'
 }
 
 const UserSchema = new Schema<IUser>(
@@ -23,7 +23,7 @@ const UserSchema = new Schema<IUser>(
     },
     name: { type: String },       // Optional for Google
     picture: { type: String },    // Optional for Google
-    provider: { type: String },   // 'google' or 'credentials'
+   provider: { type: String, default: 'credentials' },   // 'google' or 'credentials'
   },
   { collection: "users" }
 );

@@ -1,14 +1,31 @@
 // lib/jwt.ts
+// app/lib/jwt.ts
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET!;
+if (!process.env.JWT_SECRET) {
+  throw new Error('⚠️ Please define JWT_SECRET in your .env.local');
+}
 
-export function verifyJwt(token: string): { userId: string } | null {
+export interface JWTPayload {
+  id: string;
+  email: string;
+}
+
+// Sign a new JWT with `{ id, email }` and 7d expiry
+export function signJwt(payload: JWTPayload): string {
+  return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '7d' });
+}
+
+// Verify and return the payload, or null if invalid
+export function verifyJwt(token: string): JWTPayload | null {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    return typeof decoded === 'object' && 'userId' in decoded ? (decoded as { userId: string }) : null;
-  } catch (error) {
-    console.error('Error verifying JWT token:', error);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    if (typeof decoded === 'object' && decoded && 'id' in decoded && 'email' in decoded) {
+      return decoded as JWTPayload;
+    }
+    return null;
+  } catch (err) {
+    console.error('❌ JWT verification error:', err);
     return null;
   }
 }
