@@ -1,26 +1,31 @@
-import  { Schema, Document, model, models } from 'mongoose';
+import { Schema, Document, model, models } from "mongoose";
 
 export interface IUser extends Document {
   email: string;
-  password: string;
+  password?: string; // Now optional
   createdAt: Date;
   resetToken?: string;
-resetTokenExpiry?: number;
-premium: boolean;
-
+  resetTokenExpiry?: number;
+  premium: boolean;
+  name?: string;      // Google provides name
+  picture?: string;   // Google provides picture
+  provider?: string;  // 'google' or 'credentials'
 }
 
 const UserSchema = new Schema<IUser>(
   {
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String }, // Not required anymore
     createdAt: { type: Date, default: Date.now },
-     premium: {
-    type: Boolean,
-    default: false,      // default false so new users are not premium by default
+    premium: {
+      type: Boolean,
+      default: false,
+    },
+    name: { type: String },       // Optional for Google
+    picture: { type: String },    // Optional for Google
+    provider: { type: String },   // 'google' or 'credentials'
   },
-  },
-  { collection: 'users' }
+  { collection: "users" }
 );
 
-export const User = models.User || model<IUser>('User', UserSchema);
+export const User = models.User || model<IUser>("User", UserSchema);
