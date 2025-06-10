@@ -259,6 +259,7 @@ import ClickTrendChart from '@/components/ClickTrendChart';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import QrCodeButton from '@/components/QrCodeButton';
 
 type LinkType = {
     _id: string;
@@ -345,20 +346,20 @@ export default function Dashboard() {
         }
     }
 
-   async function handleDelete(alias: string) {
-    const res = await fetch('/api/links/delete', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug: alias }), // send 'slug' in POST body
-    });
+    async function handleDelete(alias: string) {
+        const res = await fetch('/api/links/delete', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug: alias }), // send 'slug' in POST body
+        });
 
-    if (res.ok) {
-        setLinks((prev) => prev.filter((link) => link.alias !== alias));
-    } else {
-        console.error('Failed to delete');
+        if (res.ok) {
+            setLinks((prev) => prev.filter((link) => link.alias !== alias));
+        } else {
+            console.error('Failed to delete');
+        }
     }
-}
 
 
     const fullShortUrl = slug ? `${baseUrl}/${slug}` : '';
@@ -580,6 +581,10 @@ export default function Dashboard() {
                                                             >
                                                                 <FiTrash2 className="text-red-500 hover:text-red-700" />
                                                             </button>
+
+                                                            {/* QR Code Button */}
+                                                            <QrCodeButton url={`${baseUrl}/${link.alias}`} id={link._id} />
+
                                                         </div>
                                                     </div>
                                                 </motion.div>
@@ -616,69 +621,69 @@ export default function Dashboard() {
                                 </div>
                             )
                         )
-                        : premium ? (
+                            : premium ? (
 
 
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h2 className="text-xl font-semibold text-gray-800 mb-6">Analytics</h2>
-                            {links.length > 0 ? (
-                                <div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                                        <div className="bg-indigo-50 rounded-lg p-4">
-                                            <p className="text-sm font-medium text-indigo-700 mb-1">Total Links</p>
-                                            <p className="text-2xl font-bold text-indigo-900">{links.length}</p>
+                                <div className="bg-white rounded-xl shadow-sm p-6">
+                                    <h2 className="text-xl font-semibold text-gray-800 mb-6">Analytics</h2>
+                                    {links.length > 0 ? (
+                                        <div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                                <div className="bg-indigo-50 rounded-lg p-4">
+                                                    <p className="text-sm font-medium text-indigo-700 mb-1">Total Links</p>
+                                                    <p className="text-2xl font-bold text-indigo-900">{links.length}</p>
+                                                </div>
+                                                <div className="bg-green-50 rounded-lg p-4">
+                                                    <p className="text-sm font-medium text-green-700 mb-1">Total Clicks</p>
+                                                    <p className="text-2xl font-bold text-green-900">
+                                                        {links.reduce((sum, link) => sum + link.clicks, 0)}
+                                                    </p>
+                                                </div>
+                                                <div className="bg-purple-50 rounded-lg p-4">
+                                                    <p className="text-sm font-medium text-purple-700 mb-1">Most Popular</p>
+                                                    <p className="text-lg font-bold text-purple-900 truncate">
+                                                        {links.length > 0
+                                                            ? `${baseUrl}/${links.reduce((prev, current) => (prev.clicks > current.clicks) ? prev : current).alias}`
+                                                            : '-'
+                                                        }
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div className="border border-gray-200 rounded-lg p-4">
+                                                <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends</h3>
+                                                <ClickTrendChart slug={slug} />
+                                            </div>
                                         </div>
-                                        <div className="bg-green-50 rounded-lg p-4">
-                                            <p className="text-sm font-medium text-green-700 mb-1">Total Clicks</p>
-                                            <p className="text-2xl font-bold text-green-900">
-                                                {links.reduce((sum, link) => sum + link.clicks, 0)}
+                                    ) : (
+                                        <div className="text-center py-12">
+                                            <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                                <FiBarChart2 className="text-gray-400 text-3xl" />
+                                            </div>
+                                            <h3 className="text-lg font-medium text-gray-900 mb-1">No analytics data yet</h3>
+                                            <p className="text-gray-500 max-w-md mx-auto">
+                                                Create some links and start tracking their performance.
                                             </p>
                                         </div>
-                                        <div className="bg-purple-50 rounded-lg p-4">
-                                            <p className="text-sm font-medium text-purple-700 mb-1">Most Popular</p>
-                                            <p className="text-lg font-bold text-purple-900 truncate">
-                                                {links.length > 0
-                                                    ? `${baseUrl}/${links.reduce((prev, current) => (prev.clicks > current.clicks) ? prev : current).alias}`
-                                                    : '-'
-                                                }
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="border border-gray-200 rounded-lg p-4">
-                                        <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends</h3>
-                                        <ClickTrendChart slug={slug} />
-                                    </div>
+                                    )}
                                 </div>
                             ) : (
-                                <div className="text-center py-12">
-                                    <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                        <FiBarChart2 className="text-gray-400 text-3xl" />
+                                <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
+                                    <div className="mx-auto w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                                        <FiLock className="text-yellow-500 text-3xl" />
                                     </div>
-                                    <h3 className="text-lg font-medium text-gray-900 mb-1">No analytics data yet</h3>
-                                    <p className="text-gray-500 max-w-md mx-auto">
-                                        Create some links and start tracking their performance.
+                                    <h3 className="text-lg font-medium text-gray-900 mb-1">Upgrade Required</h3>
+                                    <p className="text-gray-500 max-w-md mx-auto mb-4">
+                                        Analytics is a premium feature. Upgrade to unlock detailed performance insights.
                                     </p>
+                                    <Link
+                                        href="/pricing"
+                                        className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition"
+                                    >
+                                        Upgrade to Premium
+                                    </Link>
                                 </div>
                             )}
-                        </div>
-                        ) : (
-                        <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
-                            <div className="mx-auto w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
-                                <FiLock className="text-yellow-500 text-3xl" />
-                            </div>
-                            <h3 className="text-lg font-medium text-gray-900 mb-1">Upgrade Required</h3>
-                            <p className="text-gray-500 max-w-md mx-auto mb-4">
-                                Analytics is a premium feature. Upgrade to unlock detailed performance insights.
-                            </p>
-                            <Link
-                                href="/pricing"
-                                className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium transition"
-                            >
-                                Upgrade to Premium
-                            </Link>
-                        </div>
-                        )}
                     </div>
                 </div>
             </div>
