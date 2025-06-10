@@ -54,9 +54,9 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    window.location.href = '/api/auth/google';
-  };
+  // const handleGoogleLogin = () => {
+  //   window.location.href = '/api/auth/google';
+  // };
 
   return (
     <div className="">
@@ -146,7 +146,7 @@ export default function LoginPage() {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full flex items-center justify-center py-3 px-4 rounded-lg font-medium text-white transition ${isLoading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
+                  className={`w-full flex items-center justify-center py-3 px-4 rounded-lg font-medium text-white transition ${isLoading ? 'bg-indigo-400' : 'bg-blue-600 hover:bg-blue-700'
                     }`}
                 >
                   {isLoading ? (
@@ -181,12 +181,12 @@ export default function LoginPage() {
                 </motion.button>
               </form>
 
-              <button
+              {/* <button
                 onClick={handleGoogleLogin}
                 className="w-full flex items-center justify-center py-3 px-4 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition mt-4"
               >
                 Sign in with Google
-              </button>
+              </button>  */}
 
               {/* Sign Up Link */}
               <div className="mt-6 text-center">
