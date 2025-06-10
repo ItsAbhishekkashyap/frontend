@@ -103,10 +103,10 @@ export default function Navbar() {
         {mobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 space-y-4">
             <nav className="flex flex-col space-y-3">
-              <a href="#" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Features</a>
-              <a href="#" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-              <a href="#" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Analytics</a>
-              <a href="#" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>API</a>
+              <Link href="/features" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Features</Link>
+              <Link href="/pricing" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Pricing</Link>
+              <Link href="/dashboard" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Analytics</Link>
+              <Link href="/blog" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
             </nav>
 
             <div className="flex flex-col space-y-3 pt-2 border-t border-gray-100">
