@@ -1,12 +1,25 @@
-import { NextRequest, NextResponse } from 'next/server';
+// /app/api/auth/google/route.ts
 
-export async function GET(req: NextRequest) {
-    console.log("Incoming request:", req.url);
-  const redirect_uri = 'https://ashrtl.vercel.app/api/auth/google/callback';
-  const client_id = process.env.GOOGLE_CLIENT_ID as string;
-  const scope = 'openid email profile';
+import { NextResponse } from 'next/server';
 
-  const url = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
+export async function GET() {
+  const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+  const options = {
+    redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URL!,
+    client_id: process.env.GOOGLE_CLIENT_ID!, // server-side var
+    access_type: 'offline',
+    response_type: 'code',
+    prompt: 'consent',
+    scope: [
+      'openid',
+      'email',
+      'profile',
+    ].join(' '),
+  };
+
+  const params = new URLSearchParams(options);
+  const url = `${rootUrl}?${params.toString()}`;
 
   return NextResponse.redirect(url);
 }
+

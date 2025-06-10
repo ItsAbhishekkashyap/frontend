@@ -55,8 +55,8 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-  window.location.href = '/api/auth/google';
-};
+    window.location.href = '/api/auth/google';
+  };
 
   return (
     <div className="">
@@ -93,9 +93,8 @@ export default function LoginPage() {
                       placeholder="you@example.com"
                       aria-label="Email Address"
                       {...register('email')}
-                      className={`w-full pl-10 pr-3 py-2 border ${
-                        errors.email ? 'border-red-500' : 'border-gray-300'
-                      } text-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition`}
+                      className={`w-full pl-10 pr-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'
+                        } text-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition`}
                     />
                   </div>
                   {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
@@ -116,9 +115,8 @@ export default function LoginPage() {
                       placeholder="••••••••"
                       aria-label="Password"
                       {...register('password')}
-                      className={`w-full pl-10 pr-10 py-2 border ${
-                        errors.password ? 'border-red-500' : 'border-gray-300'
-                      } text-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition`}
+                      className={`w-full pl-10 pr-10 py-2 border ${errors.password ? 'border-red-500' : 'border-gray-300'
+                        } text-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition`}
                     />
                     <button
                       type="button"
@@ -148,9 +146,8 @@ export default function LoginPage() {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full flex items-center justify-center py-3 px-4 rounded-lg font-medium text-white transition ${
-                    isLoading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
-                  }`}
+                  className={`w-full flex items-center justify-center py-3 px-4 rounded-lg font-medium text-white transition ${isLoading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
+                    }`}
                 >
                   {isLoading ? (
                     <>
@@ -185,11 +182,11 @@ export default function LoginPage() {
               </form>
 
               <button
-  onClick={handleGoogleLogin}
-  className="w-full flex items-center justify-center py-3 px-4 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition mt-4"
->
-  Sign in with Google
-</button>
+                onClick={handleGoogleLogin}
+                className="w-full flex items-center justify-center py-3 px-4 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition mt-4"
+              >
+                Sign in with Google
+              </button>
 
               {/* Sign Up Link */}
               <div className="mt-6 text-center">
