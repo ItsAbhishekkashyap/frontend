@@ -265,7 +265,7 @@ const BrandedLinksMatterPage = () => {
             <p className="text-gray-600 max-w-2xl mx-auto mb-8">
               Start using branded links today and transform how your audience engages with your content.
             </p>
-            <Link href="/pricing" className="bg-gradient-to-r w-[20%] from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-2 mx-auto">
+            <Link href="/pricing" className="bg-gradient-to-r w-[55%] sm:w-[30%] from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-2 mx-auto">
               Get Started <FiArrowRight />
             </Link>
           </div>

@@ -1,17 +1,21 @@
 "use client";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { FiShield, FiLock, FiEyeOff, FiServer, FiCheckCircle, FiBarChart2, FiSmartphone } from "react-icons/fi";
+import { 
+  FiShield, FiLock, FiEyeOff, FiServer, 
+  FiCheckCircle, FiBarChart2, FiSmartphone 
+} from "react-icons/fi";
 import Link from "next/link";
 
 export default function PrivacyFirstAnalytics() {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen min-w-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
       <Navbar />
-      
+
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-blue-800 to-indigo-900 py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-r from-blue-800 to-indigo-900 py-20 sm:py-24 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[url('/images/pattern-lock.svg')] bg-[length:120px_120px]"></div>
         </div>
@@ -21,43 +25,44 @@ export default function PrivacyFirstAnalytics() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full mb-4 sm:mb-6">
               <FiShield className="text-white" />
               <span className="text-white text-sm font-medium">Privacy by Design</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
               Privacy-First Analytics
             </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Powerful insights without compromising user privacy — the ethical way to track engagement
+            <p className="text-base sm:text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+              Powerful insights without compromising user privacy — the ethical way to track engagement.
             </p>
           </motion.div>
         </div>
       </section>
 
-      <main className="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Introduction */}
+      <main className="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+
+        {/* Introduction Section */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="mb-20"
+          className="mb-16 sm:mb-20"
         >
           <div className="flex flex-col md:flex-row gap-8 items-center">
-            <div className="md:w-1/3">
-              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <div className="bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                  <FiLock className="w-6 h-6" />
+            <div className="md:w-1/3 w-full">
+              <div className="bg-white p-5 sm:p-6 rounded-xl shadow-lg border border-gray-100">
+                <div className="bg-blue-100 text-blue-600 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-4">
+                  <FiLock className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Why Privacy Matters</h3>
-                <p className="text-gray-600">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Why Privacy Matters</h3>
+                <p className="text-gray-600 text-sm sm:text-base">
                   In an era of data breaches, respecting user privacy is both ethical and essential for compliance.
                 </p>
               </div>
             </div>
-            <div className="md:w-2/3">
-              <div className="space-y-4 text-gray-700">
+            <div className="md:w-2/3 w-full">
+              <div className="space-y-4 text-gray-700 text-sm sm:text-base">
                 <p>
                   At Ashrtl, we&#39;ve reimagined analytics to provide valuable insights while upholding the highest privacy standards. Our approach aligns with global regulations like GDPR and CCPA, ensuring you never have to choose between data and ethics.
                 </p>
@@ -77,12 +82,12 @@ export default function PrivacyFirstAnalytics() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-20"
+          className="mb-16 sm:mb-20"
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">
             Our Privacy-Preserving Techniques
           </h2>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-2 gap-6">
             {[
               {
                 icon: <FiBarChart2 className="w-6 h-6 text-green-600" />,
@@ -108,13 +113,13 @@ export default function PrivacyFirstAnalytics() {
               <motion.div 
                 key={index}
                 whileHover={{ y: -5 }}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all"
+                className="bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all"
               >
                 <div className="flex items-start gap-4">
                   <div className="mt-1">{item.icon}</div>
                   <div>
-                    <h3 className="font-bold text-lg mb-2 text-gray-800">{item.title}</h3>
-                    <p className="text-gray-600">{item.description}</p>
+                    <h3 className="font-bold text-base sm:text-lg mb-2 text-gray-800">{item.title}</h3>
+                    <p className="text-gray-600 text-sm sm:text-base">{item.description}</p>
                   </div>
                 </div>
               </motion.div>
@@ -128,14 +133,14 @@ export default function PrivacyFirstAnalytics() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-20"
+          className="mb-16 sm:mb-20"
         >
-          <div className="bg-gradient-to-r from-gray-900 to-blue-900 rounded-2xl p-8 text-white overflow-hidden relative">
-            <div className="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full"></div>
-            <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-white/10 rounded-full"></div>
+          <div className="bg-gradient-to-r from-gray-900 to-blue-900 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden">
+            <div className="absolute -right-20 -top-20 w-48 sm:w-64 h-48 sm:h-64 bg-white/10 rounded-full"></div>
+            <div className="absolute -left-20 -bottom-20 w-48 sm:w-64 h-48 sm:h-64 bg-white/10 rounded-full"></div>
             <div className="relative z-10">
-              <h2 className="text-2xl md:text-3xl font-bold mb-8">The Ashrtl Advantage</h2>
-              <div className="grid md:grid-cols-2 gap-6">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6">The Ashrtl Advantage</h2>
+              <div className="grid sm:grid-cols-2 gap-6">
                 {[
                   {
                     title: "Regulatory Compliance",
@@ -157,8 +162,8 @@ export default function PrivacyFirstAnalytics() {
                   <div key={index} className="flex items-start">
                     <FiCheckCircle className="text-blue-300 mt-1 mr-3 flex-shrink-0" />
                     <div>
-                      <h3 className="font-bold text-lg mb-1">{item.title}</h3>
-                      <p className="text-blue-100">{item.description}</p>
+                      <h3 className="font-bold text-base sm:text-lg mb-1">{item.title}</h3>
+                      <p className="text-blue-100 text-sm sm:text-base">{item.description}</p>
                     </div>
                   </div>
                 ))}
@@ -167,38 +172,37 @@ export default function PrivacyFirstAnalytics() {
           </div>
         </motion.section>
 
-        {/* Comparison Section */}
+        {/* Comparison Table */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-20"
+          className="mb-16 sm:mb-20"
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">
             How We Compare
           </h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full divide-y divide-gray-200 text-sm sm:text-base">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feature</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Traditional Analytics</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AshrtL</th>
+                  <th className="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Feature</th>
+                  <th className="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Traditional Analytics</th>
+                  <th className="px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Ashrtl</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {[
                   { feature: "Data Collection", traditional: "Individual-level tracking", ashortl: "Aggregate patterns only" },
                   { feature: "Third-Party Sharing", traditional: "Common with advertisers", ashortl: "Never" },
-
                   { feature: "User Consent", traditional: "Complex cookie banners required", ashortl: "Minimal consent needed" },
                   { feature: "Data Retention", traditional: "Indefinite by default", ashortl: "Automatic anonymization" }
                 ].map((row, index) => (
                   <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{row.feature}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">{row.traditional}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-blue-600 font-medium">{row.ashortl}</td>
+                    <td className="px-4 py-3 whitespace-nowrap font-medium text-gray-900">{row.feature}</td>
+                    <td className="px-4 py-3 text-gray-600">{row.traditional}</td>
+                    <td className="px-4 py-3 text-blue-600 font-medium">{row.ashortl}</td>
                   </tr>
                 ))}
               </tbody>
@@ -206,7 +210,7 @@ export default function PrivacyFirstAnalytics() {
           </div>
         </motion.section>
 
-        {/* Final CTA */}
+        {/* CTA */}
         <motion.section
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -214,12 +218,12 @@ export default function PrivacyFirstAnalytics() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center"
         >
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Ready to Upgrade Your Analytics?</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100 mx-auto max-w-2xl">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Ready to Upgrade Your Analytics?</h2>
+            <p className="text-gray-600 mb-6 text-sm sm:text-base">
               Join thousands of ethical businesses using Ashrtl&#39;s privacy-first approach to link analytics.
             </p>
-            <Link href="/pricing" className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl">
+            <Link href="/pricing" className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl inline-block">
               Get Started Privacy-First
             </Link>
           </div>
