@@ -59,6 +59,8 @@ export default function Navbar() {
             <Link href="/features" className="text-gray-600 hover:text-indigo-600 transition">Features</Link>
             <Link href="/pricing" className="text-gray-600 hover:text-indigo-600 transition">Pricing</Link>
             <Link href="/dashboard" className="text-gray-600 hover:text-indigo-600 transition">Analytics</Link>
+            <Link href="/dashboard" className="text-gray-600 hover:text-indigo-600 transition">Dashboard</Link>
+            
             <Link href="/blog" className="text-gray-600 hover:text-indigo-600 transition">Blog</Link>
           </nav>
 
@@ -106,6 +108,7 @@ export default function Navbar() {
               <Link href="/features" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Features</Link>
               <Link href="/pricing" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Pricing</Link>
               <Link href="/dashboard" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Analytics</Link>
+              <Link href="/dashboard" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Dashboard</Link>
               <Link href="/blog" className="text-gray-600 hover:text-indigo-600 transition py-2 px-2 rounded hover:bg-indigo-50" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
             </nav>
 

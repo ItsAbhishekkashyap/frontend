@@ -10,15 +10,16 @@ import Footer from './components/Footer';
 import Script from 'next/script';
 import FeatureCard from './components/FeatureCard';
 
-import { 
-  FiTwitter, 
-  FiInstagram, 
-  FiFacebook, 
-  FiMail, 
-  FiPrinter, 
-  FiArrowRight 
+import {
+  FiTwitter,
+  FiInstagram,
+  FiFacebook,
+  FiMail,
+  FiPrinter,
+  FiArrowRight
 } from 'react-icons/fi';
 import StepCard from './components/StepCard';
+import Link from 'next/link';
 
 
 // export const metadata = {
@@ -316,119 +317,119 @@ export default function Home() {
 
         {/* How It Works - Animated Steps */}
         <section className="py-20 bg-gradient-to-b from-white to-indigo-50">
-  <div className="container mx-auto px-4">
-    {/* Header */}
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="text-center mb-16"
-    >
-      <span className="inline-block px-4 py-2 text-sm font-semibold text-indigo-600 bg-indigo-100 rounded-full mb-4 shadow-sm">
-        ✨ Simple Process
-      </span>
-      <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-clip-text  bg-gradient-to-r from-indigo-600 to-indigo-400">
-        How It Works
-      </h2>
-      <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-        Transform your links in just a few clicks with our intuitive platform
-      </p>
-    </motion.div>
+          <div className="container mx-auto px-4">
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center mb-16"
+            >
+              <span className="inline-block px-4 py-2 text-sm font-semibold text-indigo-600 bg-indigo-100 rounded-full mb-4 shadow-sm">
+                ✨ Simple Process
+              </span>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-clip-text  bg-gradient-to-r from-indigo-600 to-indigo-400">
+                How It Works
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Transform your links in just a few clicks with our intuitive platform
+              </p>
+            </motion.div>
 
-    {/* Steps */}
-    <div className="max-w-5xl mx-auto">
-      <div className="grid md:grid-cols-4 gap-8">
-        {/* Step 1 */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="relative"
-        >
-          <div className="absolute -left-4 md:-left-8 top-10 h-full w-0.5 bg-indigo-100 md:block hidden"></div>
-          <StepCard
-            number={1}
-            title="Paste URL"
-            description="Enter any long web address"
-            icon={<FiClipboard className="text-indigo-600" />}
-            accentColor="bg-indigo-100"
-          />
-        </motion.div>
+            {/* Steps */}
+            <div className="max-w-5xl mx-auto">
+              <div className="grid md:grid-cols-4 gap-8">
+                {/* Step 1 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="relative"
+                >
+                  <div className="absolute -left-4 md:-left-8 top-10 h-full w-0.5 bg-indigo-100 md:block hidden"></div>
+                  <StepCard
+                    number={1}
+                    title="Paste URL"
+                    description="Enter any long web address"
+                    icon={<FiClipboard className="text-indigo-600" />}
+                    accentColor="bg-indigo-100"
+                  />
+                </motion.div>
 
-        {/* Step 2 */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative"
-        >
-          <StepCard
-            number={2}
-            title="Customize"
-            description="Add aliases or set expiration"
-            icon={<FiSliders className="text-indigo-600" />}
-            accentColor="bg-blue-100"
-          />
-        </motion.div>
+                {/* Step 2 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="relative"
+                >
+                  <StepCard
+                    number={2}
+                    title="Customize"
+                    description="Add aliases or set expiration"
+                    icon={<FiSliders className="text-indigo-600" />}
+                    accentColor="bg-blue-100"
+                  />
+                </motion.div>
 
-        {/* Step 3 */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="relative"
-        >
-          <StepCard
-            number={3}
-            title="Share"
-            description="Use your compact link anywhere"
-            icon={<FiShare2 className="text-indigo-600" />}
-            accentColor="bg-purple-100"
-          />
-        </motion.div>
+                {/* Step 3 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="relative"
+                >
+                  <StepCard
+                    number={3}
+                    title="Share"
+                    description="Use your compact link anywhere"
+                    icon={<FiShare2 className="text-indigo-600" />}
+                    accentColor="bg-purple-100"
+                  />
+                </motion.div>
 
-        {/* Step 4 */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <StepCard
-            number={4}
-            title="Track"
-            description="Monitor clicks and engagement"
-            icon={<FiActivity className="text-indigo-600" />}
-            accentColor="bg-pink-100"
-          />
-        </motion.div>
-      </div>
-    </div>
+                {/* Step 4 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  <StepCard
+                    number={4}
+                    title="Track"
+                    description="Monitor clicks and engagement"
+                    icon={<FiActivity className="text-indigo-600" />}
+                    accentColor="bg-pink-100"
+                  />
+                </motion.div>
+              </div>
+            </div>
 
-    {/* Animated Arrow Connectors (Desktop Only) */}
-    <div className="hidden md:flex justify-center mt-8">
-      <div className="flex items-center space-x-2">
-        {[1, 2, 3].map((item) => (
-          <motion.div
-            key={item}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 + item * 0.1 }}
-            className="flex items-center"
-          >
-            <div className="w-16 h-1 bg-indigo-200 rounded-full"></div>
-            <FiArrowRight className="text-indigo-400 mx-1" />
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
+            {/* Animated Arrow Connectors (Desktop Only) */}
+            <div className="hidden md:flex justify-center mt-8">
+              <div className="flex items-center space-x-2">
+                {[1, 2, 3].map((item) => (
+                  <motion.div
+                    key={item}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 + item * 0.1 }}
+                    className="flex items-center"
+                  >
+                    <div className="w-16 h-1 bg-indigo-200 rounded-full"></div>
+                    <FiArrowRight className="text-indigo-400 mx-1" />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Use Cases */}
         <section className="py-16 bg-gradient-to-br from-indigo-50 to-indigo-100">
@@ -438,7 +439,7 @@ export default function Home() {
                 Perfect For
               </span>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Where You`&#39;ll Use It
+                Where You&#39;ll Use It
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 Optimize your links for every platform and purpose
@@ -457,10 +458,10 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Social Media</h3>
                 <p className="text-gray-600 mb-4">Overcome character limits and track engagement across platforms</p>
-                <div className="flex items-center text-sm text-pink-600 font-medium">
+                <Link href="/use-cases/social-media"  className="flex items-center text-sm text-pink-600 font-medium">
                   <FiArrowRight className="mr-2" />
                   Learn more
-                </div>
+                </Link >
               </div>
 
               {/* Email Marketing Card */}
@@ -470,10 +471,10 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Email Marketing</h3>
                 <p className="text-gray-600 mb-4">Clean, trackable links for newsletters and campaigns</p>
-                <div className="flex items-center text-sm text-blue-600 font-medium">
+                <Link href="/use-cases/email-marketing" className="flex items-center text-sm text-blue-600 font-medium">
                   <FiArrowRight className="mr-2" />
                   Learn more
-                </div>
+                </Link >
               </div>
 
               {/* Print Materials Card */}
@@ -483,10 +484,10 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Print Materials</h3>
                 <p className="text-gray-600 mb-4">Convert long URLs to scannable QR codes for offline use</p>
-                <div className="flex items-center text-sm text-purple-600 font-medium">
+                <Link href="/use-cases/print-materials" className="flex items-center text-sm text-purple-600 font-medium">
                   <FiArrowRight className="mr-2" />
                   Learn more
-                </div>
+                </Link>
               </div>
             </div>
           </div>
