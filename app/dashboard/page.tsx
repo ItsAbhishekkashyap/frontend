@@ -360,6 +360,8 @@ export default function Dashboard() {
             console.error('Failed to delete');
         }
     }
+    console.log('slug passed to ClickTrendChart:', slug);
+
 
 
     const fullShortUrl = slug ? `${baseUrl}/${slug}` : '';
@@ -650,10 +652,13 @@ export default function Dashboard() {
                                                 </div>
                                             </div>
 
-                                            <div className="border border-gray-200 rounded-lg p-4">
-                                                <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends</h3>
-                                                <ClickTrendChart slug={slug} />
-                                            </div>
+                                            {links.map((link) => (
+                                                <div key={link._id} className="border border-gray-200 rounded-lg p-4">
+                                                    <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends for {link.alias}</h3>
+                                                    <ClickTrendChart slug={link.alias} />
+                                                </div>
+                                            ))}
+
                                         </div>
                                     ) : (
                                         <div className="text-center py-12">
