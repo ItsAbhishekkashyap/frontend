@@ -653,7 +653,7 @@ export default function Dashboard() {
                                             </div>
 
                                             {links.map((link) => (
-                                                <div key={link._id} className="border border-gray-200 rounded-lg p-4">
+                                                <div key={link._id} className="border border-gray-200 mb-4 rounded-lg p-4">
                                                     <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends for {link.alias}</h3>
                                                     <ClickTrendChart slug={link.alias} />
                                                 </div>
