@@ -23,7 +23,7 @@ export default function MaximizingClicksWithSmartLinks() {
                         transition={{ duration: 0.6 }}
                         className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
                     >
-                        Maximizing Clicks with Smart Links
+                        Maximizing Clicks with Branqly
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0 }}
@@ -51,7 +51,7 @@ export default function MaximizingClicksWithSmartLinks() {
 
                         <Section title="What are Smart Links?" icon={<FiCheckCircle className="text-blue-500" />}>
                             <p>
-                                A &#34;Smart Link&#34; is far more than just a shortened URL. It&#39;s an intelligent, trackable, and often AI-enhanced link that performs multiple jobs under the hood:
+                                A &#34;Branqly&#34; is far more than just a shortened URL. It&#39;s an intelligent, trackable, and often AI-enhanced link that performs multiple jobs under the hood:
                             </p>
                             <ul className="space-y-3 mt-4">
                                 {['Customizable & Brandable', 'Trackable', 'Optimizable', 'Targetable'].map((item, index) => (
@@ -92,7 +92,7 @@ export default function MaximizingClicksWithSmartLinks() {
                             <div className="flex flex-col md:flex-row gap-6 items-center mb-6">
                                 <div className="flex-1">
                                     <p>
-                                        With smart links, you&#39;re not waiting for weekly reports. Get live dashboards showing:
+                                        With branqly, you&#39;re not waiting for weekly reports. Get live dashboards showing:
                                     </p>
                                     <ul className="mt-4 space-y-2">
                                         {['Click-through rates by platform', 'Geographic heatmaps', 'Device breakdowns', 'Conversion funnel analysis'].map((item, index) => (
@@ -212,7 +212,7 @@ export default function MaximizingClicksWithSmartLinks() {
                         >
                             <h3 className="text-2xl font-bold mb-4">Ready to Transform Your Links?</h3>
                             <p className="mb-6 text-blue-100">
-                                Start using Smart Links today and turn every click into measurable results.
+                                Start using Branqly today and turn every click into measurable results.
                             </p>
                             <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition flex items-center gap-2">
                                 Get Started <FiArrowRight />
@@ -246,9 +246,9 @@ export default function MaximizingClicksWithSmartLinks() {
                                 <div className="space-y-4">
                                     {[
                                         {
-                                            name: "AshrtL (Our Recommendation)",
+                                            name: "Branqly (Our Recommendation)",
                                             desc: "Modern, easy-to-use link shortener with analytics, URL management, and custom slugs. Free to use and privacy-respecting.",
-                                            link: "https://ashrtl.vercel.app"
+                                            link: "https://branqly.xyz"
                                         },
                                         {
                                             name: "Bitly",

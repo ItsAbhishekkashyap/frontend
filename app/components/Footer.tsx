@@ -24,7 +24,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <Link href="/">
-              <div className="relative w-[150px] h-[50px] flex items-center justify-center border border-dashed"> {/* Debug border */}
+              <div className="relative w-[150px] h-[50px] flex items-center justify-center "> {/* Debug border */}
                 <Image
                   src="/logo.png"
                   alt="AshrtL Logo"
@@ -90,9 +90,9 @@ export default function Footer() {
           {/* Contact Section */}
           {/* Contact Section */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white border-b border-indigo-600 pb-2">
+            <Link href="/contact" className="text-lg cursor-pointer font-semibold mb-4 text-white border-b border-indigo-600 pb-2">
               Contact Us
-            </h3>
+            </Link>
             <ul className="space-y-4">
 
               {/* Location */}
@@ -117,7 +117,7 @@ export default function Footer() {
               {/* Phone */}
               <li className="flex items-start">
                 <FiMail className="text-indigo-300 mt-1 mr-3 flex-shrink-0" />
-                <Link href="/contact" className="p-2 bg-blue-600 text-sm rounded-2xl text-white text-bold">
+                <Link href="/contact" className="p-2 cursor-pointer bg-blue-600 text-sm rounded-2xl text-white text-bold">
                 Message Us
                 </Link>
                 

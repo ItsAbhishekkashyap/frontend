@@ -64,7 +64,7 @@ export default function PrivacyFirstAnalytics() {
             <div className="md:w-2/3 w-full">
               <div className="space-y-3 md:space-y-4 text-gray-700 text-xs sm:text-sm md:text-base">
                 <p>
-                  At Ashrtl, we&#39;ve reimagined analytics to provide valuable insights while upholding the highest privacy standards. Our approach aligns with global regulations like GDPR and CCPA, ensuring you never have to choose between data and ethics.
+                  At Branqly, we&#39;ve reimagined analytics to provide valuable insights while upholding the highest privacy standards. Our approach aligns with global regulations like GDPR and CCPA, ensuring you never have to choose between data and ethics.
                 </p>
                 <div className="bg-blue-50 p-3 md:p-4 rounded-lg border-l-4 border-blue-500">
                   <p className="font-medium text-blue-800 text-xs sm:text-sm md:text-base">
@@ -189,7 +189,7 @@ export default function PrivacyFirstAnalytics() {
                 <tr>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Feature</th>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Traditional Analytics</th>
-                  <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Ashrtl</th>
+                  <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">Branqly</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -221,7 +221,7 @@ export default function PrivacyFirstAnalytics() {
           <div className="bg-white rounded-xl md:rounded-2xl shadow-lg md:shadow-xl p-5 sm:p-6 md:p-8 border border-gray-100 mx-auto max-w-2xl">
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 md:mb-4">Ready to Upgrade Your Analytics?</h2>
             <p className="text-gray-600 mb-4 sm:mb-6 text-xs sm:text-sm md:text-base">
-              Join thousands of ethical businesses using Ashrtl&#39;s privacy-first approach to link analytics.
+              Join thousands of ethical businesses using Branqly&#39;s privacy-first approach to link analytics.
             </p>
             <Link href="/pricing" className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg inline-block text-sm sm:text-base">
               Get Started Privacy-First

@@ -58,7 +58,7 @@ const BrandedLinksMatterPage = () => {
             <div className="md:w-2/3">
               <div className="space-y-4 text-gray-700">
                 <p>
-                  When users see a link like <span className="font-mono bg-gray-100 px-3 py-1.5 rounded-lg text-indigo-600">ashrtl.app/SummerDeals</span>, it immediately appears more trustworthy than generic URLs. This psychological effect can boost click-through rates by up to <span className="font-semibold text-indigo-600">39%</span>.
+                  When users see a link like <span className="font-mono bg-gray-100 px-3 py-1.5 rounded-lg text-indigo-600">brankly.app/SummerDeals</span>, it immediately appears more trustworthy than generic URLs. This psychological effect can boost click-through rates by up to <span className="font-semibold text-indigo-600">39%</span>.
                 </p>
                 <div className="bg-blue-50 p-5 rounded-xl border-l-4 border-blue-500">
                   <p className="font-medium text-blue-800">
@@ -140,7 +140,7 @@ const BrandedLinksMatterPage = () => {
               <div className="space-y-4 text-gray-700">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Advanced Performance Tracking</h2>
                 <p>
-                  Branded links provide enhanced analytics to measure campaign effectiveness. With <span className="font-semibold text-indigo-600">AshrtL</span>, you gain insights into:
+                  Branded links provide enhanced analytics to measure campaign effectiveness. With <span className="font-semibold text-indigo-600">Branqly</span>, you gain insights into:
                 </p>
                 <ul className="space-y-3 mt-4">
                   {[
@@ -231,7 +231,7 @@ const BrandedLinksMatterPage = () => {
                 <h2 className="text-2xl md:text-3xl font-bold">Security & Privacy</h2>
               </div>
               <p className="text-blue-100 mb-6">
-                AshrtL provides enterprise-grade security features while maintaining full GDPR compliance:
+                Branqly provides enterprise-grade security features while maintaining full GDPR compliance:
               </p>
               <div className="grid sm:grid-cols-2 gap-4">
                 {[

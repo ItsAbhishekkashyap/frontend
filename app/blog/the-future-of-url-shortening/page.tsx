@@ -27,11 +27,11 @@ const Blog1 = () => {
                             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
                                 The Future of AI-Powered URL Shortening
                             </h1>
-                            <div className="flex justify-center gap-4 text-indigo-200">
+                            {/* <div className="flex justify-center gap-4 text-indigo-200">
                                 <span>May 15, 2023</span>
                                 <span>•</span>
                                 <span>4 min read</span>
-                            </div>
+                            </div> */}
                         </motion.div>
                     </div>
                 </section>
@@ -97,12 +97,12 @@ const Blog1 = () => {
                             </h2>
                             <div className="space-y-4 text-gray-700">
                                 <p>
-                                    What if your link shortener could think? Imagine this: you’re about to launch a product on Instagram. You paste your landing page URL into the shortener—and instead of simply giving you a random string like <code>ashrtl.app/3jf9kL</code>, the system suggests:
+                                    What if your link shortener could think? Imagine this: you’re about to launch a product on Instagram. You paste your landing page URL into the shortener—and instead of simply giving you a random string like <code>branqly.app/3jf9kL</code>, the system suggests:
                                 </p>
                                 <ul className="list-disc list-inside">
-                                    <li><code>ashrtl.app/SummerSale</code> - perfect for seasonal offers</li>
-                                    <li><code>ashrtl.app/JoinNow</code> - great for community or sign-up pages</li>
-                                    <li><code>ashrtl.app/TechTrends</code> - ideal for tech newsletter promotions</li>
+                                    <li><code>branqly.app/SummerSale</code> - perfect for seasonal offers</li>
+                                    <li><code>branqly.app/JoinNow</code> - great for community or sign-up pages</li>
+                                    <li><code>branqly.app/TechTrends</code> - ideal for tech newsletter promotions</li>
                                 </ul>
                                 <p>
                                     These aren’t random. Behind the scenes, AI algorithms are analyzing billions of data points: previous click rates, audience interests, trending keywords, time zones, device usage—and even sentiment analysis from past posts. This way, your link isn’t just short—it’s custom-built for **maximum impact**.
@@ -135,9 +135,9 @@ const Blog1 = () => {
                                     Let’s say you create three versions of a URL:
                                 </p>
                                 <ul className="list-disc list-inside">
-                                    <li><code>ashrtl.app/SummerSale</code></li>
-                                    <li><code>ashrtl.app/HotDeals</code></li>
-                                    <li><code>ashrtl.app/BigSave2025</code></li>
+                                    <li><code>branqly.app/SummerSale</code></li>
+                                    <li><code>branqly.app/HotDeals</code></li>
+                                    <li><code>branqly.app/BigSave2025</code></li>
                                 </ul>
                                 <p>
                                     The system will automatically distribute traffic to these links, measure which one performs better (higher click-through rate, longer dwell time, etc.), and gradually send all traffic to the winner—all without you lifting a finger. This means no lost revenue, no guessing, and real-time optimization.
@@ -146,17 +146,17 @@ const Blog1 = () => {
                                     <p className="font-medium text-gray-800 mb-2">Example Live Test:</p>
                                     <div className="flex items-center gap-3 mb-1">
                                         <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
-                                        <span className="font-mono text-sm truncate">ashrtl.app/SummerSale</span>
+                                        <span className="font-mono text-sm truncate">branqly.app/SummerSale</span>
                                         <span className="text-xs text-gray-500 ml-auto">40% traffic</span>
                                     </div>
                                     <div className="flex items-center gap-3 mb-1">
                                         <span className="w-3 h-3 bg-purple-500 rounded-full"></span>
-                                        <span className="font-mono text-sm truncate">ashrtl.app/HotDeals</span>
+                                        <span className="font-mono text-sm truncate">branqly.app/HotDeals</span>
                                         <span className="text-xs text-gray-500 ml-auto">35% traffic</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-                                        <span className="font-mono text-sm truncate">ashrtl.app/BigSave2025</span>
+                                        <span className="font-mono text-sm truncate">branqly.app/BigSave2025</span>
                                         <span className="text-xs text-gray-500 ml-auto">25% traffic</span>
                                     </div>
                                 </div>
