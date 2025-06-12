@@ -376,7 +376,7 @@ export default function Dashboard() {
                     {/* Sidebar */}
                     <div className="w-full md:w-64 flex-shrink-0">
                         <div className="bg-white rounded-xl shadow-sm p-6 sticky top-8">
-                            <h1 className="text-2xl font-bold text-gray-800 mb-8">Short.ly</h1>
+                            <h1 className="text-2xl font-bold text-gray-800 mb-8">Ashrtl</h1>
 
                             <nav className="space-y-1">
                                 <button

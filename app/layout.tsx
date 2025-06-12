@@ -14,12 +14,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'AshrtL | Smart URL Shortener',
-    template: '%s | AshrtL',
+    default: 'Branqly | Smart URL Shortener',
+    template: '%s | Branqly',
   },
   description: 'Shorten links, track performance, and optimize engagement with AshrtL.',
   alternates: {
-    canonical: 'https://ashrtl.xyz',
+    canonical: 'https://branqly.xyz',
   },
 
   icons: {

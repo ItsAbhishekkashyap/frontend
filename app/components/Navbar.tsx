@@ -44,7 +44,7 @@ export default function Navbar() {
           <Link href="/">
             <div className="relative w-[200px] h-[50px] flex items-center justify-center border border-dashed"> {/* Debug border */}
               <Image
-                src="/ashrtll.svg"
+                src="/logo.svg"
                 alt="AshrtL Logo"
                 width={200}
                 height={50}

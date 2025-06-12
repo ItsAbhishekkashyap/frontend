@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { FiLink, FiHome, FiMenu, FiX } from 'react-icons/fi';
+import {  FiHome, FiMenu, FiX } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,10 +14,19 @@ export default function Navbar() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <FiLink className="text-indigo-600 text-2xl" />
-            <h1 className="text-xl font-bold text-gray-800">ShortLink</h1>
+          <Link href="/">
+            <div className="relative w-[200px] h-[50px] flex items-center justify-center border border-dashed"> {/* Debug border */}
+              <Image
+                src="/logo.svg"
+                alt="AshrtL Logo"
+                width={200}
+                height={50}
+                className="object-contain"
+                
+              />
+            </div>
           </Link>
+
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6 items-center">
