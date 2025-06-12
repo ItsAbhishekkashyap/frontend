@@ -42,7 +42,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/">
-            <div className="relative w-[150px] h-[50px] flex items-center justify-center"> {/* Debug border */}
+            <div className="relative md:w-[150px] md:h-[50px] w-[100px] h-[40px] flex items-center justify-center"> {/* Debug border */}
               <Image
                 src="/logo.svg"
                 alt="AshrtL Logo"

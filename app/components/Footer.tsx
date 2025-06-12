@@ -24,7 +24,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <Link href="/">
-              <div className="relative w-[150px] h-[50px] flex items-center justify-center "> {/* Debug border */}
+              <div className="relative w-[150px] h-[50px] mb-5 md:mb-1 flex items-center justify-center "> {/* Debug border */}
                 <Image
                   src="/logo.png"
                   alt="AshrtL Logo"

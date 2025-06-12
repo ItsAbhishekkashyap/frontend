@@ -298,7 +298,7 @@ export default function Home() {
               <FeatureCard
                 icon={<FiPieChart className="text-indigo-600 text-3xl" />}
                 title="Advanced Analytics"
-                description="Real-time tracking of clicks, locations, and devices"
+                description="Real-time tracking of clicks, and time"
                 badge="Insights"
               />
               {/* <FeatureCard
