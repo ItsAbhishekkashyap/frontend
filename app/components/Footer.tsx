@@ -90,10 +90,11 @@ export default function Footer() {
           {/* Contact Section */}
           {/* Contact Section */}
           <div>
-            <Link href="/contact" className="text-lg cursor-pointer font-semibold mb-4 text-white border-b border-indigo-600 pb-2">
+            <Link href="/contact" className="text-lg cursor-pointer font-semibold mb-4 text-white  ">
               Contact Us
             </Link>
-            <ul className="space-y-4">
+            <hr className='border-indigo-500 mt-2' />
+            <ul className="space-y-4 pt-4">
 
               {/* Location */}
               <li className="flex items-start">
