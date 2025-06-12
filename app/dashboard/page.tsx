@@ -351,7 +351,7 @@ export default function Dashboard() {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slug: alias }), // send 'slug' in POST body
+            body: JSON.stringify({ slug: alias }), // it send 'slug' in POST body
         });
 
         if (res.ok) {
