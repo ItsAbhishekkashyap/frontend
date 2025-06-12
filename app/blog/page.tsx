@@ -69,7 +69,7 @@ export default function BlogPage() {
   return (
     <>
       <Head>
-        <title>AshrtL Blog | Insights on Link Management & Digital Marketing</title>
+        <title>Branqly Blog | Insights on Link Management & Digital Marketing</title>
         <meta name="description" content="Discover expert insights, stories and expertise about link management, digital marketing and web technology" />
         <link rel="canonical" href="https://ashrtl.vercel.app/blog" />
       </Head>

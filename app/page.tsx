@@ -20,6 +20,7 @@ import {
 } from 'react-icons/fi';
 import StepCard from './components/StepCard';
 import Link from 'next/link';
+import Image from 'next/image';
 
 
 // export const metadata = {
@@ -121,9 +122,22 @@ export default function Home() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 300 }}
-                className="inline-flex items-center justify-center bg-white p-5 rounded-2xl shadow-lg mb-6"
+                className="inline-flex items-center justify-center bg-white rounded-2xl shadow-lg mb-6"
               >
-                <FiLink className="text-indigo-600 text-4xl" />
+                {/* <FiLink className="text-indigo-600 text-4xl" /> */}
+                <Link href="/">
+            <div className="relative w-[80px] h-[80px] flex items-center justify-center border border-dashed"> {/* Debug border */}
+              <Image
+                src="/favicon.svg"
+                alt="AshrtL Logo"
+                width={80}
+                height={80}
+                className="object-contain"
+                
+              />
+            </div>
+          </Link>
+
               </motion.div>
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                 Shorten, Share & <span className="text-indigo-600">Track</span>

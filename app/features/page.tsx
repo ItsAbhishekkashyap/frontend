@@ -1,26 +1,26 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 export const metadata = {
-  title: "Features | AshrtL – Smarter URL Shortening",
-  description: "Explore powerful features of AshrtL including analytics, custom short links, and more.",
-  keywords: ["URL shortener", "AshrtL features", "short links", "custom URLs", "link analytics"],
+  title: "Features | Branqly – Smarter URL Shortening",
+  description: "Explore powerful features of Branqly including analytics, custom short links, and more.",
+  keywords: ["URL shortener", "Branqly features", "short links", "custom URLs", "link analytics"],
   openGraph: {
-    title: "AshrtL Features",
+    title: "BranqlyL Features",
     description: "Powerful tools to manage and track your shortened URLs",
-    url: "https://ashrtl.xyz/features",
+    url: "https://branqly.xyz/features",
     type: "website",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "AshrtL Open Graph",
+        alt: "Branqly Open Graph",
       },
     ],
     twitter: {
   card: 'summary_large_image',
-  site: '@AshrtL',
-  title: 'AshrtL',
+  site: '@Branqly',
+  title: 'Branqly | Smart URL Shortener',
   description: 'Smart URL Shortener',
   images: ['/og-image.png'],
 }
@@ -79,7 +79,7 @@ export default function FeaturesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center mb-20">
             <span className="inline-block mb-4 text-sm font-semibold tracking-wider text-indigo-600 uppercase">
-              Why choose Shortly
+              Why choose Branqly
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Professional-Grade <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">URL Management</span>
