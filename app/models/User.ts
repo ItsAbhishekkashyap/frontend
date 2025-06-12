@@ -7,7 +7,9 @@ export interface IUser extends Document {
   resetToken?: string;
   resetTokenExpiry?: number;
   premium: boolean;
-  name?: string;      // Google provides name
+  premiumSince?: Date;
+  name?: string;    
+    // Google provides name
   picture?: string;   // Google provides picture
    provider: 'credentials' | 'google'; // 'google' or 'credentials'
 }
@@ -21,6 +23,7 @@ const UserSchema = new Schema<IUser>(
       type: Boolean,
       default: false,
     },
+    premiumSince: Date,
     name: { type: String },       // Optional for Google
     picture: { type: String },    // Optional for Google
    provider: { type: String, default: 'credentials' },   // 'google' or 'credentials'

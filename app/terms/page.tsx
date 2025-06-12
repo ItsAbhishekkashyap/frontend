@@ -3,37 +3,16 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
-// import Link from 'next/link';
 import { FiAlertTriangle, FiShield, FiTerminal, FiZap, FiMail } from 'react-icons/fi';
-
-// export const metadata = {
-//   title: "Terms of Service | AshrtL",
-//   description: "Review AshrtL's terms of service and user agreement for using our URL shortener.",
-//   keywords: ["terms of service", "user agreement", "AshrtL terms"],
-//   openGraph: {
-//     title: "Terms of Service – AshrtL",
-//     description: "Terms and conditions for using AshrtL services.",
-//     url: "https://ashrtl.xyz/terms",
-//     type: "website",
-//     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Terms Page" }],
-//   },
-//   twitter: {
-//     card: "summary_large_image",
-//     site: "@AshrtL",
-//     title: "Terms of Service",
-//     description: "AshrtL's user agreement and service terms",
-//     images: ["/og-image.png"],
-//   },
-// };
 
 export default function TermsPage() {
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
-        <Navbar/>
+      <Navbar />
       <main className="max-w-4xl mx-auto py-16 px-6 sm:px-8">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -41,18 +20,10 @@ export default function TermsPage() {
           >
             Terms of Service
           </motion.h1>
-          {/* <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-lg text-gray-600 max-w-2xl mx-auto"
-          >
-            Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </motion.p> */}
         </div>
 
         {/* Terms Content */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.6 }}
@@ -60,7 +31,7 @@ export default function TermsPage() {
         >
           {/* Decorative header */}
           <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-6">
-            <h2 className="text-2xl font-bold text-white">ShortLink Terms of Service</h2>
+            <h2 className="text-2xl font-bold text-white">Branqly Terms of Service</h2>
             <p className="text-indigo-100 mt-1">Please read these terms carefully</p>
           </div>
 
@@ -73,7 +44,7 @@ export default function TermsPage() {
                 Service Overview
               </h3>
               <p className="text-gray-600">
-                ShortLink provides URL shortening services (&quot;as-is&quot;) with no guarantees of uptime or availability. By using our services, you agree to abide by these terms.
+                Branqly provides URL shortening services (&quot;as-is&quot;) with no guarantees of uptime or availability. By using our services, you agree to abide by these terms.
               </p>
             </section>
 
@@ -107,7 +78,7 @@ export default function TermsPage() {
                     content: "We may contact you regarding service changes or policy updates."
                   }
                 ].map((item, index) => (
-                  <motion.div 
+                  <motion.div
                     key={index}
                     whileHover={{ y: -3 }}
                     className="bg-gray-50 p-4 rounded-lg border border-gray-200"
@@ -138,9 +109,8 @@ export default function TermsPage() {
                     "You are responsible for all activity under your account",
                     "Service may be temporarily unavailable for maintenance",
                     "We are not liable for indirect or consequential damages",
-                    
                   ].map((item, index) => (
-                    <motion.li 
+                    <motion.li
                       key={index}
                       whileHover={{ x: 5 }}
                       className="flex items-start"
@@ -161,27 +131,13 @@ export default function TermsPage() {
                 <p className="text-gray-600 mb-4">
                   If you have any questions about these Terms of Service, please contact us.
                 </p>
-                {/* <div className="flex flex-col sm:flex-row gap-4">
-                  <a 
-                    href="mailto:legal@shortlink.com" 
-                    className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
-                  >
-                    <FiMail className="mr-2" />
-                    Contact Legal Team
-                  </a>
-                  <Link 
-                    href="/contact" 
-                    className="inline-flex items-center px-5 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                  >
-                    Support Center
-                  </Link>
-                </div> */}
               </div>
             </section>
           </div>
         </motion.div>
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
+

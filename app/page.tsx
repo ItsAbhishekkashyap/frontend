@@ -301,30 +301,14 @@ export default function Home() {
                 description="Real-time tracking of clicks, and time"
                 badge="Insights"
               />
-              {/* <FeatureCard
-                icon={<FiCalendar className="text-indigo-600 text-3xl" />}
-                title="Link Expiration"
-                description="Set automatic expiration for temporary campaigns"
-                badge="Control"
-              /> */}
-              {/* <FeatureCard
-                icon={<FiSmartphone className="text-indigo-600 text-3xl" />}
-                title="QR Codes"
-                description="Generate QR codes for print materials and offline use"
-                badge="Versatility"
-              /> */}
+              
               <FeatureCard
                 icon={<FiLink2 className="text-indigo-600 text-3xl" />}
                 title="Custom Alias"
                 description="Use your own alias for branded short links"
                 badge="Branding"
               />
-              {/* <FeatureCard
-                icon={<FiUsers className="text-indigo-600 text-3xl" />}
-                title="Team Collaboration"
-                description="Share links and analytics with your team"
-                badge="Productivity"
-              /> */}
+              
             </div>
           </div>
         </section>
