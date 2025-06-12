@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongodb';
 import { Url } from '@/models/Url';
 
-export async function GET(request: NextRequest, context: { params: { slug: string } }) {
+export async function GET(request: NextRequest) {
   try {
     await connectToDB();
 
-    const { slug } = context.params;
+    const url = new URL(request.url);
+    const slug = url.pathname.split('/').pop(); // Get the dynamic slug param
 
     if (!slug) {
       return NextResponse.json({ error: 'Slug not provided' }, { status: 400 });
@@ -56,4 +57,6 @@ export async function GET(request: NextRequest, context: { params: { slug: strin
     );
   }
 }
+
+
 
