@@ -23,7 +23,8 @@ const PUBLIC_PATHS = [
   '/privacy-policy',
   '/terms',
   '/cookie-policy',
-  
+  '/refund-policy'
+
 ];
 
 export async function middleware(req: NextRequest) {

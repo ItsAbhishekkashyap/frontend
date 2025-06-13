@@ -253,7 +253,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FiCopy, FiExternalLink, FiTrash2, FiBarChart2, FiLink, FiClock, FiActivity, FiLock } from 'react-icons/fi';
+import { FiCopy, FiExternalLink, FiTrash2, FiBarChart2, FiLink, FiClock, FiActivity, FiLock, FiCreditCard } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import ClickTrendChart from '@/components/ClickTrendChart';
 import Navbar from '@/components/Navbar';
@@ -393,14 +393,22 @@ export default function Dashboard() {
                                     <FiBarChart2 className="mr-3" />
                                     Analytics
                                 </button>
+
+                                {premium && (
+                                    <Link href="/payment"
+                                        onClick={() => setActiveTab('payments')}
+                                        className={`flex items-center w-full px-4 py-3 rounded-lg text-left transition ${activeTab === 'payments' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
+                                    >
+                                        <FiCreditCard className="mr-3" />
+                                        Payments
+                                        <span className="ml-auto bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
+                                            Premium
+                                        </span>
+                                    </Link>
+                                )}
                             </nav>
 
-                            {/* <div className="mt-8 pt-6 border-t border-gray-200">
-                                <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center transition">
-                                    <FiPlus className="mr-2" />
-                                    New Link
-                                </button>
-                            </div> */}
+
                         </div>
                     </div>
 
