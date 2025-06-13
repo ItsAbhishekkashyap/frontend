@@ -86,12 +86,12 @@ export default function RefundPolicy() {
 
                             {premium && (
                                 <div className="flex space-x-2">
-                                    <button
+                                    <Link href="/refund-policy"
                                         onClick={() => setActiveTab('policy')}
-                                        className={`px-4 py-2 rounded-lg ${activeTab === 'policy' ? 'bg-white text-blue-600' : 'bg-blue-700 hover:bg-blue-800'}`}
+                                        className={`px-4 py-2 cursor-pointer rounded-lg ${activeTab === 'policy' ? 'bg-white text-blue-600' : 'bg-blue-700 hover:bg-blue-800'}`}
                                     >
-                                        Policy
-                                    </button>
+                                        Policy Page
+                                    </Link>
                                     <button
                                         onClick={() => setActiveTab('payments')}
                                         className={`px-4 py-2 rounded-lg ${activeTab === 'payments' ? 'bg-white text-blue-600' : 'bg-blue-700 hover:bg-blue-800'}`}
