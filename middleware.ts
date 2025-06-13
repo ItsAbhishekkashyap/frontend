@@ -14,6 +14,16 @@ const PUBLIC_PATHS = [
   '/api/auth/forgot-password',
   '/api/auth/reset-password',
   '/api/links/create',
+  '/features',
+  '/blog',
+  '/pricing',
+  '/guides',
+  '/documentation',
+  '/about',
+  '/privacy-policy',
+  '/terms',
+  '/cookie-policy',
+  
 ];
 
 export async function middleware(req: NextRequest) {

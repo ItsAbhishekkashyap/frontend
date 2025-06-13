@@ -14,15 +14,14 @@ export default function Navbar() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="/">
-            <div className="relative w-[200px] h-[50px] flex items-center justify-center border border-dashed"> {/* Debug border */}
+         <Link href="/">
+            <div className="relative md:w-[150px] md:h-[50px] sm:w-[120px] sm:h-[40px] w-[100px] h-[40px] flex items-center justify-center"> {/* Debug border */}
               <Image
                 src="/logo.svg"
                 alt="AshrtL Logo"
-                width={200}
+                width={150}
                 height={50}
                 className="object-contain"
-                
               />
             </div>
           </Link>

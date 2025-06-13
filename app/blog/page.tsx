@@ -29,7 +29,7 @@ export default function BlogPage() {
       tags: ["AI", "Innovation", "Marketing"]
     },
     {
-      title: "Maximizing Clicks with Smart Links",
+      title: "Maximizing Clicks with Branqly",
       excerpt: "Learn advanced strategies to optimize your shortened URLs for maximum engagement.",
       
       category: "Marketing",
@@ -90,7 +90,7 @@ export default function BlogPage() {
                 transition={{ duration: 0.6 }}
                 className="text-center"
               >
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">AshrtL Blog</h1>
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Branqly Blog</h1>
                 <p className="text-xl text-indigo-100 max-w-3xl mx-auto">
                   Insights, stories and expertise about link management, digital marketing and web technology
                 </p>
@@ -235,9 +235,9 @@ export default function BlogPage() {
                     placeholder="Your email address"
                     className="flex-grow px-4 py-3 rounded-lg sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
                   />
-                  <button className="bg-white text-indigo-600 px-6 py-3 rounded-lg sm:rounded-l-none font-medium hover:bg-gray-100 transition whitespace-nowrap">
+                  <Link href='/contact' className="bg-white text-indigo-600 px-6 py-3 rounded-lg sm:rounded-l-none font-medium hover:bg-gray-100 transition whitespace-nowrap">
                     Subscribe
-                  </button>
+                  </Link>
                 </div>
               </div>
             </motion.section>

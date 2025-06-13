@@ -3,6 +3,7 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { FiCode, FiBarChart2, FiZap, FiLink2, FiLayers, FiSmartphone } from 'react-icons/fi';
 
 const fadeIn = {
@@ -15,8 +16,8 @@ const guideCategories = [
     title: "For Developers",
     icon: <FiCode className="text-indigo-500" size={24} />,
     guides: [
-      { title: "Integrating ShortLink API with Node.js", icon: <FiZap className="text-indigo-400" /> },
-      { title: "Creating short links from a browser extension", icon: <FiLayers className="text-indigo-400" /> },
+      { title: "Integrating Branqly API with Node.js", icon: <FiZap className="text-indigo-400" /> },
+      { title: "Creating branqly links from a browser extension", icon: <FiLayers className="text-indigo-400" /> },
       { title: "Automating link generation using Zapier", icon: <FiLink2 className="text-indigo-400" /> }
     ]
   },
@@ -25,7 +26,7 @@ const guideCategories = [
     icon: <FiBarChart2 className="text-indigo-500" size={24} />,
     guides: [
       { title: "Tracking campaign clicks via UTM parameters", icon: <FiBarChart2 className="text-indigo-400" /> },
-      { title: "Creating branded short links", icon: <FiLink2 className="text-indigo-400" /> },
+      { title: "Creating branded branqly links", icon: <FiLink2 className="text-indigo-400" /> },
       { title: "Generating QR codes for offline distribution", icon: <FiSmartphone className="text-indigo-400" /> }
     ]
   }
@@ -105,9 +106,9 @@ export default function GuidesPage() {
         >
           <h3 className="text-xl font-medium text-indigo-800 mb-3">Need personalized help?</h3>
           <p className="text-indigo-600 mb-4">Our team is ready to assist you with custom implementations.</p>
-          <button className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+          <Link href="/contact" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
             Contact Support
-          </button>
+          </Link>
         </motion.div>
       </motion.main>
 

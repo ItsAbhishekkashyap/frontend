@@ -96,6 +96,7 @@ export default function Price() {
                             whileTap={{ scale: 0.98 }}
                             onClick={handleUpgrade}
                             disabled={upgrading}
+                            
                             className={`w-full flex items-center justify-center py-4 px-6 rounded-xl font-semibold transition-all ${upgrading ? 'bg-indigo-400' : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg'}`}
                         >
                             {upgrading ? (
