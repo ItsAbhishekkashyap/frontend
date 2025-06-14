@@ -1,23 +1,17 @@
-// app/api/payment/history/route.ts
 import { NextResponse } from 'next/server';
-import { getUserFromRequest } from '@/lib/auth/getUserFromRequest';
+import { connectToDB } from '@/lib/mongodb';
 import { Payment } from '@/models/Payment';
+import { getUserFromRequest } from '@/lib/auth/getUserFromRequest';
 
 export async function GET(req: Request) {
+  await connectToDB();
+
   const user = await getUserFromRequest(req);
-  if (!user) return new Response('Unauthorized', { status: 401 });
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  const payments = await Payment.find({ 
-    userId: user._id 
-  }).sort({ createdAt: -1 });
+  const payments = await Payment.find({ userId: user._id }).sort({ createdAt: -1 });
 
-  return NextResponse.json(payments.map(p => ({
-    id: p._id,
-    amount: p.amount / 100, // Convert to rupees
-    currency: p.currency,
-    status: p.status,
-    date: p.createdAt,
-    invoiceId: p.invoiceId,
-    planId: p.planId
-  })));
+  return NextResponse.json(payments);
 }

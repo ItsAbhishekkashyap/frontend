@@ -12,9 +12,15 @@ export async function POST(req: NextRequest) {
     await connectToDB();
     const { email, password } = await req.json();
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('+password'); // Important fix
+
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+     // Defensive check for password existence
+    if (!user.password) {
+      return NextResponse.json({ error: 'User password not set in database' }, { status: 500 });
     }
 
     const isValid = await bcrypt.compare(password, user.password);

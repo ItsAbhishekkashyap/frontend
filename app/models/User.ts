@@ -41,7 +41,6 @@ export interface IUser extends Document {
       country?: string;
     };
   };
-  // Helper methods
   getActiveSubscription: () => IPaymentReference | null;
 }
 
@@ -76,7 +75,7 @@ const UserSchema = new Schema<IUser>(
     },
     password: { 
       type: String,
-      select: false // Never returned in queries
+      select: false // Password hidden unless explicitly selected
     },
     createdAt: { type: Date, default: Date.now },
     premium: {
@@ -118,8 +117,7 @@ const UserSchema = new Schema<IUser>(
   }
 );
 
-// Indexes
-UserSchema.index({ email: 1 });
+// Indexes (Removed Duplicate Index)
 UserSchema.index({ premium: 1 });
 UserSchema.index({ 'payments.status': 1 });
 UserSchema.index({ 'payments.razorpayId': 1 });

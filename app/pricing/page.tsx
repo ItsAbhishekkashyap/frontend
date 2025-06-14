@@ -108,6 +108,7 @@ export default function Price() {
                                     Processing...
                                 </>
                             ) : (
+                                
                                 'Upgrade Now'
                             )}
                         </motion.button>

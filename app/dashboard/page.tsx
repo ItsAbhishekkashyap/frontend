@@ -395,12 +395,12 @@ export default function Dashboard() {
                                 </button>
 
                                 {premium && (
-                                    <Link href="/payment"
+                                    <Link href="/payment/status"
                                         onClick={() => setActiveTab('payments')}
                                         className={`flex items-center w-full px-4 py-3 rounded-lg text-left transition ${activeTab === 'payments' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
                                     >
                                         <FiCreditCard className="mr-3" />
-                                        Payments
+                                        Your Payments
                                         <span className="ml-auto bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
                                             Premium
                                         </span>
