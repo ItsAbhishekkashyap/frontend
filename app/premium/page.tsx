@@ -26,6 +26,8 @@ type RazorpayOptions = {
   theme?: { color: string };
 };
 
+
+
 declare const Razorpay: {
   new (options: RazorpayOptions): RazorpayInstance;
 };

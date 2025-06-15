@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { razorpay } from '@/lib/razorpay';
+import { connectToDB } from '@/lib/mongodb';
+import { User } from '@/models/User';
 
 interface RazorpayAddon {
   item: {
@@ -20,30 +22,78 @@ interface SubscriptionCreateOptions {
   offer_id?: string;
   addons?: RazorpayAddon[];
   notes?: Record<string, string>;
+  customer_id?: string;
+}
+
+interface RazorpayCustomer {
+  id: string;
+  email?: string;
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await req.json();
+    const { userId, email, name, contact } = await req.json();
 
-    if (!userId) {
-      return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+    if (!userId || !email) {
+      return NextResponse.json({ error: 'userId and email are required' }, { status: 400 });
     }
 
+    await connectToDB();
+
+    // Fetch User
+    const user = await User.findById(userId);
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    // Check for existing Razorpay customer
+    const allCustomersResponse = await razorpay.customers.all({ count: 100 });
+    const existingCustomer = allCustomersResponse.items.find(
+      (customer: RazorpayCustomer) => customer.email === email
+    );
+
+    let customerId;
+    if (existingCustomer) {
+      customerId = existingCustomer.id;
+    } else {
+      const customer = await razorpay.customers.create({
+        name: name || 'No Name',
+        email,
+        contact: contact || undefined,
+      });
+      customerId = customer.id;
+    }
+
+    // Create subscription
     const options: SubscriptionCreateOptions = {
-      plan_id: 'plan_QgmHnvW6tBIhg0', // Use your actual Razorpay plan ID
-      total_count: 12,                 // 12 months or any cycle you want
-      customer_notify: 1,              // Notify customer on creation
+      plan_id: 'plan_QgmHnvW6tBIhg0',
+      total_count: 12,
+      customer_notify: 1,
+      customer_id: customerId,
       notes: {
-        userId,                        // Very important: This will come in webhook under 'notes'
-        planId: 'monthly_plan',        // Optional: Identify plan type if multiple plans used
-      }
+        userId,
+        planId: 'monthly_plan',
+      },
     };
 
-    // Create subscription via Razorpay API
     const subscription = await razorpay.subscriptions.create(options);
+    console.log('Subscription ID:',subscription.id); 
 
-    // Log important subscription details
+    // Save subscriptionId in User's last payment
+    user.payments.push({
+      razorpayId: 'N/A', // since payment is not yet made
+      subscriptionId: subscription.id, // <-- important
+      amount: 19900, // e.g., in paise (₹199)
+      currency: 'INR',
+      status: 'pending',
+      invoiceId: 'N/A',
+      planId: 'monthly_plan',
+      createdAt: new Date(),
+      refundedAmount: 0,
+    });
+
+    await user.save();
+
     console.log('Razorpay Subscription Created:', {
       id: subscription.id,
       customer_id: subscription.customer_id,
@@ -54,17 +104,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(subscription);
   } catch (err: unknown) {
     const error = err as { message?: string };
-    console.error('Error creating subscription:', error.message || err);
+    console.error('Error creating subscription:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to create subscription' },
       { status: 500 }
     );
   }
 }
-
-
-
-
 
 
 

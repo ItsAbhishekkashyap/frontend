@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { connectToDB } from '@/lib/mongodb';
 import { User } from '@/models/User';
 import { Payment } from '@/models/Payment';
+import { razorpay } from '@/lib/razorpay';
 
 async function streamToBuffer(readableStream: ReadableStream<Uint8Array>): Promise<Buffer> {
   const reader = readableStream.getReader();
@@ -29,46 +30,54 @@ export async function POST(req: NextRequest) {
       .digest('hex');
 
     if (signature !== expectedSignature) {
-      console.error('Signature mismatch:', signature, expectedSignature);
+      console.error('Signature mismatch');
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
     const event = JSON.parse(rawBody.toString());
-    console.log('Webhook event:', event.event, event.payload);
+    console.log('Webhook event received:', event.event);
 
     await connectToDB();
 
-    const isSubscriptionCharge = event.event === 'subscription.charged';
     const isPaymentCaptured = event.event === 'payment.captured';
+    if (isPaymentCaptured) {
+      const payload = event.payload.payment.entity;
+      const subscriptionId = payload.subscription_id;
 
-    if (isSubscriptionCharge || isPaymentCaptured) {
-      const payload = isSubscriptionCharge
-        ? (event.payload.payment.entity)
-        : (event.payload.payment.entity);
-
-      const notes = payload.notes || {};
-      const userId = notes.userId;
-      if (!userId) {
-        console.error('Missing notes.userId in webhook payload');
-        return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+      if (!subscriptionId) {
+        console.error('Missing subscription_id in payment payload');
+        return NextResponse.json({ error: 'No subscription_id found' }, { status: 400 });
       }
 
+      // Fetch full subscription from Razorpay to get notes (userId)
+      const subscription = await razorpay.subscriptions.fetch(subscriptionId);
+      const notes = subscription.notes || {};
+      const userId = notes.userId;
+
+      if (!userId) {
+        console.error('userId not found in subscription notes');
+        return NextResponse.json({ error: 'No userId in subscription notes' }, { status: 400 });
+      }
+
+      console.log('UserID fetched from subscription notes:', userId);
+
+      // Save Payment in DB
       const newPayment = await Payment.create({
         userId,
         razorpayPaymentId: payload.id,
         razorpayOrderId: payload.order_id || '',
         amount: payload.amount,
         currency: payload.currency,
-        status: isSubscriptionCharge ? 'captured' : 'captured',
+        status: 'captured',
         invoiceId: notes.invoiceId || '',
         planId: notes.planId || '',
         createdAt: new Date(),
       });
 
-      const update = {
-        premium: true,
-        premiumSince: new Date(),
-        payments: [{
+      // Update User to premium
+      await User.findByIdAndUpdate(userId, {
+        $set: { premium: true, premiumSince: new Date() },
+        $push: { payments: {
           _id: newPayment._id,
           razorpayId: payload.id,
           amount: payload.amount,
@@ -77,20 +86,15 @@ export async function POST(req: NextRequest) {
           invoiceId: notes.invoiceId || '',
           planId: notes.planId || '',
           createdAt: newPayment.createdAt,
-        }]
-      };
-
-      await User.findByIdAndUpdate(userId, {
-        $set: { premium: true, premiumSince: new Date() },
-        $push: { payments: update.payments[0] }
+        }}
       });
 
-      console.log('User upgraded and payment saved for userId:', userId);
+      console.log('User upgraded to premium:', userId);
     }
 
     return NextResponse.json({ received: true });
   } catch (e: unknown) {
-    console.error('Webhook error:', e);
+    console.error('Webhook processing error:', e);
     return NextResponse.json({ error: 'Webhook error' }, { status: 500 });
   }
 }

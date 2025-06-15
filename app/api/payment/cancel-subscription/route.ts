@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
-import {connectToDB} from '@/lib/mongodb';
-import { User } from '@/models/User';
+import { connectToDB } from '@/lib/mongodb';
+import { User, IUser, IPaymentReference } from '@/models/User';
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID!,
@@ -18,24 +18,32 @@ export async function POST(req: NextRequest) {
 
     await connectToDB();
 
-    const user = await User.findById(userId);
+    const user: IUser | null = await User.findById(userId);
 
     if (!user || !user.payments || user.payments.length === 0) {
-      return NextResponse.json({ error: 'No active subscription found.' }, { status: 400 });
+      return NextResponse.json({ error: 'No payment history found.' }, { status: 400 });
     }
 
-    const latestPayment = user.payments[user.payments.length - 1];
-    const subscriptionId = latestPayment.planId;
+    // Find the latest subscription with a valid subscriptionId
+    const latestSubscription = user.payments
+      .filter((p: IPaymentReference) => p.subscriptionId)
+      .sort((a: IPaymentReference, b: IPaymentReference) => 
+        b.createdAt.getTime() - a.createdAt.getTime()
+      )[0];
 
-    if (!subscriptionId) {
-      return NextResponse.json({ error: 'No subscription ID found in user data.' }, { status: 400 });
+    if (!latestSubscription || !latestSubscription.subscriptionId) {
+      return NextResponse.json({ error: 'No active subscription found to cancel.' }, { status: 400 });
     }
 
-    const cancelledSubscription = await razorpay.subscriptions.cancel(subscriptionId);
+    // Cancel subscription via Razorpay
+    const cancelledSubscription = await razorpay.subscriptions.cancel(latestSubscription.subscriptionId);
 
     return NextResponse.json({ message: 'Subscription cancelled successfully.', cancelledSubscription });
-     } catch (error) {
-  console.error('Error cancelling subscription:', error);
-  return NextResponse.json({ error: 'Failed to cancel subscription.' }, { status: 500 });
+
+  } catch (error) {
+    console.error('Error cancelling subscription:', error);
+    return NextResponse.json({ error: 'Failed to cancel subscription.' }, { status: 500 });
+  }
 }
-}
+
+

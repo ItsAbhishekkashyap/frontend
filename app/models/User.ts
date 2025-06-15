@@ -7,6 +7,7 @@ type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
 export interface IPaymentReference {
   _id: Types.ObjectId;
   razorpayId: string;
+  subscriptionId?: string;
   amount: number; // in paise (1 INR = 100 paise)
   currency: string;
   status: PaymentStatus;
@@ -29,7 +30,6 @@ export interface IUser extends Document {
   picture?: string;
   provider: 'credentials' | 'google';
   payments: IPaymentReference[];
-  lastPayment?: IPaymentReference;
   billing?: {
     name?: string;
     address?: {
@@ -47,6 +47,7 @@ export interface IUser extends Document {
 // Payment Sub-Schema
 const PaymentReferenceSchema = new Schema<IPaymentReference>({
   razorpayId: { type: String, required: true },
+    subscriptionId: { type: String },
   amount: { type: Number, required: true },
   currency: { type: String, default: 'INR' },
   status: { 
@@ -60,6 +61,7 @@ const PaymentReferenceSchema = new Schema<IPaymentReference>({
   refundedAmount: { type: Number, default: 0 }
 }, { _id: true });
 
+// User Schema
 const UserSchema = new Schema<IUser>(
   {
     email: { 
@@ -75,8 +77,10 @@ const UserSchema = new Schema<IUser>(
     },
     password: { 
       type: String,
-      select: false // Password hidden unless explicitly selected
+      select: false
     },
+    resetToken: { type: String, select: false },
+    resetTokenExpiry: { type: Date, select: false },
     createdAt: { type: Date, default: Date.now },
     premium: {
       type: Boolean,
@@ -117,7 +121,7 @@ const UserSchema = new Schema<IUser>(
   }
 );
 
-// Indexes (Removed Duplicate Index)
+// Indexes
 UserSchema.index({ premium: 1 });
 UserSchema.index({ 'payments.status': 1 });
 UserSchema.index({ 'payments.razorpayId': 1 });
@@ -142,7 +146,7 @@ UserSchema.methods.getActiveSubscription = function() {
 
 // Auto-update premium status based on payments
 UserSchema.pre('save', function(next) {
-  if (this.isModified('payments')) {
+  if (this.isModified('payments') || this.isNew) {
     const hasActivePayment = this.payments.some(p => 
       p.status === 'completed' && 
       (!p.planId || p.planId && !this.payments.some(r => 
