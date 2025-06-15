@@ -175,7 +175,7 @@ export async function POST(req: NextRequest) {
     const refundResponse = (await razorpay.payments.refund(
       latestSubscription.razorpayId,
       {
-        amount: latestSubscription.amount, // amount in paise
+        amount: Math.floor(latestSubscription.amount * 0.5), // amount in paise
       }
     )) as RazorpayRefund;
 

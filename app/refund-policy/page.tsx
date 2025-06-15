@@ -1,4 +1,5 @@
 "use client";
+
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
@@ -22,7 +23,7 @@ export default function RefundPolicy() {
             <div className="max-w-3xl mx-auto">
               <h1 className="text-3xl md:text-4xl font-bold mb-3">Refund Policy</h1>
               <p className="text-blue-100 text-lg">
-                We want you to be completely satisfied with your Branqly experience.
+                We want you to be satisfied, but here are our refund terms.
               </p>
             </div>
           </div>
@@ -30,6 +31,7 @@ export default function RefundPolicy() {
           {/* Policy Content */}
           <div className="p-6 md:p-8 lg:p-10">
             <div className="max-w-3xl mx-auto space-y-10">
+              
               {/* Refund Section */}
               <section className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -41,15 +43,15 @@ export default function RefundPolicy() {
                 <ul className="space-y-3 pl-2 text-gray-600">
                   <li className="flex items-start">
                     <FiCheck className="text-green-500 mt-1 mr-3 flex-shrink-0" />
-                    <span>Full refunds available within <span className="font-semibold text-blue-600">7 days</span> of purchase if no premium links have been created</span>
+                    <span>Partial refund of <span className="font-semibold text-blue-600">50%</span> of subscription amount available if requested within <span className="font-semibold text-blue-600">7 days</span> of purchase.</span>
                   </li>
                   <li className="flex items-start">
-                    <FiCheck className="text-green-500 mt-1 mr-3 flex-shrink-0" />
-                    <span>Partial refunds for unused portions of monthly subscriptions after the 7-day period</span>
+                    <FiX className="text-red-500 mt-1 mr-3 flex-shrink-0" />
+                    <span>No refunds will be provided for cancellations or refund requests made after the 7-day window.</span>
                   </li>
                   <li className="flex items-start">
                     <FiClock className="text-blue-400 mt-1 mr-3 flex-shrink-0" />
-                    <span>Refunds processed to original payment within <span className="font-semibold">5-10 business days</span></span>
+                    <span>Refunds are processed automatically to the original payment method within <span className="font-semibold">5-10 business days</span>.</span>
                   </li>
                 </ul>
               </section>
@@ -66,17 +68,17 @@ export default function RefundPolicy() {
                   <ul className="space-y-3 text-gray-600">
                     <li className="flex items-start">
                       <FiX className="text-red-500 mt-1 mr-3 flex-shrink-0" />
-                      <span>Custom domain purchases (must be canceled before renewal)</span>
+                      <span>Custom domain purchases (must be canceled before renewal).</span>
                     </li>
                     <li className="flex items-start">
                       <FiX className="text-red-500 mt-1 mr-3 flex-shrink-0" />
-                      <span>One-time feature unlocks or credits</span>
+                      <span>One-time feature unlocks or credits.</span>
                     </li>
                   </ul>
                 </div>
               </section>
 
-              {/* Request Refund Section */}
+              {/* How to Request Refund */}
               <section className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <div className="bg-green-100 p-2 rounded-full">
@@ -87,24 +89,25 @@ export default function RefundPolicy() {
                 <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
                   <ol className="space-y-4 pl-1 list-decimal text-gray-600 list-inside">
                     <li className="pl-2">
-                      Go to your <Link href="/dashboard" className="text-blue-600 hover:underline font-medium">Dashboard</Link>
+                      Go to your <Link href="/dashboard" className="text-blue-600 hover:underline font-medium">Dashboard</Link>.
                     </li>
-                    <li className="pl-2">Navigate to &#39;Payment&#39; section</li>
-                    <li className="pl-2">Click &#39;Request Refund&#39;</li>
+                    <li className="pl-2">Navigate to the &#39;Payment&#39; section.</li>
+                    <li className="pl-2">Click &#39;Request Refund&#39; within 7 days of purchase.</li>
                     <li className="pl-2">
-                      Or email us at <a href="mailto:support@branqly.xyz" className="text-blue-600 hover:underline font-medium">support@branqly.xyz</a> with your transaction ID
+                      Or email us at <a href="mailto:support@branqly.xyz" className="text-blue-600 hover:underline font-medium">support@branqly.xyz</a> with your transaction ID.
                     </li>
                   </ol>
                 </div>
               </section>
 
-              {/* Cancellation Section */}
+              {/* Cancellation Policy */}
               <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-800">Cancellation Policy</h2>
                 <div className="bg-blue-50 rounded-lg p-5 border border-blue-100">
                   <p className="text-gray-700">
-                    You may cancel your subscription within a first week after payment. Cancellations take effect at the end of your current billing cycle. 
-                    No prorated refunds for partial months unless requested within the 7-day window.
+                    You may cancel your subscription within <span className="font-semibold text-blue-600">7 days</span> after payment to receive a 50% refund.  
+                    No refunds are available after this period.  
+                    Cancellations take effect at the end of the current billing cycle.
                   </p>
                 </div>
               </section>
@@ -113,17 +116,17 @@ export default function RefundPolicy() {
               <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-800">Disputes</h2>
                 <p className="text-gray-700">
-                  For any payment disputes, please contact us first at <span className="font-semibold text-blue-600">support@branqly.xyz</span> before initiating a chargeback. 
+                  For any payment disputes, please contact us first at <span className="font-semibold text-blue-600">support@branqly.xyz</span> before initiating a chargeback.  
                   Chargebacks may result in automatic account suspension.
                 </p>
               </section>
 
               {/* Last Updated */}
-              <div className="pt-4 border-t border-gray-200">
+              {/* <div className="pt-4 border-t border-gray-200">
                 <p className="text-sm text-gray-500">
                   Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </motion.div>
