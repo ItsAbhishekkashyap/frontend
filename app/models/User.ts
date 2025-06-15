@@ -15,6 +15,9 @@ export interface IPaymentReference {
   planId?: string; // for subscriptions
   createdAt: Date;
   refundedAmount?: number;
+  refundStatus?: string;
+refundDate?: Date;
+  cancelDate?: Date;
 }
 
 // User Interface

@@ -218,34 +218,35 @@ export default function SubscriptionStatusPage() {
     (now.getTime() - lastPaymentDate.getTime()) / (1000 * 60 * 60 * 24) <= 7;
 
   const handleCancelSubscription = async () => {
-    if (!status || !status.userId) {
-      setCancelMsg('User ID not loaded.');
-      return;
+  if (!status || !status.userId) {
+    setCancelMsg('User ID not loaded.');
+    return;
+  }
+
+  setCancelLoading(true);
+  setCancelMsg(null);
+
+  try {
+    const res = await axios.post('/api/payment/refund-and-cancel', { // 👈 Changed API route
+      userId: status.userId,
+    });
+
+    if (res.status === 200) {
+      setCancelMsg('Refund and subscription cancellation successful.');
+      const refreshed = await axios.get('/api/payment/status');
+      setStatus(refreshed.data);
+    } else {
+      setCancelMsg(res.data?.error || 'Failed to refund and cancel subscription.');
     }
+  } catch (err) {
+    console.error('Refund and cancel subscription error:', err);
+    setCancelMsg('Error processing refund and cancellation.');
+  } finally {
+    setCancelLoading(false);
+    setShowCancelConfirm(false);
+  }
+};
 
-    setCancelLoading(true);
-    setCancelMsg(null);
-
-    try {
-      const res = await axios.post('/api/payment/cancel-subscription', {
-        userId: status.userId,
-      });
-
-      if (res.status === 200) {
-        setCancelMsg('Subscription cancelled successfully.');
-        const refreshed = await axios.get('/api/payment/status');
-        setStatus(refreshed.data);
-      } else {
-        setCancelMsg(res.data?.error || 'Failed to cancel subscription.');
-      }
-    } catch (err) {
-      console.error('Cancel subscription error:', err);
-      setCancelMsg('Error cancelling subscription.');
-    } finally {
-      setCancelLoading(false);
-      setShowCancelConfirm(false);
-    }
-  };
 
   if (loading) {
     return (
