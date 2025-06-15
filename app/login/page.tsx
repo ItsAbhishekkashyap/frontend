@@ -42,7 +42,7 @@ export default function LoginPage() {
 
       if (res.ok) {
         toast.success('Logged in successfully!');
-        router.push('/premium');
+        router.push('/payment');
       } else {
         toast.error(result.error || 'Invalid credentials. Please try again.');
       }

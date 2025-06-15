@@ -89,7 +89,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       user: {
-        id: user._id,
+        userId: user._id,
         email: user.email,
         name: user.name,
         picture: user.picture,

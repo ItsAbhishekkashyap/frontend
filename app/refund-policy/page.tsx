@@ -89,7 +89,7 @@ export default function RefundPolicy() {
                     <li className="pl-2">
                       Go to your <Link href="/dashboard" className="text-blue-600 hover:underline font-medium">Dashboard</Link>
                     </li>
-                    <li className="pl-2">Navigate to &#39;Billing&#39; section</li>
+                    <li className="pl-2">Navigate to &#39;Payment&#39; section</li>
                     <li className="pl-2">Click &#39;Request Refund&#39;</li>
                     <li className="pl-2">
                       Or email us at <a href="mailto:support@branqly.xyz" className="text-blue-600 hover:underline font-medium">support@branqly.xyz</a> with your transaction ID
@@ -103,7 +103,7 @@ export default function RefundPolicy() {
                 <h2 className="text-2xl font-bold text-gray-800">Cancellation Policy</h2>
                 <div className="bg-blue-50 rounded-lg p-5 border border-blue-100">
                   <p className="text-gray-700">
-                    You may cancel your subscription at any time. Cancellations take effect at the end of your current billing cycle. 
+                    You may cancel your subscription within a first week after payment. Cancellations take effect at the end of your current billing cycle. 
                     No prorated refunds for partial months unless requested within the 7-day window.
                   </p>
                 </div>

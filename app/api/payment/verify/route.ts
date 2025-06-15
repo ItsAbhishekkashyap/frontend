@@ -64,12 +64,20 @@ export async function POST(req: NextRequest) {
   await connectToDB();
 
   try {
-    const { subscriptionId, paymentId, signature, userId} = await req.json();
+
+    interface Payment {
+  subscriptionId: string;
+  status: string;
+  razorpayId: string;
+  // Add other properties as needed
+}
+    const { subscriptionId, paymentId, signature, userId } = await req.json();
 
     if (!subscriptionId || !paymentId || !signature || !userId) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Verify signature
     const generatedSignature = crypto
       .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET!)
       .update(`${paymentId}|${subscriptionId}`)
@@ -84,18 +92,33 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Push new payment into payments array
-    user.payments.push({
-      razorpayId: paymentId,
-      amount:19900,
-      currency:'INR',
-      status: 'completed', // ✅ Correct enum value
-      invoiceId:'N/A',
-      planId:'montlhy_plan',
-      createdAt: new Date(),
-    });
+    // Find existing payment with subscriptionId & status 'pending'
+    const payment = user.payments.find((p: Payment) => p.subscriptionId === subscriptionId && p.status === 'pending');
 
-    // premium + premiumSince handled automatically by pre('save') hook.
+    if (payment) {
+      // Update this payment with razorpay payment id & status completed
+      payment.razorpayId = paymentId;
+      payment.status = 'completed';
+      payment.createdAt = new Date(); // update payment date to now (optional)
+    } else {
+      // No pending payment found for subscription, push new one just in case
+      user.payments.push({
+        razorpayId: paymentId,
+        subscriptionId,
+        amount: 19900,
+        currency: 'INR',
+        status: 'completed',
+        invoiceId: 'N/A',
+        planId: 'monthly_plan',
+        createdAt: new Date(),
+        refundedAmount: 0,
+      });
+    }
+
+    // You might want to set premium flags here or rely on pre-save hook
+    // user.premium = true;
+    // user.premiumSince = new Date();
+
     await user.save();
 
     return NextResponse.json({ success: true });
@@ -104,5 +127,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to verify payment' }, { status: 500 });
   }
 }
+
 
 

@@ -280,6 +280,8 @@ export default function Dashboard() {
     const [links, setLinks] = useState<LinkType[]>([]);
     const [activeTab, setActiveTab] = useState('links');
 
+
+
     // Get base URL and user info
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -289,16 +291,20 @@ export default function Dashboard() {
         async function fetchUserAndLinks() {
             const res = await fetch('/api/auth/me', { credentials: 'include' });
             const user = await res.json();
+            
 
-            if (user?.user?.id) {
-                setPremium(user.user.premium);
-
-                const linksRes = await fetch('/api/links/user', { credentials: 'include' });
-                if (linksRes.ok) {
-                    const linkData = await linksRes.json();
-                    setLinks(linkData.links);
-                }
+            if (user?.user?.userId) {
+                setPremium(user.user.premium === true || user.user.premium === 'true'); // best fix
+                console.log('Premium status:', user.user.premium); // 👈 SEE THIS IN TERMINAL
             }
+
+            const linksRes = await fetch('/api/links/user', { credentials: 'include' });
+            if (linksRes.ok) {
+                const linkData = await linksRes.json();
+                setLinks(linkData.links);
+            }
+            
+
         }
 
         fetchUserAndLinks();
@@ -417,6 +423,7 @@ export default function Dashboard() {
                         {/* URL Shortener Card */}
                         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
                             <h2 className="text-xl font-semibold text-gray-800 mb-4">Shorten a URL</h2>
+                            
 
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>

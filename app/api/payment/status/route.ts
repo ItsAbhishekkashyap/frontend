@@ -43,6 +43,7 @@ export async function GET() {
     lastPayment: lastPayment
       ? {
           razorpayId: lastPayment.razorpayId,
+          subscriptionId: lastPayment.subscriptionId || null,
           amount: lastPayment.amount,
           currency: lastPayment.currency,
           status: lastPayment.status,

@@ -159,10 +159,11 @@ export default function PremiumPage() {
                   {[
                     'Faster Analytics',
                     'Unlimited Links',
-                    'Custom Domain',
+                    'Custom Alias',
                     'Enhanced Security',
                     'Advanced Reports',
-                    'Global CDN'
+                    'Global Reach',
+                    
                   ][i]}
                 </span>
               </motion.div>
@@ -178,13 +179,7 @@ export default function PremiumPage() {
               >
                 {upgrading ? 'Processing...' : 'Upgrade One‑Time'}
               </button>
-              <button
-                onClick={() => handlePayment(true)}
-                disabled={upgrading}
-                className="px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition"
-              >
-                {upgrading ? 'Processing...' : 'Subscribe Monthly'}
-              </button>
+             
             </div>
           ) : (
             <p className="mt-8 text-green-600 font-semibold">🎉 You are a Premium User!</p>

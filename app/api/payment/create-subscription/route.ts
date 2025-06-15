@@ -30,6 +30,18 @@ interface RazorpayCustomer {
   email?: string;
 }
 
+interface Payment {
+  razorpayId: string;
+  subscriptionId: string;
+  amount: number;
+  currency: string;
+  status: string;
+  invoiceId: string;
+  planId: string;
+  createdAt: Date;
+  refundedAmount: number;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { userId, email, name, contact } = await req.json();
@@ -44,6 +56,31 @@ export async function POST(req: NextRequest) {
     const user = await User.findById(userId);
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    // Clean up old pending payments older than 30 minutes
+    const THIRTY_MINUTES = 30 * 60 * 1000;
+    const now = Date.now();
+
+    user.payments = user.payments.filter((p: Payment) => {
+      if (p.status === "pending") {
+        return now - new Date(p.createdAt).getTime() < THIRTY_MINUTES;
+      }
+      return true;
+    });
+
+    await user.save();
+
+    // Check for active subscriptions only (ignore pending)
+    const activeSubscriptions = user.payments.filter(
+      (payment: Payment) => payment.status === "active"
+    );
+
+    if (activeSubscriptions.length > 0) {
+      return NextResponse.json(
+        { error: "User already has an active subscription." },
+        { status: 400 }
+      );
     }
 
     // Check for existing Razorpay customer
@@ -64,26 +101,28 @@ export async function POST(req: NextRequest) {
       customerId = customer.id;
     }
 
-    // Create subscription
+    // Create subscription options
     const options: SubscriptionCreateOptions = {
       plan_id: 'plan_QgmHnvW6tBIhg0',
       total_count: 12,
       customer_notify: 1,
       customer_id: customerId,
+      expire_by: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
       notes: {
         userId,
         planId: 'monthly_plan',
       },
     };
 
+    // Create subscription on Razorpay
     const subscription = await razorpay.subscriptions.create(options);
-    console.log('Subscription ID:',subscription.id); 
+    console.log('Subscription ID:', subscription.id);
 
-    // Save subscriptionId in User's last payment
+    // Add new subscription to user's payments with status pending
     user.payments.push({
-      razorpayId: 'N/A', // since payment is not yet made
-      subscriptionId: subscription.id, // <-- important
-      amount: 19900, // e.g., in paise (₹199)
+      razorpayId: 'N/A',
+      subscriptionId: subscription.id,
+      amount: 19900,
       currency: 'INR',
       status: 'pending',
       invoiceId: 'N/A',

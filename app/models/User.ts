@@ -1,7 +1,7 @@
 import { Schema, Document, model, models, Types } from "mongoose";
 
 // Payment Status Types
-type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
+type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded' | 'cancelled';
 
 // Payment Reference Interface
 export interface IPaymentReference {
@@ -47,12 +47,12 @@ export interface IUser extends Document {
 // Payment Sub-Schema
 const PaymentReferenceSchema = new Schema<IPaymentReference>({
   razorpayId: { type: String, required: true },
-    subscriptionId: { type: String },
+  subscriptionId: { type: String },
   amount: { type: Number, required: true },
   currency: { type: String, default: 'INR' },
   status: { 
     type: String,
-    enum: ['pending', 'completed', 'failed', 'refunded'],
+    enum: ['pending', 'completed', 'failed', 'refunded', 'cancelled'], // ✅ 'cancelled' included
     default: 'pending'
   },
   invoiceId: { type: String, required: true },
@@ -75,17 +75,11 @@ const UserSchema = new Schema<IUser>(
         message: 'Invalid email format'
       }
     },
-    password: { 
-      type: String,
-      select: false
-    },
+    password: { type: String, select: false },
     resetToken: { type: String, select: false },
     resetTokenExpiry: { type: Date, select: false },
     createdAt: { type: Date, default: Date.now },
-    premium: {
-      type: Boolean,
-      default: false,
-    },
+    premium: { type: Boolean, default: false },
     premiumSince: Date,
     name: { type: String },
     picture: { type: String },
@@ -146,17 +140,25 @@ UserSchema.methods.getActiveSubscription = function() {
 
 // Auto-update premium status based on payments
 UserSchema.pre('save', function(next) {
-  if (this.isModified('payments') || this.isNew) {
-    const hasActivePayment = this.payments.some(p => 
+  const user = this as IUser;
+
+  if (user.isModified('payments') || user.isNew) {
+    // Check if there is at least 1 active (non-cancelled, non-refunded, non-failed) subscription
+    const hasActivePayment = user.payments.some(p => 
       p.status === 'completed' && 
-      (!p.planId || p.planId && !this.payments.some(r => 
-        r.status === 'refunded' && r.razorpayId === p.razorpayId
-      ))
+      (!p.planId || (p.planId && !user.payments.some(r => 
+        ['refunded', 'cancelled', 'failed'].includes(r.status) && r.razorpayId === p.razorpayId
+      )))
     );
-    
-    this.premium = hasActivePayment;
-    if (hasActivePayment && !this.premiumSince) {
-      this.premiumSince = new Date();
+
+    user.premium = hasActivePayment;
+
+    if (hasActivePayment && !user.premiumSince) {
+      user.premiumSince = new Date();
+    }
+
+    if (!hasActivePayment) {
+      user.premiumSince = undefined; // reset premiumSince if no active plan
     }
   }
   next();
