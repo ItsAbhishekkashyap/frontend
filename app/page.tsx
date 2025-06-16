@@ -110,7 +110,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-grow">
         {/* Hero Section with Gradient Background */}
-        <section className="bg-gradient-to-br from-indigo-50 to-indigo-100 py-16 md:py-24">
+        <section className="bg-gradient-to-br from-indigo-50 to-indigo-100 py-10 md:py-24">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -126,7 +126,7 @@ export default function Home() {
               >
                 {/* <FiLink className="text-indigo-600 text-4xl" /> */}
                 <Link href="/">
-            <div className="relative w-[80px] h-[80px] flex items-center justify-center border border-dashed"> {/* Debug border */}
+            <div className="relative w-[80px] h-[80px] flex items-center justify-center "> {/* Debug border */}
               <Image
                 src="/favicon.svg"
                 alt="AshrtL Logo"
