@@ -5,7 +5,7 @@ import {
 
   FiMapPin,
   FiMail,
-  
+
 } from 'react-icons/fi';
 import {
   BsTwitter,
@@ -119,9 +119,9 @@ export default function Footer() {
               <li className="flex items-start">
                 <FiMail className="text-indigo-300 mt-1 mr-3 flex-shrink-0" />
                 <Link href="/contact" className="p-2 cursor-pointer bg-blue-600 text-sm rounded-2xl text-white text-bold">
-                Message Us
+                  Message Us
                 </Link>
-                
+
               </li>
             </ul>
           </div>
@@ -130,22 +130,23 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-indigo-700 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-indigo-300 text-sm">
+        <div className="border-t border-indigo-700 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <p className="text-indigo-300 text-sm text-center md:text-left">
             © {new Date().getFullYear()} Branqly. All rights reserved.
           </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            {['privacy-policy', 'terms', 'cookie-policy','refund-policy','about','contact-us','Shipping-and-Delivery'].map((item, index) => (
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-4 gap-y-2">
+            {['privacy-policy', 'terms', 'cookie-policy', 'refund-policy', 'about', 'contact-us', 'Shipping-and-Delivery'].map((item, index) => (
               <Link
                 key={index}
                 href={`/${item}`}
                 className="text-indigo-300 hover:text-white text-sm transition-colors capitalize"
               >
-                {item.replace('-', ' ')}
+                {item.replace(/-/g, ' ')}
               </Link>
             ))}
           </div>
         </div>
+
       </div>
     </footer>
   );

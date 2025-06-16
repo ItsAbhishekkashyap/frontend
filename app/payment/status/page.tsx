@@ -227,7 +227,7 @@ export default function SubscriptionStatusPage() {
   setCancelMsg(null);
 
   try {
-    const res = await axios.post('/api/payment/refund-and-cancel', { // 👈 Changed API route
+    const res = await axios.post('/api/payment/refund-and-cancel', { 
       userId: status.userId,
     });
 

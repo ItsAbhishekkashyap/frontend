@@ -242,7 +242,7 @@ export default function PaymentPage() {
 
       } catch (err) {
         console.error(err);
-        setError('Failed to load user or create subscription.');
+        setError('Failed to load user or create subscription refresh the page.');
       } finally {
         setIsLoading(false);
       }
@@ -257,7 +257,7 @@ export default function PaymentPage() {
     setPayLoading(true);
 
     const options: RazorpayOptions = {
-      key: 'rzp_test_yei6F7Iay80whY',
+      key: 'rzp_live_zz6kmIzjG8kElZ',
       subscription_id: subscription.id,
       name: 'Branqly',
       description: 'Monthly Subscription of ₹199',

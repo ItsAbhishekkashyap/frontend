@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
 
     // Create subscription options
     const options: SubscriptionCreateOptions = {
-      plan_id: 'plan_QgmHnvW6tBIhg0',
+      plan_id: 'plan_QhukHxVGCjhpbB',
       total_count: 12,
       customer_notify: 1,
       customer_id: customerId,
@@ -123,6 +123,7 @@ export async function POST(req: NextRequest) {
       razorpayId: 'N/A',
       subscriptionId: subscription.id,
       amount: 19900,
+      
       currency: 'INR',
       status: 'pending',
       invoiceId: 'N/A',

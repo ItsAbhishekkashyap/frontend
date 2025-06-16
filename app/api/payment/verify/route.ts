@@ -106,6 +106,7 @@ export async function POST(req: NextRequest) {
         razorpayId: paymentId,
         subscriptionId,
         amount: 19900,
+        
         currency: 'INR',
         status: 'completed',
         invoiceId: 'N/A',
