@@ -23,7 +23,9 @@ const PUBLIC_PATHS = [
   '/privacy-policy',
   '/terms',
   '/cookie-policy',
-  '/refund-policy'
+  '/refund-policy',
+  '/contact-us',
+  '/shipping-delivery'
 
 ];
 
