@@ -139,7 +139,7 @@ export default function PrivacyFirstAnalytics() {
             <div className="absolute -right-16 sm:-right-20 -top-16 sm:-top-20 w-40 sm:w-48 md:w-64 h-40 sm:h-48 md:h-64 bg-white/10 rounded-full"></div>
             <div className="absolute -left-16 sm:-left-20 -bottom-16 sm:-bottom-20 w-40 sm:w-48 md:w-64 h-40 sm:h-48 md:h-64 bg-white/10 rounded-full"></div>
             <div className="relative z-10">
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6">The Ashrtl Advantage</h2>
+              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6">The Branqly Advantage</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {[
                   {
@@ -223,7 +223,7 @@ export default function PrivacyFirstAnalytics() {
             <p className="text-gray-600 mb-4 sm:mb-6 text-xs sm:text-sm md:text-base">
               Join thousands of ethical businesses using Branqly&#39;s privacy-first approach to link analytics.
             </p>
-            <Link href="/pricing" className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg inline-block text-sm sm:text-base">
+            <Link href="/payment" className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg inline-block text-sm sm:text-base">
               Get Started Privacy-First
             </Link>
           </div>
