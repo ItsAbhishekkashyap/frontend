@@ -13,7 +13,7 @@ const Blog1 = () => {
                 {/* Hero Section */}
                 <section className="relative bg-gradient-to-r from-indigo-600 to-purple-700 py-20 overflow-hidden">
                     <div className="absolute inset-0 opacity-10">
-                        <div className="absolute inset-0 bg-[url('/images/pattern-dots.svg')] bg-[length:30px_30px]"></div>
+                        <div className="absolute inset-0 bg-[url('/images/future-url.svg')] bg-[length:30px_30px]"></div>
                     </div>
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
                         <motion.div

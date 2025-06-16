@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Head from "next/head";
+import Image from "next/image"; // Important for optimized images
 
 interface Post {
   title: string;
@@ -22,48 +23,46 @@ export default function BlogPage() {
     {
       title: "The Future of URL Shortening",
       excerpt: "Discover how AI is revolutionizing link management and what it means for marketers.",
-      
       category: "Technology",
-      image: "/images/blog-tech.jpg",
+      image: "/images/future-url.svg",
       slug: "the-future-of-url-shortening",
-      tags: ["AI", "Innovation", "Marketing"]
+      tags: ["AI", "Innovation", "Marketing"],
     },
     {
       title: "Maximizing Clicks with Branqly",
       excerpt: "Learn advanced strategies to optimize your shortened URLs for maximum engagement.",
-      
       category: "Marketing",
-      image: "/images/blog-marketing.jpg",
+      image: "/images/max-clicks.svg",
       slug: "maximizing-clicks-with-smart-links",
-      tags: ["CTR", "Optimization", "Analytics"]
-    }
+      tags: ["CTR", "Optimization", "Analytics"],
+    },
   ];
 
   const recentPosts: Post[] = [
     {
       title: "Building a Scalable Link Shortener",
       excerpt: "Technical deep dive into our architecture decisions for handling millions of daily clicks.",
-      
       category: "Engineering",
+      image: "/images/scalable.svg",
       slug: "building-scalable-link-shortener",
-      tags: ["Architecture", "Scalability", "Tech"]
+      tags: ["Architecture", "Scalability", "Tech"],
     },
     {
       title: "Privacy-First Analytics",
       excerpt: "How we provide powerful insights while respecting user privacy.",
-      
       category: "Security",
+      image: "/images/privacy.svg",
       slug: "privacy-first-analytics",
-      tags: ["GDPR", "Privacy", "Data"]
+      tags: ["GDPR", "Privacy", "Data"],
     },
     {
       title: "Why Branded Links Matter",
       excerpt: "The psychology behind custom domains and how they affect click-through rates.",
-      
       category: "Branding",
+      image: "/images/branded.svg",
       slug: "why-branded-links-matter",
-      tags: ["Branding", "Psychology", "CTR"]
-    }
+      tags: ["Branding", "Psychology", "CTR"],
+    },
   ];
 
   return (
@@ -100,7 +99,7 @@ export default function BlogPage() {
 
           {/* Featured Posts */}
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -120,30 +119,26 @@ export default function BlogPage() {
                   whileHover={{ y: -5 }}
                   className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
                 >
-                  {/* Image Container with Gradient Overlay */}
                   <div className="h-56 relative overflow-hidden">
-                    <div className="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10"></div>
-                      <div className="relative z-20 text-center p-4">
-                        <span className="inline-block px-4 py-1 text-sm font-semibold text-white bg-white/20 backdrop-blur-sm rounded-full mb-3 border border-white/30">
-                          {post.category}
-                        </span>
-                        <h3 className="text-2xl font-bold text-white">{post.title}</h3>
-                      </div>
+                    {post.image && (
+                      <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                      />
+                    )}
+                    <div className="absolute inset-0  bg-gradient-to-t from-black/30 to-transparent z-10"></div>
+                    <div className="relative z-20 text-center  p-4">
+                      <span className="inline-block px-4 py-1 text-sm font-semibold text-white bg-white/20 backdrop-blur-sm rounded-full mb-3 border border-white/30">
+                        {post.category}
+                      </span>
+                      <h3 className="text-2xl font-bold text-white">{post.title}</h3>
                     </div>
                   </div>
 
-                  {/* Content Container */}
                   <div className="p-6">
-                    {/* <div className="flex items-center gap-2 mb-4">
-                      <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
-                      <span className="text-sm font-medium text-gray-500">{post.date}</span>
-                      <span className="text-sm text-gray-400">•</span>
-                      <span className="text-sm text-gray-500">{post.readTime}</span>
-                    </div> */}
-
                     <p className="text-gray-600 mb-6 line-clamp-3">{post.excerpt}</p>
-
                     <div className="flex justify-between items-center">
                       <Link
                         href={`/blog/${post.slug}`}
@@ -154,7 +149,6 @@ export default function BlogPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                       </Link>
-
                       <div className="flex gap-2">
                         {post.tags?.slice(0, 2).map((tag, i) => (
                           <span key={i} className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full">
@@ -169,7 +163,7 @@ export default function BlogPage() {
             </div>
 
             {/* Recent Posts */}
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -202,45 +196,23 @@ export default function BlogPage() {
                         >
                           Read full article →
                         </Link>
-                        <span className="text-sm text-gray-400">{post.readTime}</span>
                       </div>
                     </div>
                     <div className="md:w-1/3 md:pl-6">
-                      <div className="w-full h-40 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg flex items-center justify-center overflow-hidden">
-                        <div className="text-gray-400">Article Visual</div>
-                      </div>
+                      {post.image && (
+                        <Image
+                          src={post.image}
+                          alt={post.title}
+                          width={300}
+                          height={200}
+                          className="rounded-lg object-cover w-full h-40"
+                        />
+                      )}
                     </div>
                   </div>
                 </motion.article>
               ))}
             </div>
-
-            {/* Newsletter CTA */}
-            <motion.section
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="mt-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 md:p-10 text-center overflow-hidden relative"
-            >
-              <div className="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full"></div>
-              <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-white/10 rounded-full"></div>
-              <div className="relative z-10">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Never miss an update</h3>
-                <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-                  Subscribe to our newsletter for the latest articles, product updates and exclusive content.
-                </p>
-                <div className="max-w-md mx-auto flex flex-col sm:flex-row gap-2">
-                  <input
-                    type="email"
-                    placeholder="Your email address"
-                    className="flex-grow px-4 py-3 rounded-lg sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
-                  />
-                  <Link href='/contact' className="bg-white text-indigo-600 px-6 py-3 rounded-lg sm:rounded-l-none font-medium hover:bg-gray-100 transition whitespace-nowrap">
-                    Subscribe
-                  </Link>
-                </div>
-              </div>
-            </motion.section>
           </section>
         </main>
 
@@ -249,3 +221,4 @@ export default function BlogPage() {
     </>
   );
 }
+
