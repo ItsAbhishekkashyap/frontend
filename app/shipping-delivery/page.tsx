@@ -18,7 +18,7 @@ export default function ShippingDeliveryPage() {
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-blue-600 mb-4"
           >
-            Shipping & Delivery Policy
+            Shipping and Delivery Policy
           </motion.h1>
         </div>
 
