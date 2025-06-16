@@ -135,7 +135,7 @@ export default function Footer() {
             © {new Date().getFullYear()} Branqly. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            {['privacy-policy', 'terms', 'cookie-policy','refund-policy','about','contact'].map((item, index) => (
+            {['privacy-policy', 'terms', 'cookie-policy','refund-policy','about','contact-us','shipping-delivery'].map((item, index) => (
               <Link
                 key={index}
                 href={`/${item}`}
