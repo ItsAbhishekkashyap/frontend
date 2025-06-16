@@ -87,9 +87,9 @@ const BrandedLinksMatterPage = () => {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
                   {[
-                    "ashrtl.app/ProductLaunch",
-                    "ashrtl.app/Webinar2025",
-                    "ashrtl.app/NewFeatures"
+                    "branqly.app/ProductLaunch",
+                    "branqly.app/Webinar2025",
+                    "branqly.app/NewFeatures"
                   ].map((link, index) => (
                     <motion.div 
                       key={index}
@@ -178,7 +178,7 @@ const BrandedLinksMatterPage = () => {
                     <div className="text-gray-600">Higher CTR with branded links</div>
                   </div>
                   <p className="text-gray-700">
-                    Generic shorteners like <span className="font-mono bg-gray-100 px-2 py-1 rounded">anything/xyz123</span> create hesitation, while branded links build instant recognition.
+                    Generic shorteners like <span className="font-mono bg-gray-100 px-2 py-1 rounded">skh&fjs$%h034@/xyz123</span> create hesitation, while branded links build instant recognition.
                   </p>
                 </div>
               </div>
