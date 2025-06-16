@@ -1,5 +1,6 @@
 export async function GET() {
-  const baseUrl = 'https://ashrtl.xyz';
+ const baseUrl = 'https://branqly.xyz';
+
 
   const pages = [
     '', 'features', 'pricing', 'login', 'signup', 'documentation', 'guides',
