@@ -1,10 +1,14 @@
 export async function GET() {
   const baseUrl = 'https://branqly.xyz';
 
-  const pages = [
-    '', 'features', 'pricing', 'login', 'signup', 'documentation', 'guides',
-    'privacy-policy', 'terms', 'cookie-policy', 'support', 'dashboard', 'blog'
-  ];
+ const pages = [
+  '', 'features', 'pricing', 'login', 'signup', 'documentation', 'guides',
+  'privacy-policy', 'terms', 'cookie-policy', 'support', 'dashboard', 'blog',
+  'about', 'contact', 'forget-password', 'payment', 'premium', 'refund-policy',
+  'reset-password', 'shortenPremium', 'use-cases/email-marketing',
+  'use-cases/print-materials', 'use-cases/social-media'
+];
+
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
