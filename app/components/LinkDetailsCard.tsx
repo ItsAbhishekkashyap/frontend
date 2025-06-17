@@ -293,6 +293,10 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
         document.body.removeChild(linkElement);
     };
 
+    const uniqueClickDetails = Array.from(new Map(
+        clickDetails.map(item => [`${item.ip}-${item.device}`, item])
+    ).values());
+
     return (
         <div key={link._id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mx-auto w-full max-w-[95vw]">
             <div className="p-4 md:p-6">
@@ -346,9 +350,9 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
-                                            {clickDetails.map((detail, index) => (
+                                            {uniqueClickDetails.map((detail, index) => (
                                                 <tr
-                                                    ref={index === clickDetails.length - 1 ? lastElementRef : null}
+                                                    ref={index === uniqueClickDetails.length - 1 ? lastElementRef : null}
                                                     key={index}
                                                     className="hover:bg-gray-50 transition"
                                                 >
@@ -402,9 +406,9 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
 
                         {/* Mobile Cards */}
                         <div className="block sm:hidden">
-                            {clickDetails.map((detail, index) => (
+                            {uniqueClickDetails.map((detail, index) => (
                                 <div
-                                    ref={index === clickDetails.length - 1 ? lastElementRef : null}
+                                    ref={index === uniqueClickDetails.length - 1 ? lastElementRef : null}
                                     key={index}
                                     className="border border-gray-200 rounded-lg overflow-hidden mb-2"
                                 >
@@ -479,7 +483,7 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                                 No more records available
                             </div>
                         )}
-                        {clickDetails.length === 0 && !loading && !error && (
+                        {uniqueClickDetails.length === 0 && !loading && !error && (
                             <div className="text-center py-6 text-gray-500">
                                 <FiGlobe className="mx-auto text-2xl text-gray-400 mb-2" />
                                 <p>No analytics data available yet</p>
