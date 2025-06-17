@@ -6,13 +6,16 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { FiMail, FiLock, FiArrowRight, FiLogIn, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiMail, FiLock, FiArrowRight, FiLogIn, FiEye, FiEyeOff, FiUser } from 'react-icons/fi';
 import toast, { Toaster } from 'react-hot-toast';
 
 import Footer from '@/components/Footer';
 import Navbar from '@/components/loginNavbar';
+import Link from 'next/link';
 
+// Zod schema for validation
 const SignupSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
   email: z.string().email({ message: 'Invalid email address' }),
   password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   terms: z.literal(true, {
@@ -36,7 +39,7 @@ export default function SignupPage() {
     try {
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
-        body: JSON.stringify({ email: data.email, password: data.password }),
+        body: JSON.stringify({ name: data.name, email: data.email, password: data.password }),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
@@ -58,7 +61,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="">
+    <div>
       <Navbar />
       <Toaster position="top-right" reverseOrder={false} />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
@@ -77,6 +80,27 @@ export default function SignupPage() {
 
             <div className="p-6 sm:p-8">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                {/* Name Field */}
+                <div className="space-y-1">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FiUser className="text-gray-400" />
+                    </div>
+                    <input
+                      id="name"
+                      type="text"
+                      placeholder="John Doe"
+                      aria-label="Full Name"
+                      {...register('name')}
+                      className={`w-full pl-10 pr-3 py-2 border ${
+                        errors.name ? 'border-red-500' : 'border-gray-300'
+                      } text-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition`}
+                    />
+                  </div>
+                  {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+                </div>
+
                 {/* Email Field */}
                 <div className="space-y-1">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
@@ -140,9 +164,9 @@ export default function SignupPage() {
                   <div className="ml-3 text-sm">
                     <label htmlFor="terms" className="text-gray-600">
                       I agree to the{' '}
-                      <a href="#" className="text-blue-600 hover:underline">Terms of Service</a>{' '}
+                      <Link href="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>{' '}
                       and{' '}
-                      <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
+                      <Link href="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</Link>
                     </label>
                   </div>
                 </div>
@@ -194,3 +218,4 @@ export default function SignupPage() {
     </div>
   );
 }
+

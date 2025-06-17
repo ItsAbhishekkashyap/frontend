@@ -294,7 +294,7 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
     };
 
     return (
-        <div key={link._id} className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 max-w-full mx-2">
+        <div key={link._id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mx-auto w-full max-w-[95vw]">
             <div className="p-4 md:p-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
                     <div className="max-w-full overflow-hidden">
@@ -331,17 +331,18 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
 
                 {activeTab === "table" ? (
                     <div className="overflow-hidden">
-                        {/* Desktop Table */}
-                        <div className="hidden md:block">
+                        {/* Desktop/Tablet Table */}
+                        {/* Desktop/Tablet Table */}
+                        <div className="hidden sm:block">
                             <div className="border border-gray-200 rounded-lg overflow-hidden">
-                                <div className="overflow-x-auto max-h-[500px] overflow-y-auto custom-scrollbar">
-                                    <table className="w-full table-fixed">
+                                <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 max-h-[500px] overflow-y-auto custom-scrollbar">
+                                    <table className="w-full min-w-[460px] table-fixed">
                                         <thead className="bg-gray-50 sticky top-0">
                                             <tr>
-                                                <th className="w-[180px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-                                                <th className="w-[220px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                                                <th className="w-[200px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Device</th>
-                                                <th className="w-[180px] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP</th>
+                                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[20%]">Time</th>
+                                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[25%]">Location</th>
+                                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[30%]">Device</th>
+                                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[25%]">IP</th>
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
@@ -351,42 +352,42 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                                                     key={index}
                                                     className="hover:bg-gray-50 transition"
                                                 >
-                                                    <td className="px-4 py-3 overflow-hidden">
+                                                    <td className="px-3 py-2 overflow-hidden">
                                                         <div className="flex items-center gap-2">
                                                             <FiClock className="text-gray-400 flex-shrink-0" />
                                                             <div className="overflow-hidden">
-                                                                <div className="text-gray-700 truncate">
+                                                                <div className="text-gray-700 truncate text-xs sm:text-sm">
                                                                     {new Date(detail.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                                 </div>
-                                                                <div className="text-xs text-gray-500 truncate">
+                                                                <div className="text-gray-500 truncate text-xxs sm:text-xs">
                                                                     {new Date(detail.timestamp).toLocaleDateString()}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td className="px-4 py-3 overflow-hidden">
+                                                    <td className="px-3 py-2 overflow-hidden">
                                                         <div className="flex items-center gap-2">
-                                                            <span className="text-xl flex-shrink-0">{getEmojiFlag(detail.country)}</span>
+                                                            <span className="text-lg flex-shrink-0">{getEmojiFlag(detail.country)}</span>
                                                             <div className="overflow-hidden">
-                                                                <div className="font-medium text-gray-900 truncate">
+                                                                <div className="font-medium text-gray-900 truncate text-xs sm:text-sm">
                                                                     {formatValue(detail.city) || formatValue(detail.region)}
                                                                 </div>
-                                                                <div className="text-gray-500 text-xs truncate">
+                                                                <div className="text-gray-500 truncate text-xxs sm:text-xs">
                                                                     {formatValue(detail.country)}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td className="px-4 py-3 overflow-hidden">
+                                                    <td className="px-3 py-2 overflow-hidden">
                                                         <div className="flex items-center gap-2">
                                                             <span className="text-lg flex-shrink-0">{getDeviceIcon(detail.device)}</span>
-                                                            <span className="text-gray-700 truncate block overflow-hidden">
+                                                            <span className="text-gray-700 truncate block  overflow-hidden text-xs sm:text-sm max-w-[180px]"  >
                                                                 {formatValue(detail.device)}
                                                             </span>
                                                         </div>
                                                     </td>
-                                                    <td className="px-4 py-3 overflow-hidden">
-                                                        <span className="text-gray-700 text-sm font-mono truncate block">
+                                                    <td className="px-3 py-2 overflow-hidden">
+                                                        <span className="text-gray-700 truncate block text-xs sm:text-sm font-mono max-w-[150px]">
                                                             {formatValue(detail.ip)}
                                                         </span>
                                                     </td>
@@ -398,13 +399,14 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                             </div>
                         </div>
 
-                        {/* Mobile Cards - Enhanced */}
-                        <div className="md:hidden space-y-2">
+
+                        {/* Mobile Cards */}
+                        <div className="block sm:hidden">
                             {clickDetails.map((detail, index) => (
                                 <div
                                     ref={index === clickDetails.length - 1 ? lastElementRef : null}
                                     key={index}
-                                    className="border border-gray-200 rounded-lg overflow-hidden"
+                                    className="border border-gray-200 rounded-lg overflow-hidden mb-2"
                                 >
                                     <div
                                         className="p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition"
@@ -413,10 +415,10 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                                         <div className="flex items-center gap-3 min-w-0">
                                             <span className="text-xl">{getDeviceIcon(detail.device)}</span>
                                             <div className="min-w-0">
-                                                <p className="font-medium text-gray-800 truncate">
+                                                <p className="font-medium text-gray-800 truncate text-sm">
                                                     {formatValue(detail.device)}
                                                 </p>
-                                                <p className="text-xs text-gray-500 truncate">
+                                                <p className="text-gray-500 truncate text-xs">
                                                     {new Date(detail.timestamp).toLocaleTimeString()}
                                                 </p>
                                             </div>
@@ -431,26 +433,26 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                                         <div className="p-3 pt-0 border-t border-gray-100 bg-gray-50 animate-fadeIn">
                                             <div className="grid grid-cols-2 gap-3 text-sm">
                                                 <div className="space-y-1">
-                                                    <p className="text-gray-500">Location</p>
-                                                    <p className="font-medium flex items-center gap-1">
+                                                    <p className="text-gray-500 text-xs">Location</p>
+                                                    <p className="font-medium flex items-center gap-1 text-sm">
                                                         <FiMapPin className="flex-shrink-0" />
-                                                        <span className="truncate text-gray-600">
+                                                        <span className="truncate">
                                                             {formatValue(detail.city) || formatValue(detail.region)}
                                                         </span>
                                                     </p>
-                                                    <p className="text-gray-600 truncate">
+                                                    <p className="text-gray-600 truncate text-xs">
                                                         {formatValue(detail.country)}
                                                     </p>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <p className="text-gray-700">Date</p>
-                                                    <p className="font-medium text-gray-600">
+                                                    <p className="text-gray-500 text-xs">Date</p>
+                                                    <p className="font-medium text-sm">
                                                         {new Date(detail.timestamp).toLocaleDateString()}
                                                     </p>
                                                 </div>
                                                 <div className="space-y-1 col-span-2">
-                                                    <p className="text-gray-500">IP Address</p>
-                                                    <p className="font-mono text-gray-700 flex items-center gap-1">
+                                                    <p className="text-gray-500 text-xs">IP Address</p>
+                                                    <p className="font-mono text-gray-700 flex items-center gap-1 text-sm">
                                                         <FiGlobe className="flex-shrink-0" />
                                                         <span className="truncate">{formatValue(detail.ip)}</span>
                                                     </p>
