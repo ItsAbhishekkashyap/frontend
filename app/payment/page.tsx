@@ -317,7 +317,7 @@ export default function PaymentPage() {
     return (
       <div className="w-screen min-h-screen bg-gradient-to-r from-green-100 to-teal-200">
         <Navbar />
-        <div className="flex flex-col items-center justify-center px-4 py-12 space-y-8">
+        <div className="flex flex-col w-screen items-center justify-center px-4 py-12 space-y-8">
           <h1 className="text-3xl font-bold text-green-800 text-center">🎉 You&#39;re a Premium User!</h1>
           <p className="text-gray-700 text-center max-w-sm">
             Enjoy unlimited access, priority support, and all the latest updates.
