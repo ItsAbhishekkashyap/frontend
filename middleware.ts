@@ -15,6 +15,8 @@ const PUBLIC_PATHS = [
   '/api/auth/reset-password',
   '/api/links/create',
   '/features',
+  '/forgot-password',
+  '/reset-password',
   '/blog',
   '/pricing',
   '/guides',

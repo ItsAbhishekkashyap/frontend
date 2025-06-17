@@ -14,12 +14,20 @@ export async function POST(req: NextRequest) {
     await connectToDB();
 
     const user = await User.findOne({ resetToken: token });
-    if (!user) {
+
+    // Check if token is valid and not expired
+    if (
+      !user || 
+      !user.resetTokenExpiry || 
+      user.resetTokenExpiry < Date.now()
+    ) {
       return NextResponse.json({ error: 'Invalid or expired token' }, { status: 400 });
     }
 
+    // Hash new password and clear reset token and expiry
     user.password = await bcrypt.hash(password, 10);
     user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
     await user.save();
 
     return NextResponse.json({ message: 'Password reset successful' });
@@ -28,3 +36,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+
