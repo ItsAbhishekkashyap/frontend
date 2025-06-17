@@ -1,4 +1,5 @@
 "use client";
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
@@ -14,7 +15,7 @@ interface Post {
   category: string;
   image?: string;
   link?: string;
-  slug?: string;
+  alias?: string;
   tags?: string[];
 }
 
@@ -25,7 +26,7 @@ export default function BlogPage() {
       excerpt: "Discover how AI is revolutionizing link management and what it means for marketers.",
       category: "Technology",
       image: "/images/future-url.svg",
-      slug: "the-future-of-url-shortening",
+      alias: "the-future-of-url-shortening",
       tags: ["AI", "Innovation", "Marketing"],
     },
     {
@@ -33,7 +34,7 @@ export default function BlogPage() {
       excerpt: "Learn advanced strategies to optimize your shortened URLs for maximum engagement.",
       category: "Marketing",
       image: "/images/max-clicks.svg",
-      slug: "maximizing-clicks-with-smart-links",
+      alias: "maximizing-clicks-with-smart-links",
       tags: ["CTR", "Optimization", "Analytics"],
     },
   ];
@@ -44,7 +45,7 @@ export default function BlogPage() {
       excerpt: "Technical deep dive into our architecture decisions for handling millions of daily clicks.",
       category: "Engineering",
       image: "/images/scalable.svg",
-      slug: "building-scalable-link-shortener",
+      alias: "building-scalable-link-shortener",
       tags: ["Architecture", "Scalability", "Tech"],
     },
     {
@@ -52,7 +53,7 @@ export default function BlogPage() {
       excerpt: "How we provide powerful insights while respecting user privacy.",
       category: "Security",
       image: "/images/privacy.svg",
-      slug: "privacy-first-analytics",
+      alias: "privacy-first-analytics",
       tags: ["GDPR", "Privacy", "Data"],
     },
     {
@@ -60,7 +61,7 @@ export default function BlogPage() {
       excerpt: "The psychology behind custom domains and how they affect click-through rates.",
       category: "Branding",
       image: "/images/branded.svg",
-      slug: "why-branded-links-matter",
+      alias: "why-branded-links-matter",
       tags: ["Branding", "Psychology", "CTR"],
     },
   ];
@@ -141,7 +142,7 @@ export default function BlogPage() {
                     <p className="text-gray-600 mb-6 line-clamp-3">{post.excerpt}</p>
                     <div className="flex justify-between items-center">
                       <Link
-                        href={`/blog/${post.slug}`}
+                        href={`/blog/${post.alias}`}
                         className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
                       >
                         Read More
@@ -191,7 +192,7 @@ export default function BlogPage() {
                       <p className="text-gray-600 mb-4">{post.excerpt}</p>
                       <div className="flex items-center gap-4">
                         <Link
-                          href={`/blog/${post.slug}`}
+                          href={`/blog/${post.alias}`}
                           className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors text-sm"
                         >
                           Read full article →

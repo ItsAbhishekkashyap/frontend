@@ -1,4 +1,4 @@
-// ✅ app/[shortId]/route.ts
+// ✅ app/[alias]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongodb';
 import { Url } from '@/models/Url';
@@ -7,13 +7,13 @@ export async function GET(req: NextRequest) {
   try {
     await connectToDB();
 
-    const shortId = req.nextUrl.pathname.split('/').pop(); // Extract from the path
+    const alias = req.nextUrl.pathname.split('/').pop(); // Extract alias from path
 
-    if (!shortId) {
+    if (!alias) {
       return NextResponse.redirect(new URL('/', req.url));
     }
 
-    const found = await Url.findOne({ slug: shortId });
+    const found = await Url.findOne({ alias }); // Updated: now using 'alias'
 
     if (!found) {
       return NextResponse.redirect(new URL('/', req.url));
@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url));
   }
 }
+
 
 
 

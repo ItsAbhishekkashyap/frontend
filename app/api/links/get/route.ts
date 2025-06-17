@@ -4,15 +4,15 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { slug } = await request.json();
+    const { alias } = await request.json(); // Changed from slug to alias
 
-    if (!slug) {
-      return NextResponse.json({ error: 'Slug is required' }, { status: 400 });
+    if (!alias) {
+      return NextResponse.json({ error: 'Alias is required' }, { status: 400 });
     }
 
     await connectToDB();
 
-    const urlEntry = await Url.findOne({ slug });
+    const urlEntry = await Url.findOne({ alias }); // Changed to alias
 
     if (!urlEntry) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -26,7 +26,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ redirect: urlEntry.originalUrl });
   } catch (error) {
-    console.error('GET by slug error', error);
+    console.error('GET by alias error', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+

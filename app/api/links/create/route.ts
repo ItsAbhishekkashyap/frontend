@@ -106,13 +106,13 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_here';
 
-function generateSlug(length = 6) {
+function generateAlias(length = 6) {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let slug = '';
+  let alias = '';
   for (let i = 0; i < length; i++) {
-    slug += chars.charAt(Math.floor(Math.random() * chars.length));
+    alias += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  return slug;
+  return alias;
 }
 
 export async function POST(request: NextRequest) {
@@ -125,7 +125,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
     }
 
-    // Normalize URL to ensure it starts with http:// or https://
     let originalUrl = rawOriginalUrl.trim();
     if (!/^https?:\/\//i.test(originalUrl)) {
       originalUrl = 'https://' + originalUrl;
@@ -147,8 +146,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Custom alias only for premium users
-    let slug = '';
+    let alias = '';
     if (customAlias) {
       if (!user || !user.premium) {
         return NextResponse.json(
@@ -162,23 +160,22 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Custom alias invalid format' }, { status: 400 });
       }
 
-      const exists = await Url.findOne({ slug: customAlias });
+      const exists = await Url.findOne({ alias: customAlias });
       if (exists) {
         return NextResponse.json({ error: 'Custom alias already taken' }, { status: 409 });
       }
 
-      slug = customAlias;
+      alias = customAlias;
     } else {
-      // Auto-generate slug
-      slug = generateSlug();
-      while (await Url.findOne({ slug })) {
-        slug = generateSlug();
+      alias = generateAlias();
+      while (await Url.findOne({ alias })) {
+        alias = generateAlias();
       }
     }
 
     const newUrl = await Url.create({
       originalUrl,
-      slug,
+      alias,
       createdBy: user?._id || null,
       createdAt: new Date(),
       clicks: 0,
@@ -189,7 +186,7 @@ export async function POST(request: NextRequest) {
       {
         _id: newUrl._id,
         originalUrl: newUrl.originalUrl,
-        slug: newUrl.slug,
+        alias: newUrl.alias,
         createdAt: newUrl.createdAt,
         clicks: newUrl.clicks,
         lastAccessed: newUrl.lastAccessed,
@@ -201,6 +198,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+
 
 
 

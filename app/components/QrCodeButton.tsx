@@ -31,8 +31,8 @@ export default function QrCodeButton({ url, id }: QrCodeButtonProps) {
       try {
         await navigator.share({
           title: 'Check this out!',
-          text: 'Shortened using AshRTL - the smart URL shortener.',
-          url: 'https://ashrtl.vercel.app', // You can make this dynamic
+          text: 'Shortened using Branqly - the smart URL shortener.',
+          url: 'https://branqly.xyz', // You can make this dynamic
         });
         console.log('Content shared successfully');
       } catch (error) {

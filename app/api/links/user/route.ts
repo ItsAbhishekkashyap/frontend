@@ -16,13 +16,14 @@ export async function GET(req: Request) {
     const token = tokenCookie.split('=')[1];
     const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
 
-    // ✅ Corrected query: match 'createdBy' field
+    // ✅ Fetch all URLs created by this user
     const links = await Url.find({ createdBy: decoded.userId }).sort({ createdAt: -1 });
 
+    // ✅ Map output to use alias field instead of slug
     const formatted = links.map((l) => ({
       _id: l._id,
       originalUrl: l.originalUrl,
-      alias: l.slug,
+      alias: l.alias, // ✅ Corrected to alias instead of slug
       createdAt: l.createdAt,
       clicks: l.clicks || 0,
       lastAccessed: l.lastAccessed || null,

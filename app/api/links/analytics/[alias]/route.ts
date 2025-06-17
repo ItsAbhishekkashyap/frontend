@@ -7,13 +7,13 @@ export async function GET(request: NextRequest) {
     await connectToDB();
 
     const url = new URL(request.url);
-    const slug = url.pathname.split('/').pop(); // Get the dynamic slug param
+    const alias = url.pathname.split('/').pop(); // Get the dynamic alias param
 
-    if (!slug) {
-      return NextResponse.json({ error: 'Slug not provided' }, { status: 400 });
+    if (!alias) {
+      return NextResponse.json({ error: 'Alias not provided' }, { status: 400 });
     }
 
-    const urlEntry = await Url.findOne({ slug });
+    const urlEntry = await Url.findOne({ alias });
 
     if (!urlEntry) {
       return NextResponse.json({ error: 'URL not found' }, { status: 404 });
@@ -29,13 +29,13 @@ export async function GET(request: NextRequest) {
     }, {} as Record<string, number>);
 
     const clickData = Object.entries(clickCounts)
-      .map(([date, count]) => ({ 
-        date, 
+      .map(([date, count]) => ({
+        date,
         count,
-        formattedDate: new Date(date).toLocaleDateString('en-US', { 
-          month: 'short', 
-          day: 'numeric' 
-        })
+        formattedDate: new Date(date).toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+        }),
       }))
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
@@ -44,19 +44,19 @@ export async function GET(request: NextRequest) {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Cache-Control': 'no-store, max-age=0'
-        }
+          'Cache-Control': 'no-store, max-age=0',
+        },
       }
     );
-
   } catch (error) {
     console.error('Error fetching analytics:', error);
     return NextResponse.json(
-      { error: 'Internal server error' }, 
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
+
 
 
 

@@ -829,7 +829,7 @@ export default function Dashboard() {
                                                     <h3 className="text-lg font-medium text-gray-800 mb-4">
                                                         Click Trends for {link.alias}
                                                     </h3>
-                                                    <ClickTrendChart slug={link.alias} />
+                                                    <ClickTrendChart alias={link.alias} />
 
                                                     {/* here to add */}
                                                   <LinkDetailsCard key={link._id} link={link} /> 

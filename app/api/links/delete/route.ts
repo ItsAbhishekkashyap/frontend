@@ -7,10 +7,10 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 
 export async function POST(request: NextRequest) {
   try {
-    const { slug } = await request.json();
+    const { alias } = await request.json(); // Changed from slug to alias
 
-    if (!slug) {
-      return NextResponse.json({ error: 'Slug is required' }, { status: 400 });
+    if (!alias) {
+      return NextResponse.json({ error: 'Alias is required' }, { status: 400 });
     }
 
     await connectToDB();
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
-    const urlEntry = await Url.findOne({ slug });
+    const urlEntry = await Url.findOne({ alias }); // Changed to alias
     if (!urlEntry) {
       return NextResponse.json({ error: 'URL not found' }, { status: 404 });
     }
@@ -38,11 +38,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    await Url.deleteOne({ slug });
+    await Url.deleteOne({ alias }); // Changed to alias
 
     return NextResponse.json({ message: 'Deleted successfully' });
   } catch (error) {
-    console.error('DELETE by slug error', error);
+    console.error('DELETE by alias error', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+

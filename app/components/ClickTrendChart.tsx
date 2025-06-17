@@ -197,11 +197,10 @@ type ClickData = {
   formattedDate?: string;
 };
 
-export default function ClickTrendChart({ slug }: { slug: string }) {
+export default function ClickTrendChart({ alias }: { alias: string }) {
   const [data, setData] = useState<ClickData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
 
   function exportToCSV(data: ClickData[], filename = 'click_report.csv') {
     const csvRows = [
@@ -221,7 +220,7 @@ export default function ClickTrendChart({ slug }: { slug: string }) {
   function exportToPDF(data: ClickData[], filename = 'click_report.pdf') {
     const doc = new jsPDF();
     doc.text('Click Report', 10, 10);
-    doc.text(`Analytics for: ${slug}`, 10, 20);
+    doc.text(`Analytics for: ${alias}`, 10, 20);
 
     data.forEach((row, i) => {
       doc.text(`${row.date}: ${row.count} clicks`, 10, 30 + i * 10);
@@ -229,13 +228,14 @@ export default function ClickTrendChart({ slug }: { slug: string }) {
 
     doc.save(filename);
   }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/links/analytics/${slug}`, {
+        const response = await fetch(`/api/links/analytics/${alias}`, {
           cache: 'no-store'
         });
 
@@ -249,10 +249,8 @@ export default function ClickTrendChart({ slug }: { slug: string }) {
           throw new Error('Invalid data format');
         }
 
-        // Ensure data is properly formatted
         const formattedData = result.clickData.map((item: ClickData) => ({
           ...item,
-          // Use formattedDate if available, otherwise format it
           formattedDate: item.formattedDate || new Date(item.date).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric'
@@ -269,15 +267,13 @@ export default function ClickTrendChart({ slug }: { slug: string }) {
       }
     };
 
-    if (slug) {
+    if (alias) {
       fetchData();
     } else {
-      setError('No slug provided');
+      setError('No alias provided');
       setLoading(false);
     }
-  }, [slug]);
-
-  // ... (keep your exportToCSV and exportToPDF functions the same)
+  }, [alias]);
 
   if (loading) {
     return <div className="text-center py-8">Loading analytics...</div>;
@@ -349,4 +345,3 @@ export default function ClickTrendChart({ slug }: { slug: string }) {
     </div>
   );
 }
-

@@ -1,8 +1,8 @@
-export function generateSlug(length: number = 6): string {
+export function generateAlias(length: number = 6): string {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let slug = '';
+  let alias = '';
   for (let i = 0; i < length; i++) {
-    slug += chars.charAt(Math.floor(Math.random() * chars.length));
+    alias += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  return slug;
+  return alias;
 }
