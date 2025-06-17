@@ -43,7 +43,9 @@ import Image from 'next/image';
 //   },
 // };
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+const baseUrl = process.env.NODE_ENV === 'development' 
+  ? 'http://localhost:3000' 
+  : process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -497,3 +499,21 @@ export default function Home() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

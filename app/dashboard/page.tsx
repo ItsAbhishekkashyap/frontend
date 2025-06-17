@@ -284,7 +284,10 @@ type LinkType = {
     clickDetails?: ClickDetail[];
 };
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+const baseUrl = process.env.NODE_ENV === 'development' 
+  ? 'http://localhost:3000' 
+  : process.env.NEXT_PUBLIC_BASE_URL;
+
 export default function Dashboard() {
 
     const [originalUrl, setOriginalUrl] = useState('');
