@@ -3,11 +3,13 @@ import { connectToDB } from '@/lib/mongodb';
 import { Url } from '@/models/Url';
 import { UAParser } from 'ua-parser-js';
 
+const IPINFO_TOKEN = process.env.IPINFO_TOKEN || "";
+
 export async function POST(req: NextRequest) {
   try {
     await connectToDB();
 
-    const { alias } = await req.json();  // changed from slug to alias
+    const { alias } = await req.json();
 
     if (!alias) {
       return NextResponse.json({ error: 'Alias is required' }, { status: 400 });
@@ -19,36 +21,45 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Alias not found' }, { status: 404 });
     }
 
+    // Parse user-agent for device type
     const userAgent = req.headers.get('user-agent') || '';
     const parser = new UAParser(userAgent);
     const uaResult = parser.getResult();
     const device = uaResult.device.type || 'Desktop';
 
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || 'Unknown';
+    // Extract IP from x-forwarded-for
+    const xForwardedFor = req.headers.get('x-forwarded-for');
+    const ip = xForwardedFor ? xForwardedFor.split(",")[0].trim() : "unknown";
 
-    let country = 'Unknown';
-    let region = 'Unknown';
-    let city = 'Unknown';
+    // Default geo info
+    let geoInfo = { country: 'Unknown', region: 'Unknown', city: 'Unknown' };
 
-    try {
-      const response = await fetch(`https://ipinfo.io/${ip}?token=e1c28e555bd2c8`);
-      const data = await response.json();
-      country = data.country || 'Unknown';
-      region = data.region || 'Unknown';
-      city = data.city || 'Unknown';
-    } catch (err) {
-      console.error('IP Info fetch failed:', err);
+    // Fetch geo info if possible
+    if (IPINFO_TOKEN && ip !== "unknown") {
+      try {
+        const response = await fetch(`https://ipinfo.io/${ip}/json?token=${IPINFO_TOKEN}`);
+        if (response.ok) {
+          const data = await response.json();
+          geoInfo = {
+            country: data.country || 'Unknown',
+            region: data.region || 'Unknown',
+            city: data.city || 'Unknown',
+          };
+        }
+      } catch (err) {
+        console.error('IPInfo fetch failed:', err);
+      }
     }
 
-    found.clickDetails.push({
+    // Record the analytics
+    const clickDetail = {
       timestamp: new Date(),
-      country,
-      region,
-      city,
-      device,
       ip,
-    });
+      device,
+      ...geoInfo
+    };
 
+    found.clickDetails.push(clickDetail);
     await found.save();
 
     return NextResponse.json({ message: 'Analytics recorded successfully' });
@@ -58,4 +69,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+
 

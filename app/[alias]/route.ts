@@ -1,40 +1,48 @@
 // ✅ app/[alias]/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { connectToDB } from '@/lib/mongodb';
-import { Url } from '@/models/Url';
+// import { NextRequest, NextResponse } from "next/server";
+// import { connectToDB } from "@/lib/mongodb";
+// import { Url } from "@/models/Url";
 
-export async function GET(req: NextRequest) {
-  try {
-    await connectToDB();
+// export async function GET(req: NextRequest) {
+//   try {
+//     await connectToDB();
 
-    const alias = req.nextUrl.pathname.split('/').pop(); // Extract alias from path
+//     const alias = req.nextUrl.pathname.slice(1); // removes leading '/'
+//     if (!alias) return NextResponse.redirect(new URL("/", req.url));
 
-    if (!alias) {
-      return NextResponse.redirect(new URL('/', req.url));
-    }
+//     const urlDoc = await Url.findOne({ alias });
+//     if (!urlDoc) return NextResponse.redirect(new URL("/", req.url));
 
-    const found = await Url.findOne({ alias }); // Updated: now using 'alias'
+//     // Visitor info
+//     const ip = req.headers.get("x-forwarded-for") || "unknown";
 
-    if (!found) {
-      return NextResponse.redirect(new URL('/', req.url));
-    }
+//     const userAgent = req.headers.get("user-agent") || "unknown";
 
-    found.clicks = (found.clicks || 0) + 1;
-    found.lastAccessed = new Date();
-    found.clickHistory.push(new Date());
-    await found.save();
+//     // TODO: Use a geoip lookup service to get country, region, city from IP
+//     const geoInfo = { country: "Unknown", region: "Unknown", city: "Unknown" };
 
-    return NextResponse.redirect(found.originalUrl);
-  } catch (error) {
-    console.error('Redirect error:', error);
-    return NextResponse.redirect(new URL('/', req.url));
-  }
-}
+//     const deviceInfo = userAgent; // or parse userAgent for device type
 
+//     // Update Url document
+//     urlDoc.clicks = (urlDoc.clicks || 0) + 1;
+//     urlDoc.lastAccessed = new Date();
+//     urlDoc.clickHistory.push(new Date());
 
+//     urlDoc.clickDetails.push({
+//       timestamp: new Date(),
+//       ip,
+//       device: deviceInfo,
+//       ...geoInfo,
+//     });
 
+//     await urlDoc.save();
 
-
+//     return NextResponse.redirect(urlDoc.originalUrl);
+//   } catch (error) {
+//     console.error("Redirect error:", error);
+//     return NextResponse.redirect(new URL("/", req.url));
+//   }
+// }
 
 // import { NextRequest, NextResponse } from 'next/server';
 // import { connectToDB } from '@/lib/mongodb';
@@ -101,9 +109,80 @@ export async function GET(req: NextRequest) {
 //     console.log('Redirecting to:', found.originalUrl);
 //     return NextResponse.redirect(found.originalUrl);
 
-
 //   } catch (error) {
 //     console.error('Redirect error:', error);
 //     return NextResponse.redirect(new URL('/', req.url));
 //   }
 // }
+
+
+
+// app/[alias]/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { connectToDB } from "@/lib/mongodb";
+import { Url } from "@/models/Url";
+
+const IPINFO_TOKEN = process.env.IPINFO_TOKEN || "";
+
+export async function GET(req: NextRequest) {
+  try {
+    await connectToDB();
+
+    // Extract alias from URL path (removes leading '/')
+    const alias = req.nextUrl.pathname.slice(1);
+    if (!alias) return NextResponse.redirect(new URL("/", req.url));
+
+    // Find URL doc by alias
+    const urlDoc = await Url.findOne({ alias });
+    if (!urlDoc) return NextResponse.redirect(new URL("/", req.url));
+
+    // Extract IP address from headers (x-forwarded-for or connection remoteAddress)
+    const xForwardedFor = req.headers.get("x-forwarded-for");
+    const ip = xForwardedFor ? xForwardedFor.split(",")[0].trim() : "unknown";
+
+    // Get user agent
+    const userAgent = req.headers.get("user-agent") || "unknown";
+
+    // Default geo info in case fetch fails or no token
+    let geoInfo = { country: "Unknown", region: "Unknown", city: "Unknown" };
+
+    // Fetch geo info from ipinfo.io if token and ip available
+    if (IPINFO_TOKEN && ip !== "unknown") {
+      try {
+        const response = await fetch(`https://ipinfo.io/${ip}/json?token=${IPINFO_TOKEN}`);
+        if (response.ok) {
+          const data = await response.json();
+          geoInfo = {
+            country: data.country || "Unknown",
+            region: data.region || "Unknown",
+            city: data.city || "Unknown",
+          };
+        }
+      } catch (error) {
+        console.warn("IPInfo fetch failed:", error);
+      }
+    }
+
+    // Create click detail record
+    const clickDetail = {
+      timestamp: new Date(),
+      ip,
+      device: userAgent,
+      ...geoInfo,
+    };
+
+    // Update URL document atomically
+    urlDoc.clicks = (urlDoc.clicks || 0) + 1;
+    urlDoc.lastAccessed = new Date();
+    urlDoc.clickHistory.push(new Date());
+    urlDoc.clickDetails.push(clickDetail);
+
+    await urlDoc.save();
+
+    // Redirect to original URL
+    return NextResponse.redirect(urlDoc.originalUrl);
+  } catch (error) {
+    console.error("Redirect error:", error);
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+}
