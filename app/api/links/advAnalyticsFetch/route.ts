@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDB();
 
-    const { alias } = await req.json();
+    const { alias, page = 1, limit = 50 } = await req.json(); // page & limit received from frontend
 
     if (!alias) {
       return NextResponse.json({ error: 'Alias is required' }, { status: 400 });
@@ -18,12 +18,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Alias not found' }, { status: 404 });
     }
 
-    // Return only the relevant fields for advanced analytics
+    // Pagination logic
+    const skip = (page - 1) * limit;
+    const totalClicks = found.clickDetails.length;
+
+    const slicedClicks = found.clickDetails.slice(skip, skip + limit);
+
     return NextResponse.json({
       alias: found.alias,
-      totalClicks: found.clicks || 0,
+      totalClicks,
       lastAccessed: found.lastAccessed || null,
-      clickDetails: found.clickDetails || [],
+      clickDetails: slicedClicks,
     });
 
   } catch (error) {
