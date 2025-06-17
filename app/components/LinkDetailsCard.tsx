@@ -44,6 +44,8 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
         fetchDetails();
     }, [link.alias]);
 
+    const format = (value?: string) => (!value || value === 'Unknown' ? '-' : value);
+
     return (
         <div key={link._id} className="border border-gray-200 mb-4 rounded-lg p-4">
             <h3 className="text-lg font-medium text-gray-800 mb-4">
@@ -70,11 +72,11 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                                 clickDetails.map((detail, index) => (
                                     <tr key={index} className="border-t">
                                         <td className="px-4 py-2">{new Date(detail.timestamp).toLocaleString()}</td>
-                                        <td className="px-4 py-2">{detail.country || '-'}</td>
-                                        <td className="px-4 py-2">{detail.region || '-'}</td>
-                                        <td className="px-4 py-2">{detail.city || '-'}</td>
-                                        <td className="px-4 py-2">{detail.device || '-'}</td>
-                                        <td className="px-4 py-2">{detail.ip || '-'}</td>
+                                        <td className="px-4 py-2">{format(detail.country)}</td>
+                                        <td className="px-4 py-2">{format(detail.region)}</td>
+                                        <td className="px-4 py-2">{format(detail.city)}</td>
+                                        <td className="px-4 py-2">{format(detail.device)}</td>
+                                        <td className="px-4 py-2">{format(detail.ip)}</td>
                                     </tr>
                                 ))
                             ) : (
@@ -91,3 +93,4 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
         </div>
     );
 }
+
