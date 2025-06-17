@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongodb';
-import Link from '@/models/Link';
+import { Url } from '@/models/Url';
 
 export async function POST(req: NextRequest) {
   try {
     await connectToDB();
 
-    const { alias } = await req.json();
+    const { alias } = await req.json();  // changed from slug to alias
 
     if (!alias) {
       return NextResponse.json({ error: 'Alias is required' }, { status: 400 });
     }
 
-    const found = await Link.findOne({ alias });
+    const found = await Url.findOne({ alias });
 
     if (!found) {
       return NextResponse.json({ error: 'Alias not found' }, { status: 404 });
@@ -28,5 +28,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+
+
 
 

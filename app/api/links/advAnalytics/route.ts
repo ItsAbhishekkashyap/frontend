@@ -1,34 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongodb';
-import Link from '@/models/Link';
+import { Url } from '@/models/Url';
 import { UAParser } from 'ua-parser-js';
 
 export async function POST(req: NextRequest) {
   try {
     await connectToDB();
 
-    const { alias } = await req.json(); // client must send alias
+    const { alias } = await req.json();  // changed from slug to alias
 
     if (!alias) {
       return NextResponse.json({ error: 'Alias is required' }, { status: 400 });
     }
 
-    const found = await Link.findOne({ alias });
+    const found = await Url.findOne({ alias });
 
     if (!found) {
       return NextResponse.json({ error: 'Alias not found' }, { status: 404 });
     }
 
-    // User-Agent Parsing
     const userAgent = req.headers.get('user-agent') || '';
     const parser = new UAParser(userAgent);
     const uaResult = parser.getResult();
     const device = uaResult.device.type || 'Desktop';
 
-    // IP Extraction
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || 'Unknown';
 
-    // Fetch Location Info
     let country = 'Unknown';
     let region = 'Unknown';
     let city = 'Unknown';
@@ -43,7 +40,6 @@ export async function POST(req: NextRequest) {
       console.error('IP Info fetch failed:', err);
     }
 
-    // Push to clickDetails array
     found.clickDetails.push({
       timestamp: new Date(),
       country,
@@ -62,3 +58,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+

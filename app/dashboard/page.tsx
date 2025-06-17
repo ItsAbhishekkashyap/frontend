@@ -284,9 +284,15 @@ type LinkType = {
     clickDetails?: ClickDetail[];
 };
 
-const baseUrl = process.env.NODE_ENV === 'development' 
-  ? 'http://localhost:3000' 
-  : process.env.NEXT_PUBLIC_BASE_URL;
+
+
+
+
+
+
+const baseUrl = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function Dashboard() {
 
@@ -298,8 +304,10 @@ export default function Dashboard() {
     // const [baseUrl, setBaseUrl] = useState('');
     const [links, setLinks] = useState<LinkType[]>([]);
     const [activeTab, setActiveTab] = useState('links');
+   
 
-    
+
+
     // useEffect(() => {
     //     async function fetchDetails() {
     //         try {
@@ -324,7 +332,7 @@ export default function Dashboard() {
     //     fetchDetails();
     // }, [link.alias]);
 
-   
+
 
 
     // Get base URL and user info
@@ -824,7 +832,9 @@ export default function Dashboard() {
                                                     <ClickTrendChart slug={link.alias} />
 
                                                     {/* here to add */}
-                                                     <LinkDetailsCard key={link._id} link={link} />
+                                                  <LinkDetailsCard key={link._id} link={link} /> 
+
+
                                                 </div>
                                             ))}
 
