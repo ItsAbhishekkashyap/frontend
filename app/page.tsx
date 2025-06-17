@@ -43,7 +43,7 @@ import Image from 'next/image';
 //   },
 // };
 
-
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -69,7 +69,7 @@ export default function Home() {
 
       const data = await res.json();
       if (res.ok) {
-        setShortUrl(`${window.location.origin}/${data.slug}`);
+        setShortUrl(`${baseUrl}/${data.slug}`);
       } else {
         setError(data.error || 'Failed to shorten URL');
       }
@@ -92,8 +92,8 @@ export default function Home() {
     {JSON.stringify({
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "AshrtL",
-      "url": "https://ashrtl.xyz",
+      "name": "Branqly",
+      "url": "https://branqly.xyz",
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://ashrtl.xyz/search?q={search_term_string}",

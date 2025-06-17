@@ -36,6 +36,7 @@
     "recharts": "^2.15.3",
     "resend": "^4.5.2",
     "sonner": "^2.0.5",
+    "ua-parser-js": "^2.0.3",
     "zod": "^3.25.56"
   },
   "devDependencies": {

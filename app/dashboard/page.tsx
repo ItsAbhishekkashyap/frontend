@@ -260,6 +260,19 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import QrCodeButton from '@/components/QrCodeButton';
+import { BsCheckLg } from 'react-icons/bs';
+import LinkDetailsCard from '@/components/LinkDetailsCard';
+
+
+type ClickDetail = {
+    timestamp: string | Date;
+    country?: string;
+    region?: string;
+    city?: string;
+    device?: string;
+    ip?: string;
+};
+
 
 type LinkType = {
     _id: string;
@@ -268,34 +281,61 @@ type LinkType = {
     createdAt: string;
     clicks: number;
     lastAccessed: string | null;
+    clickDetails?: ClickDetail[];
 };
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 export default function Dashboard() {
+
     const [originalUrl, setOriginalUrl] = useState('');
     const [customAlias, setCustomAlias] = useState('');
     const [premium, setPremium] = useState(false);
     const [slug, setSlug] = useState('');
     const [error, setError] = useState('');
-    const [baseUrl, setBaseUrl] = useState('');
+    // const [baseUrl, setBaseUrl] = useState('');
     const [links, setLinks] = useState<LinkType[]>([]);
     const [activeTab, setActiveTab] = useState('links');
 
+    
+    // useEffect(() => {
+    //     async function fetchDetails() {
+    //         try {
+    //             const res = await fetch('/api/links/details', {
+    //                 method: 'POST',
+    //                 headers: { 'Content-Type': 'application/json' },
+    //                 body: JSON.stringify({ slug: alias }),
+    //             });
+    //             const data = await res.json();
+    //             if (!data.error) {
+    //                 setClickDetails(data.clickDetails || []);
+    //             } else {
+    //                 setClickDetails([]);
+    //             }
+    //         } catch (err) {
+    //             console.error('Error fetching click details:', err);
+    //             setClickDetails([]);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     }
+    //     fetchDetails();
+    // }, [link.alias]);
+
+   
 
 
     // Get base URL and user info
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            setBaseUrl(window.location.origin);
-        }
+
 
         async function fetchUserAndLinks() {
             const res = await fetch('/api/auth/me', { credentials: 'include' });
             const user = await res.json();
-            
+
 
             if (user?.user?.userId) {
-                setPremium(user.user.premium === true || user.user.premium === 'true'); // best fix
-                console.log('Premium status:', user.user.premium); // 👈 SEE THIS IN TERMINAL
+                setPremium(user.user.premium === true || user.user.premium === 'true');
+                console.log('Premium status:', user.user.premium);
             }
 
             const linksRes = await fetch('/api/links/user', { credentials: 'include' });
@@ -303,12 +343,55 @@ export default function Dashboard() {
                 const linkData = await linksRes.json();
                 setLinks(linkData.links);
             }
-            
+
 
         }
 
         fetchUserAndLinks();
     }, []);
+
+    // async function handleSubmit(e: React.FormEvent) {
+    //     e.preventDefault();
+    //     setError('');
+    //     setSlug('');
+
+    //     try {
+    //         const res = await fetch('/api/links/create', {
+    //             method: 'POST',
+    //             credentials: 'include',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({
+    //                 originalUrl,
+    //                 ...(customAlias ? { customAlias } : {})
+    //             }),
+    //         });
+
+    //         const data = await res.json();
+    //         if (!res.ok) {
+    //             setError(data.error || 'Failed to shorten URL');
+    //             return;
+    //         }
+
+    //         setSlug(data.slug);
+    //         setOriginalUrl('');
+    //         setCustomAlias('');
+
+    //         setLinks((prev) => [
+    //             {
+    //                 _id: data._id,
+    //                 originalUrl: data.originalUrl,
+    //                 alias: data.slug,
+    //                 createdAt: data.createdAt,
+    //                 clicks: data.clicks || 0,
+    //                 lastAccessed: data.lastAccessed || null,
+    //             },
+    //             ...prev,
+    //         ]);
+    //     } catch {
+    //         setError('Something went wrong');
+    //     }
+    // }
+
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -347,6 +430,9 @@ export default function Dashboard() {
                 },
                 ...prev,
             ]);
+
+
+
         } catch {
             setError('Something went wrong');
         }
@@ -423,7 +509,7 @@ export default function Dashboard() {
                         {/* URL Shortener Card */}
                         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
                             <h2 className="text-xl font-semibold text-gray-800 mb-4">Shorten a URL</h2>
-                            
+
 
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
@@ -469,6 +555,9 @@ export default function Dashboard() {
                                     <FiLink className="mr-2" />
                                     Shorten URL
                                 </button>
+
+
+
                             </form>
 
                             <AnimatePresence>
@@ -488,39 +577,50 @@ export default function Dashboard() {
                                 <motion.div
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
-                                    transition={{ duration: 0.3 }}
-                                    className="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-100"
+                                    transition={{ duration: 0.4 }}
+                                    className="mt-8 p-5 bg-indigo-50 rounded-xl border border-indigo-100"
                                 >
-                                    <p className="text-sm font-medium text-indigo-800 mb-2">Your shortened URL</p>
-                                    <div className="flex items-center">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <p className="text-sm font-medium text-gray-700">Your shortened URL:</p>
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <span className="w-2 h-2 rounded-full bg-green-500 mr-1"></span>
+                                            Active
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center bg-white p-3 rounded-lg border border-gray-200">
                                         <a
                                             href={fullShortUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex-1 text-indigo-600 font-medium truncate hover:underline"
+                                            className="flex-1 text-indigo-600 font-medium truncate hover:underline text-lg"
                                         >
                                             {fullShortUrl}
                                         </a>
-                                        <div className="flex space-x-2 ml-2">
+                                        <div className="flex space-x-2 ml-3">
                                             <button
                                                 onClick={() => navigator.clipboard.writeText(fullShortUrl)}
-                                                className="p-2 rounded-lg hover:bg-indigo-100 transition"
+                                                className="p-2 rounded-lg hover:bg-indigo-100 transition flex items-center justify-center"
                                                 title="Copy to clipboard"
                                             >
-                                                <FiCopy className="text-indigo-600" />
+                                                <FiCopy className="text-indigo-600 text-xl" />
                                             </button>
                                             <a
                                                 href={fullShortUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="p-2 rounded-lg hover:bg-indigo-100 transition"
+                                                className="p-2 rounded-lg hover:bg-indigo-100 transition flex items-center justify-center"
                                                 title="Open in new tab"
                                             >
-                                                <FiExternalLink className="text-indigo-600" />
+                                                <FiExternalLink className="text-indigo-600 text-xl" />
                                             </a>
                                         </div>
                                     </div>
+                                    <div className="mt-3 flex items-center text-sm text-gray-500">
+                                        <BsCheckLg className="mr-1.5 text-green-500" />
+                                        <span>Link is ready to use • </span>
+                                    </div>
                                 </motion.div>
+
                             )}
                         </div>
 
@@ -641,6 +741,53 @@ export default function Dashboard() {
                             : premium ? (
 
 
+                                // <div className="bg-white rounded-xl shadow-sm p-6">
+                                //     <h2 className="text-xl font-semibold text-gray-800 mb-6">Analytics</h2>
+                                //     {links.length > 0 ? (
+                                //         <div>
+                                //             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                //                 <div className="bg-indigo-50 rounded-lg p-4">
+                                //                     <p className="text-sm font-medium text-indigo-700 mb-1">Total Links</p>
+                                //                     <p className="text-2xl font-bold text-indigo-900">{links.length}</p>
+                                //                 </div>
+                                //                 <div className="bg-green-50 rounded-lg p-4">
+                                //                     <p className="text-sm font-medium text-green-700 mb-1">Total Clicks</p>
+                                //                     <p className="text-2xl font-bold text-green-900">
+                                //                         {links.reduce((sum, link) => sum + link.clicks, 0)}
+                                //                     </p>
+                                //                 </div>
+                                //                 <div className="bg-purple-50 rounded-lg p-4">
+                                //                     <p className="text-sm font-medium text-purple-700 mb-1">Most Popular</p>
+                                //                     <p className="text-lg font-bold text-purple-900 truncate">
+                                //                         {links.length > 0
+                                //                             ? `${baseUrl}/${links.reduce((prev, current) => (prev.clicks > current.clicks) ? prev : current).alias}`
+                                //                             : '-'
+                                //                         }
+                                //                     </p>
+                                //                 </div>
+                                //             </div>
+
+                                //             {links.map((link) => (
+                                //                 <div key={link._id} className="border border-gray-200 mb-4 rounded-lg p-4">
+                                //                     <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends for {link.alias}</h3>
+                                //                     <ClickTrendChart slug={link.alias} />
+                                //                 </div>
+                                //             ))}
+
+                                //         </div>
+                                //     ) : (
+                                //         <div className="text-center py-12">
+                                //             <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                //                 <FiBarChart2 className="text-gray-400 text-3xl" />
+                                //             </div>
+                                //             <h3 className="text-lg font-medium text-gray-900 mb-1">No analytics data yet</h3>
+                                //             <p className="text-gray-500 max-w-md mx-auto">
+                                //                 Create some links and start tracking their performance.
+                                //             </p>
+                                //         </div>
+                                //     )}
+                                // </div>
+
                                 <div className="bg-white rounded-xl shadow-sm p-6">
                                     <h2 className="text-xl font-semibold text-gray-800 mb-6">Analytics</h2>
                                     {links.length > 0 ? (
@@ -661,16 +808,20 @@ export default function Dashboard() {
                                                     <p className="text-lg font-bold text-purple-900 truncate">
                                                         {links.length > 0
                                                             ? `${baseUrl}/${links.reduce((prev, current) => (prev.clicks > current.clicks) ? prev : current).alias}`
-                                                            : '-'
-                                                        }
+                                                            : '-'}
                                                     </p>
                                                 </div>
                                             </div>
 
                                             {links.map((link) => (
                                                 <div key={link._id} className="border border-gray-200 mb-4 rounded-lg p-4">
-                                                    <h3 className="text-lg font-medium text-gray-800 mb-4">Click Trends for {link.alias}</h3>
+                                                    <h3 className="text-lg font-medium text-gray-800 mb-4">
+                                                        Click Trends for {link.alias}
+                                                    </h3>
                                                     <ClickTrendChart slug={link.alias} />
+
+                                                    {/* here to add */}
+                                                     <LinkDetailsCard key={link._id} link={link} />
                                                 </div>
                                             ))}
 
