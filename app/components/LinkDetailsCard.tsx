@@ -12,35 +12,47 @@ export type ClickDetail = {
 type LinkDetailsCardProps = {
     link: {
         _id: string;
-        alias: string;
+        alias: string;  // Make sure this is alias from Link model
     };
 };
 
 export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
     const [clickDetails, setClickDetails] = useState<ClickDetail[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchDetails = async () => {
+            setLoading(true);
+            setError(null);
             try {
                 const res = await fetch('/api/links/advAnalyticsFetch', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ alias: link.alias }),
                 });
-                const data = await res.json();
-                if (!data.error) {
-                    setClickDetails(data.clickDetails || []);
-                } else {
-                    setClickDetails([]);
+
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(errorData.error || 'Failed to fetch analytics');
                 }
-            } catch (err) {
+
+                const data = await res.json();
+                setClickDetails(data.clickDetails || []);
+            } catch (err: unknown) {
                 console.error(`Error fetching click details for ${link.alias}:`, err);
                 setClickDetails([]);
+
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError('Unknown error');
+                }
             } finally {
                 setLoading(false);
             }
         };
+
         fetchDetails();
     }, [link.alias]);
 
@@ -49,12 +61,14 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
     return (
         <div key={link._id} className="border border-gray-200 mb-4 rounded-lg p-4">
             <h3 className="text-lg font-medium text-gray-800 mb-4">
-                Click Trends for {link.alias}
+                Advanced Analytics for {link.alias}
             </h3>
 
             <div className="overflow-x-auto mt-4">
                 {loading ? (
                     <p className="text-center py-4 text-gray-500">Loading details...</p>
+                ) : error ? (
+                    <p className="text-center py-4 text-red-600">Error: {error}</p>
                 ) : (
                     <table className="min-w-full text-sm text-left">
                         <thead className="bg-gray-50">
@@ -93,4 +107,5 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
         </div>
     );
 }
+
 
