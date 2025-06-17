@@ -23,10 +23,10 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
     useEffect(() => {
         const fetchDetails = async () => {
             try {
-                const res = await fetch('/api/links/details', {
+                const res = await fetch('/api/links/advAnalyticsFetch', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ slug: link.alias }),
+                    body: JSON.stringify({ alias: link.alias }),
                 });
                 const data = await res.json();
                 if (!data.error) {
