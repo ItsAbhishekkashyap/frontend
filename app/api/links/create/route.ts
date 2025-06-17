@@ -171,6 +171,8 @@ export async function POST(request: NextRequest) {
       while (await Url.findOne({ alias })) {
         alias = generateAlias();
       }
+      console.log('Creating URL with alias:', alias);
+
     }
 
     const newUrl = await Url.create({
