@@ -71,7 +71,7 @@ export default function Home() {
 
       const data = await res.json();
       if (res.ok) {
-        setShortUrl(`${baseUrl}/${data.slug}`);
+        setShortUrl(`${baseUrl}/${data.alias}`);
       } else {
         setError(data.error || 'Failed to shorten URL');
       }
