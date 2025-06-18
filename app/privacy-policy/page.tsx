@@ -44,9 +44,24 @@ export default function PrivacyPage() {
                 Data Collection
               </h3>
               <p className="text-gray-600">
-                We collect limited data to provide our services, including email addresses for account management and usage data for analytics. We do not sell or share your personal information.
+                We collect limited data to provide and improve our services. This includes user-provided information such as email addresses for account creation, login, and management purposes.
+              </p>
+              <p className="text-gray-600">
+                In order to offer detailed and advanced analytics for the links you shorten using Branqly, we also collect non-personally identifiable data related to link clicks. This includes:
+              </p>
+              <ul className="list-disc list-inside text-gray-600 space-y-2">
+                <li>Approximate geographic location (country, region, city) based on the IP address at the time of the link click.</li>
+                <li>Device type (e.g., mobile, desktop, tablet) used to access the link.</li>
+                <li>IP address of the user who clicks the link (used solely for location detection and fraud prevention).</li>
+              </ul>
+              <p className="text-gray-600">
+                Please note: this data is collected strictly for analytics purposes related to the performance of the shortened links and is <strong>not linked to or used for profiling individual users</strong>. We do not track or store personal browsing habits or behaviors outside of link interaction events.
+              </p>
+              <p className="text-gray-600">
+                Your privacy remains a priority, and all data collected is handled in compliance with applicable data protection regulations.
               </p>
             </section>
+
 
             <section className="space-y-4">
               <h3 className="text-xl font-semibold text-gray-800 flex items-center">
@@ -115,6 +130,7 @@ export default function PrivacyPage() {
                     "We may update this Privacy Policy from time to time.",
                     "Users will be notified of significant changes via email.",
                     "Data processing is limited to service improvement and analytics.",
+                    "Location, region, city, device type, and IP address data are collected solely for link analytics, not for personal user profiling.",
                     "We comply with applicable data protection laws and regulations."
                   ].map((item, index) => (
                     <motion.li
