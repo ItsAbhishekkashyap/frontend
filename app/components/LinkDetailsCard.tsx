@@ -341,7 +341,7 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                             <div className="border border-gray-200 rounded-lg overflow-hidden">
                                 <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 max-h-[500px] overflow-y-auto custom-scrollbar">
                                     <table className="w-full min-w-[460px] table-fixed">
-                                        <thead className="bg-gray-50 sticky top-0">
+                                        <thead className="bg-gray-50 text-gray-600 sticky top-0">
                                             <tr>
                                                 <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[20%]">Time</th>
                                                 <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[25%]">Location</th>
@@ -422,14 +422,14 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                                                 <p className="font-medium text-gray-800 truncate text-sm">
                                                     {formatValue(detail.device)}
                                                 </p>
-                                                <p className="text-gray-500 truncate text-xs">
+                                                <p className="text-gray-600 truncate text-xs">
                                                     {new Date(detail.timestamp).toLocaleTimeString()}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <span className="text-lg">{getEmojiFlag(detail.country)}</span>
-                                            {expandedRows[index] ? <FiChevronUp className="text-gray-400" /> : <FiChevronDown className="text-gray-400" />}
+                                            {expandedRows[index] ? <FiChevronUp className="text-gray-600" /> : <FiChevronDown className="text-gray-400" />}
                                         </div>
                                     </div>
 
@@ -440,7 +440,7 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                                                     <p className="text-gray-500 text-xs">Location</p>
                                                     <p className="font-medium flex items-center gap-1 text-sm">
                                                         <FiMapPin className="flex-shrink-0" />
-                                                        <span className="truncate">
+                                                        <span className="truncate text-gray-700">
                                                             {formatValue(detail.city) || formatValue(detail.region)}
                                                         </span>
                                                     </p>
@@ -450,7 +450,7 @@ export default function LinkDetailsCard({ link }: LinkDetailsCardProps) {
                                                 </div>
                                                 <div className="space-y-1">
                                                     <p className="text-gray-500 text-xs">Date</p>
-                                                    <p className="font-medium text-sm">
+                                                    <p className="font-medium text-gray-700 text-sm">
                                                         {new Date(detail.timestamp).toLocaleDateString()}
                                                     </p>
                                                 </div>
