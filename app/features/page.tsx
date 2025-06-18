@@ -178,7 +178,7 @@ export default function FeaturesPage() {
                 </svg>
               </Link>
               <Link
-                href="//shorts"
+                href="/shorts"
                 className="px-8 py-4 border-2 border-white text-white hover:text-indigo-600 font-bold rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
               >
                 Watch Demo
