@@ -74,54 +74,89 @@ export default function FeaturesPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Navbar />
-      
-      <main className="flex-grow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center mb-20">
-            <span className="inline-block mb-4 text-sm font-semibold tracking-wider text-indigo-600 uppercase">
-              Why choose Branqly
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Professional-Grade <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">URL Management</span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Everything you need to shorten, manage, and analyze your links with enterprise-grade performance and security.
-            </p>
-          </div>
+  <Navbar />
+  
+  <main className="flex-grow">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="text-center mb-20">
+        <span className="inline-block mb-4 text-sm font-semibold tracking-wider text-indigo-600 uppercase">
+          Why choose Branqly
+        </span>
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          Professional-Grade <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">URL Management</span>
+        </h1>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          Everything you need to shorten, manage, and analyze your links with enterprise-grade performance and security.
+        </p>
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div 
-                key={index}
-                className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-indigo-100"
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {[
+          ...features,
+          {
+            icon: (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-7 w-7 text-indigo-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
               >
-                <div className="p-8">
-                  <div className="flex items-center justify-center w-14 h-14 mb-6 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 text-indigo-600">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-20 text-center">
-            <Link href="/premium" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-              Get Started
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.657 16.657L13.414 12.414m0 0L9.172 8.172m4.242 4.242l4.242 4.242m-8.485 0L7 16m0 0l4.242-4.242"
+                />
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={2} />
               </svg>
-            </Link>
-            <p className="mt-4 text-gray-500 text-sm">
-              No credit card required. 14-day free trial.
-            </p>
+            ),
+            title: "Advanced Analytics",
+            description:
+              "Get detailed insights including location (region, city), device type, and IP address analytics for every link click, empowering you to understand your audience better."
+          }
+        ].map((feature, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-indigo-100"
+          >
+            <div className="p-8">
+              <div className="flex items-center justify-center w-14 h-14 mb-6 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 text-indigo-600">
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
+              <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+            </div>
           </div>
-        </div>
-      </main>
+        ))}
+      </div>
 
-      <Footer />
+      <div className="mt-20 text-center">
+        <Link
+          href="/premium"
+          className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          Get Started
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 inline-block ml-2"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </Link>
+        <p className="mt-4 text-gray-500 text-sm">No credit card required. 14-day free trial.</p>
+      </div>
     </div>
+  </main>
+
+  <Footer />
+</div>
+
   );
 }

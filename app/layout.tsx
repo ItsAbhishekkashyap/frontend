@@ -16,10 +16,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Branqly | Smart URL Shortener',
+    default: 'Branqly | All-in-One Link Management & Analytics Platform',
     template: '%s | Branqly',
   },
-  description: 'Shorten links, track performance, and optimize engagement with AshrtL.',
+  description: 'Branqly lets you shorten links, generate QR codes, and track detailed analytics with CSV export. Perfect for marketers and growth hackers to optimize campaigns in one place.',
   alternates: {
     canonical: 'https://branqly.xyz',
   },
