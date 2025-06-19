@@ -3,7 +3,7 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
-import { FiAlertTriangle, FiShield, FiTerminal, FiZap, FiMail } from 'react-icons/fi';
+import { FiAlertTriangle, FiShield, FiTerminal, FiZap, FiMail, FiGlobe } from 'react-icons/fi';
 
 export default function TermsPage() {
   return (
@@ -44,7 +44,7 @@ export default function TermsPage() {
                 Service Overview
               </h3>
               <p className="text-gray-600">
-                Branqly provides URL shortening services (&quot;as-is&quot;) with no guarantees of uptime or availability. By using our services, you agree to abide by these terms.
+                Branqly provides URL shortening services (&#34;as-is&#34;) with no guarantees of uptime or availability. By using our services, you agree to abide by these terms.
               </p>
             </section>
 
@@ -122,6 +122,21 @@ export default function TermsPage() {
                     </motion.li>
                   ))}
                 </ul>
+              </div>
+            </section>
+
+            {/* NEW International Payments Section */}
+            <section className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+                <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                  <FiGlobe className="w-4 h-4 text-indigo-600" />
+                </div>
+                International Payments
+              </h3>
+              <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-100">
+                <p className="text-gray-700">
+                  For customers making international payments via PayPal or other foreign gateways, please note that <span className="font-semibold text-red-600">refunds are not available</span>. We recommend trying our free features before upgrading to a paid plan to ensure our service fits your needs.
+                </p>
               </div>
             </section>
 

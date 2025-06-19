@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { FiCheck, FiX, FiMail, FiCreditCard, FiClock } from 'react-icons/fi';
+import { FiCheck, FiX, FiMail, FiCreditCard, FiClock, FiGlobe } from 'react-icons/fi';
 
 export default function RefundPolicy() {
   return (
@@ -78,6 +78,23 @@ export default function RefundPolicy() {
                 </div>
               </section>
 
+              {/* New Section for International Payments */}
+              <section className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-yellow-100 p-2 rounded-full">
+                    <FiGlobe className="text-yellow-600 text-xl" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-800">International Payments</h2>
+                </div>
+                <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-100">
+                  <p className="text-gray-700">
+                    For international customers making payments via PayPal or other cross-border methods, 
+                    <span className="font-semibold text-red-600"> refunds are not available</span>. 
+                    We encourage all international users to try our free tier or demo features before upgrading to a paid plan.
+                  </p>
+                </div>
+              </section>
+
               {/* How to Request Refund */}
               <section className="space-y-4">
                 <div className="flex items-center space-x-3">
@@ -120,13 +137,6 @@ export default function RefundPolicy() {
                   Chargebacks may result in automatic account suspension.
                 </p>
               </section>
-
-              {/* Last Updated */}
-              {/* <div className="pt-4 border-t border-gray-200">
-                <p className="text-sm text-gray-500">
-                  Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                </p>
-              </div> */}
             </div>
           </div>
         </motion.div>
@@ -136,3 +146,4 @@ export default function RefundPolicy() {
     </div>
   );
 }
+

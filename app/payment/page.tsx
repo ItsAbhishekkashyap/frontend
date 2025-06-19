@@ -344,47 +344,53 @@ export default function PaymentPage() {
   }
 
   // Non-Premium User View
-  return (
-    <div className="w-screen min-h-screen bg-gradient-to-r from-indigo-100 to-purple-200">
-      <Navbar />
-      <div className="flex flex-col items-center justify-center px-4 py-12 space-y-8">
-        <h1 className="text-3xl font-bold text-indigo-700 text-center">Get Premium Access</h1>
-        <p className="text-gray-600 text-center max-w-sm">
-          Unlock all premium features including unlimited usage and priority support for just ₹199/month.
-        </p>
+return (
+  <div className="w-screen min-h-screen bg-gradient-to-r from-indigo-100 to-purple-200">
+    <Navbar />
+    <div className="flex flex-col items-center justify-center px-4 py-12 space-y-8">
+      <h1 className="text-3xl font-bold text-indigo-700 text-center">Get Premium Access</h1>
+      <p className="text-gray-600 text-center max-w-sm">
+        Unlock all premium features including unlimited usage and priority support for just ₹199/month.
+      </p>
 
-        <div className="bg-white shadow-2xl rounded-2xl p-6 w-full max-w-sm space-y-4">
-          <h2 className="text-2xl font-semibold text-center text-gray-800">₹199 / month</h2>
+      <div className="bg-white shadow-2xl rounded-2xl p-6 w-full max-w-sm space-y-4">
+        <h2 className="text-2xl font-semibold text-center text-gray-800">₹199 / month</h2>
 
-          <ul className="space-y-2">
-            <li className="flex items-center text-gray-700">
-              <CheckCircle className="text-green-500 w-5 h-5 mr-2" /> Unlimited Access
-            </li>
-            <li className="flex items-center text-gray-700">
-              <CheckCircle className="text-green-500 w-5 h-5 mr-2" /> Priority Support
-            </li>
-            <li className="flex items-center text-gray-700">
-              <CheckCircle className="text-green-500 w-5 h-5 mr-2" /> Monthly Updates
-            </li>
-          </ul>
+        <ul className="space-y-2">
+          <li className="flex items-center text-gray-700">
+            <CheckCircle className="text-green-500 w-5 h-5 mr-2" /> Unlimited Access
+          </li>
+          <li className="flex items-center text-gray-700">
+            <CheckCircle className="text-green-500 w-5 h-5 mr-2" /> Priority Support
+          </li>
+          <li className="flex items-center text-gray-700">
+            <CheckCircle className="text-green-500 w-5 h-5 mr-2" /> Monthly Updates
+          </li>
+        </ul>
 
-          <button
-            onClick={openRazorpayCheckout}
-            disabled={!subscription || !user || payLoading}
-            className="w-full py-2 mt-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition flex justify-center items-center"
-          >
-            {payLoading ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin mr-2" /> Processing...
-              </>
-            ) : (
-              'Pay ₹199 Now'
-            )}
-          </button>
-        </div>
+        <button
+          onClick={openRazorpayCheckout}
+          disabled={!subscription || !user || payLoading}
+          className="w-full py-2 mt-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition flex justify-center items-center"
+        >
+          {payLoading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin mr-2" /> Processing...
+            </>
+          ) : (
+            'Pay ₹199 Now'
+          )}
+        </button>
       </div>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-      <Footer />
+
+      {/* Light Note for International Users */}
+      <p className="mt-4 text-sm text-gray-500 text-center max-w-xs">
+        Note: Refunds are <span className="font-medium text-gray-700">not available for international payments</span> made via PayPal or other global methods.
+      </p>
     </div>
-  );
+    <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+    <Footer />
+  </div>
+);
+
 }
