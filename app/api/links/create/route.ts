@@ -97,16 +97,15 @@
 
 
 
-
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/lib/mongodb';
 import { Url } from '@/models/Url';
-import { User } from '@/models/User';
+import { User, IUser } from '@/models/User';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_here';
 
-function generateAlias(length = 6) {
+function generateAlias(length = 6): string {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let alias = '';
   for (let i = 0; i < length; i++) {
@@ -115,39 +114,48 @@ function generateAlias(length = 6) {
   return alias;
 }
 
+interface CreateLinkRequestBody {
+  originalUrl: string;
+  customAlias?: string;
+  domainUsed?: string;
+}
+
 export async function POST(request: NextRequest) {
   try {
     await connectToDB();
 
-    const { originalUrl: rawOriginalUrl, customAlias } = await request.json();
+    const body: CreateLinkRequestBody = await request.json();
 
-    if (!rawOriginalUrl || typeof rawOriginalUrl !== 'string') {
+    if (!body.originalUrl || typeof body.originalUrl !== 'string') {
       return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
     }
 
-    let originalUrl = rawOriginalUrl.trim();
+    let originalUrl = body.originalUrl.trim();
     if (!/^https?:\/\//i.test(originalUrl)) {
       originalUrl = 'https://' + originalUrl;
     }
 
     // Attempt to extract and verify token (optional)
-    let user = null;
+    let user: IUser | null = null;
     const token =
       request.cookies.get('token')?.value ||
       request.headers.get('Authorization')?.replace('Bearer ', '');
 
     if (token) {
       try {
-        const payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
-        user = await User.findById(payload.userId);
+        const payload = jwt.verify(token, JWT_SECRET) as JwtPayload & { userId?: string };
+        if (payload.userId) {
+          user = await User.findById(payload.userId).exec();
+        }
       } catch (err) {
         console.error('Error verifying token:', err);
-        console.warn('Invalid token, proceeding as anonymous user.');
+        // Continue anonymously if token invalid
       }
     }
 
-    let alias = '';
-    if (customAlias) {
+    // Handle alias generation or validation
+    let alias: string;
+    if (body.customAlias) {
       if (!user || !user.premium) {
         return NextResponse.json(
           { error: 'Only premium users can create custom aliases' },
@@ -156,23 +164,39 @@ export async function POST(request: NextRequest) {
       }
 
       const aliasRegex = /^[a-zA-Z0-9_-]{3,30}$/;
-      if (!aliasRegex.test(customAlias)) {
+      if (!aliasRegex.test(body.customAlias)) {
         return NextResponse.json({ error: 'Custom alias invalid format' }, { status: 400 });
       }
 
-      const exists = await Url.findOne({ alias: customAlias });
+      const exists = await Url.findOne({ alias: body.customAlias }).exec();
       if (exists) {
         return NextResponse.json({ error: 'Custom alias already taken' }, { status: 409 });
       }
 
-      alias = customAlias;
+      alias = body.customAlias;
     } else {
       alias = generateAlias();
-      while (await Url.findOne({ alias })) {
+      // Ensure alias uniqueness
+      while (await Url.findOne({ alias }).exec()) {
         alias = generateAlias();
       }
       console.log('Creating URL with alias:', alias);
+    }
 
+    // Validate domainUsed against user's verified custom domains
+    let finalDomainUsed = 'branqly.xyz'; // default
+
+    if (user && body.domainUsed) {
+      const userHasDomain = user.customDomains?.some(
+        (d) => d.domain === body.domainUsed && d.isVerified
+      );
+      if (userHasDomain) {
+        finalDomainUsed = body.domainUsed;
+      } else {
+        console.warn(`Domain used by user not verified or owned: ${body.domainUsed}`);
+        // Optional: return error here if you want strict domain enforcement
+        // return NextResponse.json({ error: 'Invalid or unverified domain used' }, { status: 400 });
+      }
     }
 
     const newUrl = await Url.create({
@@ -182,6 +206,7 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
       clicks: 0,
       lastAccessed: null,
+      domainUsed: finalDomainUsed,
     });
 
     return NextResponse.json(
@@ -192,6 +217,7 @@ export async function POST(request: NextRequest) {
         createdAt: newUrl.createdAt,
         clicks: newUrl.clicks,
         lastAccessed: newUrl.lastAccessed,
+        domainUsed: newUrl.domainUsed,
       },
       { status: 201 }
     );
@@ -200,6 +226,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+
 
 
 

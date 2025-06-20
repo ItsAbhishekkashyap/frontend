@@ -32,6 +32,12 @@ export interface IUser extends Document {
   name?: string;
   picture?: string;
   provider: 'credentials' | 'google';
+  customDomains?: {
+  domain: string;
+  isVerified: boolean;
+  cnameTarget?: string;
+}[];
+
   payments: IPaymentReference[];
   billing?: {
     name?: string;
@@ -91,6 +97,14 @@ const UserSchema = new Schema<IUser>(
       enum: ['credentials', 'google'],
       default: 'credentials'
     },
+
+      customDomains: [{
+  domain: { type: String, required: true, trim: true, lowercase: true },
+  isVerified: { type: Boolean, default: false },
+  cnameTarget: { type: String, default: 'cname.branqly.xyz' }
+}],
+
+
     payments: [PaymentReferenceSchema],
     billing: {
       name: { type: String },
