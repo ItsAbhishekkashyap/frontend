@@ -1,7 +1,12 @@
 import { Schema, Document, model, models, Types } from "mongoose";
 
 // Payment Status Types
-type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded' | 'cancelled';
+type PaymentStatus =
+  | "pending"
+  | "completed"
+  | "failed"
+  | "refunded"
+  | "cancelled";
 
 // Payment Reference Interface
 export interface IPaymentReference {
@@ -16,7 +21,7 @@ export interface IPaymentReference {
   createdAt: Date;
   refundedAmount?: number;
   refundStatus?: string;
-refundDate?: Date;
+  refundDate?: Date;
   cancelDate?: Date;
 }
 
@@ -31,12 +36,17 @@ export interface IUser extends Document {
   premiumSince?: Date;
   name?: string;
   picture?: string;
-  provider: 'credentials' | 'google';
+  provider: "credentials" | "google";
   customDomains?: {
-  domain: string;
-  isVerified: boolean;
-  cnameTarget?: string;
-}[];
+    domain: string;
+    isVerified: boolean;
+    cnameTarget?: string;
+  }[];
+
+  
+  rootDomains?: { domain: string; verified: boolean }[];
+
+
 
   payments: IPaymentReference[];
   billing?: {
@@ -54,35 +64,38 @@ export interface IUser extends Document {
 }
 
 // Payment Sub-Schema
-const PaymentReferenceSchema = new Schema<IPaymentReference>({
-  razorpayId: { type: String, required: true },
-  subscriptionId: { type: String },
-  amount: { type: Number, required: true },
-  currency: { type: String, default: 'INR' },
-  status: { 
-    type: String,
-    enum: ['pending', 'completed', 'failed', 'refunded', 'cancelled'], // ✅ 'cancelled' included
-    default: 'pending'
+const PaymentReferenceSchema = new Schema<IPaymentReference>(
+  {
+    razorpayId: { type: String, required: true },
+    subscriptionId: { type: String },
+    amount: { type: Number, required: true },
+    currency: { type: String, default: "INR" },
+    status: {
+      type: String,
+      enum: ["pending", "completed", "failed", "refunded", "cancelled"], // ✅ 'cancelled' included
+      default: "pending",
+    },
+    invoiceId: { type: String, required: true },
+    planId: { type: String },
+    createdAt: { type: Date, default: Date.now },
+    refundedAmount: { type: Number, default: 0 },
   },
-  invoiceId: { type: String, required: true },
-  planId: { type: String },
-  createdAt: { type: Date, default: Date.now },
-  refundedAmount: { type: Number, default: 0 }
-}, { _id: true });
+  { _id: true }
+);
 
 // User Schema
 const UserSchema = new Schema<IUser>(
   {
-    email: { 
-      type: String, 
-      required: true, 
+    email: {
+      type: String,
+      required: true,
       unique: true,
       trim: true,
       lowercase: true,
       validate: {
         validator: (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-        message: 'Invalid email format'
-      }
+        message: "Invalid email format",
+      },
     },
     password: { type: String, select: false },
     resetToken: { type: String, select: false },
@@ -92,18 +105,28 @@ const UserSchema = new Schema<IUser>(
     premiumSince: Date,
     name: { type: String },
     picture: { type: String },
-    provider: { 
-      type: String, 
-      enum: ['credentials', 'google'],
-      default: 'credentials'
+    provider: {
+      type: String,
+      enum: ["credentials", "google"],
+      default: "credentials",
     },
 
-      customDomains: [{
-  domain: { type: String, required: true, trim: true, lowercase: true },
-  isVerified: { type: Boolean, default: false },
-  cnameTarget: { type: String, default: 'cname.branqly.xyz' }
-}],
+    customDomains: [
+      {
+        domain: { type: String, required: true, trim: true, lowercase: true },
+        isVerified: { type: Boolean, default: false },
+        cnameTarget: { type: String, default: "cname.branqly.xyz" },
+      },
+    ],
 
+    
+    rootDomains: [
+  {
+    domain: { type: String, required: true },
+    verified: { type: Boolean, default: false }
+  }
+]
+,
 
     payments: [PaymentReferenceSchema],
     billing: {
@@ -114,11 +137,11 @@ const UserSchema = new Schema<IUser>(
         city: { type: String },
         state: { type: String },
         postalCode: { type: String },
-        country: { type: String, default: 'India' }
-      }
-    }
+        country: { type: String, default: "India" },
+      },
+    },
   },
-  { 
+  {
     collection: "users",
     toJSON: {
       virtuals: true,
@@ -127,18 +150,18 @@ const UserSchema = new Schema<IUser>(
         delete ret.resetToken;
         delete ret.resetTokenExpiry;
         return ret;
-      }
-    }
+      },
+    },
   }
 );
 
 // Indexes
 UserSchema.index({ premium: 1 });
-UserSchema.index({ 'payments.status': 1 });
-UserSchema.index({ 'payments.razorpayId': 1 });
+UserSchema.index({ "payments.status": 1 });
+UserSchema.index({ "payments.razorpayId": 1 });
 
 // Virtual for last payment
-UserSchema.virtual('lastPayment').get(function() {
+UserSchema.virtual("lastPayment").get(function () {
   if (this.payments && this.payments.length > 0) {
     return this.payments[this.payments.length - 1];
   }
@@ -146,26 +169,34 @@ UserSchema.virtual('lastPayment').get(function() {
 });
 
 // Method to get active subscription
-UserSchema.methods.getActiveSubscription = function() {
+UserSchema.methods.getActiveSubscription = function () {
   if (!this.premium) return null;
-  return this.payments
-    .filter((p: IPaymentReference) => p.status === 'completed' && p.planId)
-    .sort((a: IPaymentReference, b: IPaymentReference) => 
-      b.createdAt.getTime() - a.createdAt.getTime()
-    )[0] || null;
+  return (
+    this.payments
+      .filter((p: IPaymentReference) => p.status === "completed" && p.planId)
+      .sort(
+        (a: IPaymentReference, b: IPaymentReference) =>
+          b.createdAt.getTime() - a.createdAt.getTime()
+      )[0] || null
+  );
 };
 
 // Auto-update premium status based on payments
-UserSchema.pre('save', function(next) {
+UserSchema.pre("save", function (next) {
   const user = this as IUser;
 
-  if (user.isModified('payments') || user.isNew) {
+  if (user.isModified("payments") || user.isNew) {
     // Check if there is at least 1 active (non-cancelled, non-refunded, non-failed) subscription
-    const hasActivePayment = user.payments.some(p => 
-      p.status === 'completed' && 
-      (!p.planId || (p.planId && !user.payments.some(r => 
-        ['refunded', 'cancelled', 'failed'].includes(r.status) && r.razorpayId === p.razorpayId
-      )))
+    const hasActivePayment = user.payments.some(
+      (p) =>
+        p.status === "completed" &&
+        (!p.planId ||
+          (p.planId &&
+            !user.payments.some(
+              (r) =>
+                ["refunded", "cancelled", "failed"].includes(r.status) &&
+                r.razorpayId === p.razorpayId
+            )))
     );
 
     user.premium = hasActivePayment;

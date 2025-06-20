@@ -445,7 +445,7 @@ export default function CustomDomainPage() {
                                                             </div>
                                                             <div className="grid grid-cols-3 gap-4">
                                                                 <span className="text-gray-400">Value:</span>
-                                                                <span className="col-span-2 text-blue-300">your-unique-target.branqly.com</span>
+                                                                <span className="col-span-2 text-blue-300">cname.branqly.com</span>
                                                             </div>
                                                         </div>
                                                     </div>
