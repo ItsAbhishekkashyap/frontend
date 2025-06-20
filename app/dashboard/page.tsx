@@ -32,6 +32,7 @@ type LinkType = {
     clicks: number;
     lastAccessed: string | null;
     clickDetails?: ClickDetail[];
+    domainUsed?: string;
 };
 
 
@@ -121,8 +122,7 @@ export default function Dashboard() {
             setAlias(data.alias);
             setOriginalUrl('');
             setCustomAlias('');
-            setCustomDomain(data.domainUsed || '');
-
+            // DO NOT update setCustomDomain here!
 
             setLinks((prev) => [
                 {
@@ -132,16 +132,16 @@ export default function Dashboard() {
                     createdAt: data.createdAt,
                     clicks: data.clicks || 0,
                     lastAccessed: data.lastAccessed || null,
+                    domainUsed: data.domainUsed || '', // <-- add domainUsed for this link only
                 },
                 ...prev,
             ]);
-
-
 
         } catch {
             setError('Something went wrong');
         }
     }
+
 
     async function handleDelete(aliasToDelete: string) {
         const res = await fetch('/api/links/delete', {
@@ -162,7 +162,7 @@ export default function Dashboard() {
 
 
     const displayDomain = premium && isDomainVerified && customDomain ? customDomain : baseUrl;
-    const fullShortUrl = alias ? `${displayDomain}/${alias}` : '';
+    const fullShortUrl = alias ? `${displayDomain.replace(/\/$/, '')}/${alias}` : '';
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -389,13 +389,11 @@ export default function Dashboard() {
                                         <div className="divide-y divide-gray-200">
                                             {links.map((link) => {
                                                 // Normalize domain to avoid double https://
-                                                const normalizedDomain =
-                                                    premium && isDomainVerified && customDomain
-                                                        ? customDomain
-                                                        : baseUrl.replace(/^https?:\/\//, '');
+                                                const domainForLink = link.domainUsed && link.domainUsed.trim() !== '' ? link.domainUsed : baseUrl.replace(/^https?:\/\//, '');
 
 
-                                                const shortUrl = `https://${normalizedDomain}/${link.alias}`;
+                                                const shortUrl = `https://${domainForLink.replace(/\/$/, '')}/${link.alias}`;
+
 
                                                 return (
                                                     <motion.div
@@ -413,7 +411,7 @@ export default function Dashboard() {
                                                                         rel="noopener noreferrer"
                                                                         className="font-medium text-indigo-600 hover:underline break-all"
                                                                     >
-                                                                        {normalizedDomain}/{link.alias}
+                                                                        {domainForLink}/{link.alias}
                                                                     </a>
                                                                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
                                                                         {link.clicks} clicks
