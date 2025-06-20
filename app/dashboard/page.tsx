@@ -121,6 +121,7 @@ export default function Dashboard() {
             setAlias(data.alias);
             setOriginalUrl('');
             setCustomAlias('');
+            setCustomDomain(data.domainUsed || '');
 
 
             setLinks((prev) => [
