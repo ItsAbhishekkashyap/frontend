@@ -409,6 +409,7 @@ export default function CustomDomainPage() {
                                         </div>
 
                                         {/* Step 2 */}
+                                        {/* Step 2 */}
                                         <div className="relative flex group">
                                             <div className="flex-shrink-0 bg-white rounded-full border-2 border-indigo-500 w-12 h-12 flex items-center justify-center z-10 transition-all duration-300 group-hover:bg-indigo-50 group-hover:scale-110">
                                                 <span className="text-indigo-600 font-bold text-lg">2</span>
@@ -417,10 +418,10 @@ export default function CustomDomainPage() {
                                                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-all duration-300">
                                                     <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
                                                         <FiServer className="text-indigo-500 mr-2" />
-                                                        Update DNS records
+                                                        Configure DNS Records
                                                     </h3>
                                                     <p className="text-gray-600 mb-4">
-                                                        Log in to your domain registrar&#39;s dashboard (like GoDaddy, Namecheap, or Cloudflare) and add the following CNAME record:
+                                                        To use your custom domain with Branqly, log in to your domain registrar&#39;s dashboard (such as GoDaddy, Namecheap, or Cloudflare) and add the following DNS record:
                                                     </p>
 
                                                     {/* Interactive DNS Record Card */}
@@ -428,7 +429,7 @@ export default function CustomDomainPage() {
                                                         <div className="flex items-center justify-between bg-gray-800 px-4 py-2">
                                                             <span className="text-gray-300 text-sm font-mono">DNS Configuration</span>
                                                             <button
-                                                                onClick={() => copyToClipboard("yourdomain.com CNAME your-unique-target.branqly.com")}
+                                                                onClick={() => copyToClipboard("yourdomain.com CNAME cname.branqly.com")}
                                                                 className="text-gray-400 hover:text-white transition-colors flex items-center"
                                                             >
                                                                 <FiCopy className="mr-1" /> Copy
@@ -457,14 +458,15 @@ export default function CustomDomainPage() {
                                                             Where to add this in popular registrars:
                                                         </h4>
                                                         <ul className="text-sm text-blue-700 space-y-1">
-                                                            <li>• GoDaddy: DNS Management → Records → Add CNAME</li>
-                                                            <li>• Cloudflare: DNS → Add record</li>
-                                                            <li>• Namecheap: Advanced DNS → Host Records</li>
+                                                            <li>• GoDaddy: DNS Management → Records → Add CNAME Record</li>
+                                                            <li>• Cloudflare: DNS → Add Record → Type: CNAME</li>
+                                                            <li>• Namecheap: Advanced DNS → Host Records → Add CNAME Record</li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
 
                                         {/* Step 3 */}
                                         <div className="relative flex group">

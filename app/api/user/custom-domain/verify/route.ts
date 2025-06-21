@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   try {
     const body: VerifyDomainRequestBody = await req.json();
 
-    let domainToVerify: string = body.domainToVerify;
+    let domainToVerify = body.domainToVerify;
     if (!domainToVerify || typeof domainToVerify !== 'string') {
       return NextResponse.json({ error: 'Domain to verify is required' }, { status: 400 });
     }
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 
     const customDomains = fullUser.customDomains as CustomDomain[];
 
-const domainObj = customDomains.find((d: CustomDomain) => d.domain === domainToVerify);
+    const domainObj = customDomains.find((d: CustomDomain) => d.domain === domainToVerify);
 
     if (!domainObj) {
       return NextResponse.json({ error: 'Domain not found in your list' }, { status: 404 });
@@ -58,7 +58,10 @@ const domainObj = customDomains.find((d: CustomDomain) => d.domain === domainToV
         return NextResponse.json({ verified: false, error: 'No CNAME records found.' }, { status: 400 });
       }
 
-      if (records.includes(CNAME_TARGET)) {
+      const cnameTargetLower = CNAME_TARGET.toLowerCase();
+      const foundValidCname = records.some((r) => r.toLowerCase() === cnameTargetLower);
+
+      if (foundValidCname) {
         // Mark domain as verified
         domainObj.isVerified = true;
         await fullUser.save();

@@ -95,19 +95,30 @@ const PUBLIC_PATHS = [
 ];
 
 export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const { pathname, protocol } = req.nextUrl;
 
-  // ✅ Allow public files and exact public paths
+  // === 1. FORCE HTTPS REDIRECT ===
+  // If request is over HTTP, redirect to HTTPS
+  if (protocol === 'http:') {
+    const httpsUrl = req.nextUrl.clone();
+    httpsUrl.protocol = 'https:';
+    return NextResponse.redirect(httpsUrl);
+  }
+
+  // === 2. EXISTING LOGIC ===
+
+  // Allow public files and exact public paths
   if (PUBLIC_FILE.test(pathname) || PUBLIC_PATHS.includes(pathname)) {
     return NextResponse.next();
   }
 
-  // ✅ Allow public access to dynamic short URLs like /abc123 etc
+  // Allow public access to dynamic short URLs like /abc123 etc
   const shortLinkRegex = /^\/[a-zA-Z0-9_-]{3,}$/; // adjust length as per alias length if needed
   if (shortLinkRegex.test(pathname)) {
     return NextResponse.next();
   }
 
+  // Check auth token for all other routes
   const token = req.cookies.get('token')?.value;
   if (!token) {
     return NextResponse.redirect(new URL('/login', req.url));
@@ -124,10 +135,11 @@ export async function middleware(req: NextRequest) {
   }
 }
 
-// ✅ Matcher config
+// Matcher config
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
+
 
 
 
