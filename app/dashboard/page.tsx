@@ -56,7 +56,7 @@ export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('links');
     const [customDomain, setCustomDomain] = useState('');
     const [isDomainVerified, setIsDomainVerified] = useState(false);
-
+const [fullShortUrl, setFullShortUrl] = useState('');
 
 
 
@@ -96,51 +96,99 @@ export default function Dashboard() {
     }, []);
 
 
+    // async function handleSubmit(e: React.FormEvent) {
+    //     e.preventDefault();
+    //     setError('');
+    //     setAlias('');
+
+    //     try {
+    //         const res = await fetch('/api/links/create', {
+    //             method: 'POST',
+    //             credentials: 'include',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({
+    //                 originalUrl,
+    //                 ...(customAlias ? { customAlias } : {}),
+    //                 domainUsed: customDomain || undefined,
+    //             }),
+    //         });
+
+    //         const data = await res.json();
+    //         if (!res.ok) {
+    //             setError(data.error || 'Failed to shorten URL');
+    //             return;
+    //         }
+
+    //         setAlias(data.alias);
+    //         setOriginalUrl('');
+    //         setCustomAlias('');
+    //         // DO NOT update setCustomDomain here!
+
+    //         setLinks((prev) => [
+    //             {
+    //                 _id: data._id,
+    //                 originalUrl: data.originalUrl,
+    //                 alias: data.alias,
+    //                 createdAt: data.createdAt,
+    //                 clicks: data.clicks || 0,
+    //                 lastAccessed: data.lastAccessed || null,
+    //                 domainUsed: data.domainUsed || '', // <-- add domainUsed for this link only
+    //             },
+    //             ...prev,
+    //         ]);
+
+    //     } catch {
+    //         setError('Something went wrong');
+    //     }
+    // }
+
     async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        setError('');
-        setAlias('');
+    e.preventDefault();
+    setError('');
+    setAlias('');
 
-        try {
-            const res = await fetch('/api/links/create', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    originalUrl,
-                    ...(customAlias ? { customAlias } : {}),
-                    domainUsed: customDomain || undefined,
-                }),
-            });
+    try {
+        const res = await fetch('/api/links/create', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                originalUrl,
+                ...(customAlias ? { customAlias } : {}),
+                domainUsed: customDomain || undefined,
+            }),
+        });
 
-            const data = await res.json();
-            if (!res.ok) {
-                setError(data.error || 'Failed to shorten URL');
-                return;
-            }
-
-            setAlias(data.alias);
-            setOriginalUrl('');
-            setCustomAlias('');
-            // DO NOT update setCustomDomain here!
-
-            setLinks((prev) => [
-                {
-                    _id: data._id,
-                    originalUrl: data.originalUrl,
-                    alias: data.alias,
-                    createdAt: data.createdAt,
-                    clicks: data.clicks || 0,
-                    lastAccessed: data.lastAccessed || null,
-                    domainUsed: data.domainUsed || '', // <-- add domainUsed for this link only
-                },
-                ...prev,
-            ]);
-
-        } catch {
-            setError('Something went wrong');
+        const data = await res.json();
+        if (!res.ok) {
+            setError(data.error || 'Failed to shorten URL');
+            return;
         }
+
+        setAlias(data.alias);
+        setOriginalUrl('');
+        setCustomAlias('');
+
+        // ✅ This is the main fix: setFullShortUrl using backend response
+        setFullShortUrl(`https://${data.domainUsed}/${data.alias}`);
+
+        setLinks((prev) => [
+            {
+                _id: data._id,
+                originalUrl: data.originalUrl,
+                alias: data.alias,
+                createdAt: data.createdAt,
+                clicks: data.clicks || 0,
+                lastAccessed: data.lastAccessed || null,
+                domainUsed: data.domainUsed || '', // this ensures correct domain in Links tab
+            },
+            ...prev,
+        ]);
+
+    } catch {
+        setError('Something went wrong');
     }
+}
 
 
     async function handleDelete(aliasToDelete: string) {
@@ -160,9 +208,20 @@ export default function Dashboard() {
     console.log('slug passed to ClickTrendChart:', alias);
 
 
+   
 
-    const displayDomain = premium && isDomainVerified && customDomain ? customDomain : baseUrl;
-    const fullShortUrl = alias ? `${displayDomain.replace(/\/$/, '')}/${alias}` : '';
+    const normalizedCustomDomain = customDomain
+        .trim()
+        .replace(/^https?:\/\//, '')
+        .replace(/\/$/, ''); // remove trailing slash
+
+    // const displayDomain =
+    //     premium && isDomainVerified && normalizedCustomDomain !== ''
+    //         ? normalizedCustomDomain
+    //         : baseUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+   
+
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -263,8 +322,9 @@ export default function Dashboard() {
                                         </label>
                                         <div className="flex">
                                             <span className="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-gray-200 bg-gray-50 text-gray-500 text-sm font-medium">
-                                                {customDomain?.trim() !== '' ? `${customDomain}/` : `${baseUrl}/`}
+                                                {normalizedCustomDomain !== '' ? `${normalizedCustomDomain}/` : `${baseUrl.replace(/^https?:\/\//, '')}/`}
                                             </span>
+
                                             <input
                                                 type="text"
                                                 id="customAlias"
@@ -389,10 +449,11 @@ export default function Dashboard() {
                                         <div className="divide-y divide-gray-200">
                                             {links.map((link) => {
                                                 // Normalize domain to avoid double https://
-                                                const domainForLink = link.domainUsed && link.domainUsed.trim() !== '' ? link.domainUsed : baseUrl.replace(/^https?:\/\//, '');
+                                                const normalizedDomainForLink = link.domainUsed
+                                                    ? link.domainUsed.replace(/^https?:\/\//, '').replace(/\/$/, '')
+                                                    : baseUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
-
-                                                const shortUrl = `https://${domainForLink.replace(/\/$/, '')}/${link.alias}`;
+                                                const shortUrl = `https://${normalizedDomainForLink}/${link.alias}`;
 
 
                                                 return (
@@ -411,7 +472,7 @@ export default function Dashboard() {
                                                                         rel="noopener noreferrer"
                                                                         className="font-medium text-indigo-600 hover:underline break-all"
                                                                     >
-                                                                        {domainForLink}/{link.alias}
+                                                                       {shortUrl}
                                                                     </a>
                                                                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
                                                                         {link.clicks} clicks

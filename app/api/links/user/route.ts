@@ -19,14 +19,15 @@ export async function GET(req: Request) {
     // ✅ Fetch all URLs created by this user
     const links = await Url.find({ createdBy: decoded.userId }).sort({ createdAt: -1 });
 
-    // ✅ Map output to use alias field instead of slug
+    // ✅ Include domainUsed here too
     const formatted = links.map((l) => ({
       _id: l._id,
       originalUrl: l.originalUrl,
-      alias: l.alias, // ✅ Corrected to alias instead of slug
+      alias: l.alias,
       createdAt: l.createdAt,
       clicks: l.clicks || 0,
       lastAccessed: l.lastAccessed || null,
+      domainUsed: l.domainUsed || '', // ✅ Added this line
     }));
 
     return NextResponse.json({ links: formatted });
