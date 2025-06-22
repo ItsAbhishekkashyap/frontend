@@ -61,7 +61,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserFromRequest } from '@/lib/auth/getUserFromRequest';
-
 import { connectToDB } from '@/lib/mongodb';
 
 const VERCEL_API_TOKEN = process.env.VERCEL_API_TOKEN!;
@@ -70,14 +69,12 @@ const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID!;
 export async function POST(req: NextRequest) {
   try {
     await connectToDB();
-
     const user = await getUserFromRequest(req);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // ✅ Only premium users can use custom domain feature
     if (!user.premium) {
       return NextResponse.json({ error: 'Upgrade to premium to use custom domains.' }, { status: 403 });
     }
@@ -88,7 +85,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Custom domain is required and must be a string.' }, { status: 400 });
     }
 
-    // ✅ Call Vercel API to add domain
+    // ✅ New: Prevent Root Domain Addition
+    const domainParts = customDomain.split('.');
+    if (domainParts.length <= 2) {  // Means it's root domain like 'abc.com' or 'sayvia.xyz'
+      return NextResponse.json({ 
+        error: 'Only subdomains are allowed. Root domains are not permitted.' 
+      }, { status: 400 });
+    }
+
+    // ✅ New: Block 'www' subdomain explicitly
+    if (customDomain.startsWith('www.')) {
+      return NextResponse.json({ 
+        error: 'Please use a custom subdomain, not "www". Example: go.yourdomain.com' 
+      }, { status: 400 });
+    }
+
+    // ✅ Vercel API call to add subdomain
     const vercelRes = await fetch(`https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/domains`, {
       method: 'POST',
       headers: {
@@ -105,15 +117,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to add domain to Vercel.', details: vercelData }, { status: 500 });
     }
 
-    // ✅ Update user document in DB
-    // Assuming User model has: customDomains: [{ domain: string, isVerified: boolean }]
+    // ✅ Save in MongoDB
     user.customDomains = user.customDomains || [];
     user.customDomains.push({ domain: customDomain, isVerified: false });
     await user.save();
 
     return NextResponse.json({
       success: true,
-      message: 'Domain added to Vercel successfully. Please configure DNS and verify.',
+      message: 'Subdomain added to Vercel successfully. Please configure DNS and verify.',
       vercelData
     });
 

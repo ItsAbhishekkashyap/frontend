@@ -97,14 +97,14 @@ const PUBLIC_PATHS = [
 export async function middleware(req: NextRequest) {
   const { pathname, protocol } = req.nextUrl;
 
-  // === 1. FORCE HTTPS REDIRECT ONLY IN PRODUCTION ===
+  
   if (process.env.NODE_ENV === 'production' && protocol === 'http:') {
     const httpsUrl = req.nextUrl.clone();
     httpsUrl.protocol = 'https:';
     return NextResponse.redirect(httpsUrl);
   }
 
-  // === 2. EXISTING LOGIC ===
+
   if (PUBLIC_FILE.test(pathname) || PUBLIC_PATHS.includes(pathname)) {
     return NextResponse.next();
   }
