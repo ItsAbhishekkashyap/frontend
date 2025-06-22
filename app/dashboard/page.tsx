@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FiCopy, FiExternalLink, FiTrash2, FiBarChart2, FiLink, FiClock, FiActivity, FiLock, FiCreditCard, FiGlobe, FiEdit2, FiAlertCircle, FiCheckCircle } from 'react-icons/fi';
+import { FiCopy, FiExternalLink, FiTrash2, FiBarChart2, FiLink, FiClock, FiActivity, FiLock, FiCreditCard, FiGlobe, FiEdit2, FiAlertCircle, FiCheckCircle, FiAlertTriangle } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import ClickTrendChart from '@/components/ClickTrendChart';
 import Navbar from '@/components/Navbar';
@@ -60,6 +60,10 @@ export default function Dashboard() {
     const [customDomain, setCustomDomain] = useState('');
     const [isDomainVerified, setIsDomainVerified] = useState(false);
     const [fullShortUrl, setFullShortUrl] = useState('');
+
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [linkToDelete, setLinkToDelete] = useState<string | null>(null);
+
 
 
 
@@ -194,32 +198,40 @@ export default function Dashboard() {
     }
 
 
-  async function handleDelete(aliasToDelete: string) {
-    const confirmDelete = window.confirm(
-        'Are you sure you want to delete this link? All data related to this link cannot be retrieved.'
-    );
+    const handleDeleteClick = (alias: string) => {
+        setLinkToDelete(alias);
+        setShowConfirmModal(true);
+    };
 
-    if (!confirmDelete) {
-        return; // user cancelled
-    }
+    const confirmDelete = async () => {
+        if (!linkToDelete) return;
 
-    try {
-        const res = await fetch('/api/links/delete', {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ alias: aliasToDelete }),
-        });
+        try {
+            const res = await fetch('/api/links/delete', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ alias: linkToDelete }),
+            });
 
-        if (res.ok) {
-            setLinks((prev) => prev.filter((link) => link.alias !== aliasToDelete));
-        } else {
-            console.error('Failed to delete the link.');
+            if (res.ok) {
+                setLinks((prev) => prev.filter((link) => link.alias !== linkToDelete));
+            } else {
+                console.error('Failed to delete the link.');
+            }
+        } catch (error) {
+            console.error('Error deleting the link:', error);
+        } finally {
+            setShowConfirmModal(false);
+            setLinkToDelete(null);
         }
-    } catch (error) {
-        console.error('Error deleting the link:', error);
-    }
-}
+    };
+
+    const cancelDelete = () => {
+        setShowConfirmModal(false);
+        setLinkToDelete(null);
+    };
+
 
     console.log('slug passed to ClickTrendChart:', alias);
 
@@ -236,7 +248,7 @@ export default function Dashboard() {
     //         ? normalizedCustomDomain
     //         : baseUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
-   
+
 
 
 
@@ -527,13 +539,43 @@ export default function Dashboard() {
                                                                     <FiCopy className="text-gray-500 hover:text-gray-700" />
                                                                 </button>
                                                                 <button
-                                                                    onClick={() => handleDelete(link.alias)}
+                                                                    onClick={() => handleDeleteClick(link.alias)}
                                                                     className="p-2 rounded-lg hover:bg-red-50 transition"
                                                                     title="Delete link"
                                                                     aria-label="Delete link"
                                                                 >
                                                                     <FiTrash2 className="text-red-500 hover:text-red-700" />
                                                                 </button>
+
+                                                                {showConfirmModal && (
+                                                                    <div className="fixed inset-0 z-50 backdrop-blur-sm flex items-center justify-center">
+
+                                                                        <div className="bg-white rounded-xl p-6 shadow-lg w-full max-w-sm animate-fadeIn">
+                                                                            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                                                                <FiAlertTriangle className="text-yellow-500 mr-2" /> Confirm Delete
+                                                                            </h3>
+                                                                            <p className="text-gray-600 mb-6 text-sm">
+                                                                                Are you sure you want to delete this link? This action cannot be undone.
+                                                                            </p>
+                                                                            <div className="flex justify-end gap-3">
+                                                                                <button
+                                                                                    onClick={cancelDelete}
+                                                                                    className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm"
+                                                                                >
+                                                                                    Cancel
+                                                                                </button>
+                                                                                <button
+                                                                                    onClick={confirmDelete}
+                                                                                    className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 text-sm flex items-center"
+                                                                                >
+                                                                                    <FiTrash2 className="mr-1" /> Delete
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+
 
                                                                 {/* QR Code Button */}
                                                                 <QrCodeButton url={shortUrl} id={link._id} />
@@ -575,7 +617,7 @@ export default function Dashboard() {
                             )
                         ) : premium ? (
                             <div className="bg-white rounded-xl shadow-sm p-6">
-                                
+
 
                                 {links.length > 0 ? (
                                     <div>

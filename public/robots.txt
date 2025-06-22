@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ashrtl.xyz/sitemap.xml
+Sitemap: https://branqly.xyz/sitemap.xml
