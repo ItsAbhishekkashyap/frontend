@@ -7,6 +7,9 @@ import {  FaPaperPlane, FaGlobe } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+
+
+
 export default function ContactPage() {
     const [form, setForm] = useState({ name: "", email: "", message: "" });
     const [loading, setLoading] = useState(false);
@@ -46,6 +49,7 @@ export default function ContactPage() {
 
     return (
         <div className="min-h-screen flex flex-col">
+            
             <Navbar />
             <main className="flex-grow bg-gradient-to-br from-blue-50 to-indigo-50">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">

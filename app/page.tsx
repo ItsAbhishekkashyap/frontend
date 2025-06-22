@@ -9,6 +9,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Script from 'next/script';
 import FeatureCard from './components/FeatureCard';
+import Meta from '@/components/Meta';
+
 
 import {
   FiTwitter,
@@ -23,25 +25,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 
-// export const metadata = {
-//   title: "AshrtL – The Smarter URL Shortener",
-//   description: "Create short links, monitor clicks, and manage your URLs with ease. AshrtL makes link shortening smarter.",
-//   keywords: ["URL shortener", "AshrtL", "smart links", "link analytics", "free short link"],
-//   openGraph: {
-//     title: "AshrtL",
-//     description: "Smart, fast and reliable URL shortening for modern web.",
-//     url: "https://ashrtl.xyz",
-//     type: "website",
-//     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "AshrtL OG" }],
-//   },
-//   twitter: {
-//     card: "summary_large_image",
-//     site: "@AshrtL",
-//     title: "AshrtL",
-//     description: "Smarter URL Shortener",
-//     images: ["/og-image.png"],
-//   },
-// };
+
 
 const baseUrl = process.env.NODE_ENV === 'development' 
   ? 'http://localhost:3000' 
@@ -105,6 +89,11 @@ export default function Home() {
   </Script>
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-indigo-50 to-blue-50">
+      <Meta 
+        title="Branqly | Simplify Your URLs with Advanced Link Shortening"
+        description="Branqly - The easiest way to shorten, manage and analyze your URLs. Boost your branding with custom links."
+      />
+      <h1 style={{ display: 'none' }}>Branqly - Best URL Shortener and Link Management Platform</h1>
       {/* Header section */}
 
       <Navbar />
