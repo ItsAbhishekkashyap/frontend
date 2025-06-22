@@ -33,7 +33,10 @@ type LinkType = {
     lastAccessed: string | null;
     clickDetails?: ClickDetail[];
     domainUsed?: string;
+
 };
+
+
 
 
 
@@ -56,7 +59,7 @@ export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('links');
     const [customDomain, setCustomDomain] = useState('');
     const [isDomainVerified, setIsDomainVerified] = useState(false);
-const [fullShortUrl, setFullShortUrl] = useState('');
+    const [fullShortUrl, setFullShortUrl] = useState('');
 
 
 
@@ -143,72 +146,85 @@ const [fullShortUrl, setFullShortUrl] = useState('');
     // }
 
     async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    setAlias('');
+        e.preventDefault();
+        setError('');
+        setAlias('');
+
+        try {
+            const res = await fetch('/api/links/create', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    originalUrl,
+                    ...(customAlias ? { customAlias } : {}),
+                    domainUsed: customDomain || undefined,
+                }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                setError(data.error || 'Failed to shorten URL');
+                return;
+            }
+
+            setAlias(data.alias);
+            setOriginalUrl('');
+            setCustomAlias('');
+
+            // ✅ This is the main fix: setFullShortUrl using backend response
+            setFullShortUrl(`https://${data.domainUsed}/${data.alias}`);
+
+            setLinks((prev) => [
+                {
+                    _id: data._id,
+                    originalUrl: data.originalUrl,
+                    alias: data.alias,
+                    createdAt: data.createdAt,
+                    clicks: data.clicks || 0,
+                    lastAccessed: data.lastAccessed || null,
+                    domainUsed: data.domainUsed || '', // this ensures correct domain in Links tab
+                },
+                ...prev,
+            ]);
+
+        } catch {
+            setError('Something went wrong');
+        }
+    }
+
+
+  async function handleDelete(aliasToDelete: string) {
+    const confirmDelete = window.confirm(
+        'Are you sure you want to delete this link? All data related to this link cannot be retrieved.'
+    );
+
+    if (!confirmDelete) {
+        return; // user cancelled
+    }
 
     try {
-        const res = await fetch('/api/links/create', {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                originalUrl,
-                ...(customAlias ? { customAlias } : {}),
-                domainUsed: customDomain || undefined,
-            }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-            setError(data.error || 'Failed to shorten URL');
-            return;
-        }
-
-        setAlias(data.alias);
-        setOriginalUrl('');
-        setCustomAlias('');
-
-        // ✅ This is the main fix: setFullShortUrl using backend response
-        setFullShortUrl(`https://${data.domainUsed}/${data.alias}`);
-
-        setLinks((prev) => [
-            {
-                _id: data._id,
-                originalUrl: data.originalUrl,
-                alias: data.alias,
-                createdAt: data.createdAt,
-                clicks: data.clicks || 0,
-                lastAccessed: data.lastAccessed || null,
-                domainUsed: data.domainUsed || '', // this ensures correct domain in Links tab
-            },
-            ...prev,
-        ]);
-
-    } catch {
-        setError('Something went wrong');
-    }
-}
-
-
-    async function handleDelete(aliasToDelete: string) {
         const res = await fetch('/api/links/delete', {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ alias: aliasToDelete }), // it send 'slug' in POST body
+            body: JSON.stringify({ alias: aliasToDelete }),
         });
 
         if (res.ok) {
             setLinks((prev) => prev.filter((link) => link.alias !== aliasToDelete));
         } else {
-            console.error('Failed to delete');
+            console.error('Failed to delete the link.');
         }
+    } catch (error) {
+        console.error('Error deleting the link:', error);
     }
+}
+
     console.log('slug passed to ClickTrendChart:', alias);
 
 
-   
+
 
     const normalizedCustomDomain = customDomain
         .trim()
@@ -221,6 +237,7 @@ const [fullShortUrl, setFullShortUrl] = useState('');
     //         : baseUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
    
+
 
 
     return (
@@ -472,7 +489,7 @@ const [fullShortUrl, setFullShortUrl] = useState('');
                                                                         rel="noopener noreferrer"
                                                                         className="font-medium text-indigo-600 hover:underline break-all"
                                                                     >
-                                                                       {shortUrl}
+                                                                        {shortUrl}
                                                                     </a>
                                                                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
                                                                         {link.clicks} clicks
@@ -558,7 +575,8 @@ const [fullShortUrl, setFullShortUrl] = useState('');
                             )
                         ) : premium ? (
                             <div className="bg-white rounded-xl shadow-sm p-6">
-                                <h2 className="text-xl font-semibold text-gray-800 mb-6">Analytics</h2>
+                                
+
                                 {links.length > 0 ? (
                                     <div>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -588,8 +606,6 @@ const [fullShortUrl, setFullShortUrl] = useState('');
                                                     Click Trends for {link.alias}
                                                 </h3>
                                                 <ClickTrendChart alias={link.alias} />
-
-                                                {/* here to add */}
                                                 <LinkDetailsCard key={link._id} link={link} />
                                             </div>
                                         ))}
@@ -606,6 +622,7 @@ const [fullShortUrl, setFullShortUrl] = useState('');
                                     </div>
                                 )}
                             </div>
+
                         ) : (
                             <div className="text-center py-12 bg-white rounded-xl shadow-sm p-6">
                                 <div className="mx-auto w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
