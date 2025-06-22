@@ -5,10 +5,18 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { FiArrowRight, FiCheck, FiBarChart2, FiTrendingUp, FiShield } from "react-icons/fi";
 import Link from "next/link";
+import Meta from '@/components/Meta';
 
 const BrandedLinksMatterPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
+
+ <Meta 
+        title="Why Branded Links Matter | Branqly Blog"
+        description="Learn why branded short links can boost trust and click-through rates for your audience."
+      />
+      <h1 style={{ display: 'none' }}>Why Branded Links Matter</h1>
+
       <Navbar />
       
       {/* Hero Section */}

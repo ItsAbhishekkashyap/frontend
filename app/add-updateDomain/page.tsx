@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import Meta from '@/components/Meta';
 
 export default function CustomDomainSettings() {
   const [domain, setDomain] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
 
   async function saveDomain() {
     setLoading(true);
@@ -53,6 +55,12 @@ export default function CustomDomainSettings() {
 
   return (
     <div>
+
+      <Meta 
+        title="Add or Update Custom Domain | Branqly"
+        description="Easily add or update your custom domain on Branqly and personalize your shortened links."
+      />
+      <h1 style={{ display: 'none' }}>Add or Update Domain on Branqly</h1>
       <input
         type="text"
         placeholder="Enter your custom domain"

@@ -13,6 +13,8 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/loginNavbar';
 import Link from 'next/link';
 
+import Meta from '@/components/Meta';
+
 // Zod schema for validation
 const SignupSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
@@ -62,6 +64,11 @@ export default function SignupPage() {
 
   return (
     <div>
+      <Meta 
+        title="Sign Up for Branqly | Create Your Account"
+        description="Create your Branqly account and start shortening, branding, and managing your URLs today."
+      />
+      <h1 style={{ display: 'none' }}>Sign Up for Branqly URL Shortener</h1>
       <Navbar />
       <Toaster position="top-right" reverseOrder={false} />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">

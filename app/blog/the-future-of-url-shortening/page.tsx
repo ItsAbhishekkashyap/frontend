@@ -3,10 +3,18 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import { FiShare2, FiBookmark } from 'react-icons/fi';
+import Meta from '@/components/Meta';
 
 const Blog1 = () => {
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
+
+<Meta 
+        title="The Future of URL Shortening | Branqly Blog"
+        description="Stay updated on the evolving trends and technologies in the world of URL shortening."
+      />
+      <h1 style={{ display: 'none' }}>The Future of URL Shortening</h1>
+
             <Navbar />
 
             <main className="flex-grow">

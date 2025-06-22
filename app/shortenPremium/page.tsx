@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Meta from '@/components/Meta';
 // import { useRouter } from 'next/navigation';
 
 export default function ShortenPage() {
@@ -62,6 +63,11 @@ export default function ShortenPage() {
 
   return (
     <main className="max-w-xl mx-auto p-4">
+      <Meta 
+        title="Shorten Links with Premium Features | Branqly"
+        description="Use Branqly’s premium link shortener for better customization, analytics, and branded URLs."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Premium URL Shortener</h1>
       <h1 className="text-3xl font-bold mb-6">Shorten Your URL</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input

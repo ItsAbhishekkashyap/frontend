@@ -11,6 +11,8 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import Footer from '@/components/Footer';
 import Navbar from '@/components/loginNavbar';
+import Meta from '@/components/Meta';
+
 
 const LoginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -60,6 +62,11 @@ export default function LoginPage() {
 
   return (
     <div className="">
+      <Meta 
+        title="Login to Branqly | Manage Your Links"
+        description="Login to your Branqly account to manage and track your shortened URLs easily."
+      />
+      <h1 style={{ display: 'none' }}>Login to Your Branqly Account</h1>
       <Navbar />
       <Toaster position="top-right" reverseOrder={false} />
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center p-4">

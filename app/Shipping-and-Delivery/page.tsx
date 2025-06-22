@@ -4,10 +4,19 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import { FiTruck, FiClock, FiMapPin, FiAlertCircle } from 'react-icons/fi';
+import Meta from '@/components/Meta';
 
 export default function ShippingDeliveryPage() {
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
+
+<Meta 
+        title="Shipping & Delivery Policy | Branqly Services"
+        description="Understand Branqly's shipping and delivery policies for digital products and services. We ensure timely and secure service delivery."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Shipping and Delivery Information</h1>
+
+
       <Navbar />
       <main className="max-w-4xl mx-auto py-16 px-6 sm:px-8">
         {/* Header Section */}

@@ -160,6 +160,8 @@ import { Loader2, CheckCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useRouter } from 'next/navigation';
 
+import Meta from '@/components/Meta';
+
 interface RazorpayResponse {
   razorpay_payment_id: string;
   razorpay_subscription_id: string;
@@ -346,6 +348,11 @@ export default function PaymentPage() {
   // Non-Premium User View
 return (
   <div className="w-screen min-h-screen bg-gradient-to-r from-indigo-100 to-purple-200">
+    <Meta 
+        title="Secure Payment Portal | Branqly"
+        description="Complete your payment securely through Branqly's trusted payment portal."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Payment Portal</h1>
     <Navbar />
     <div className="flex flex-col items-center justify-center px-4 py-12 space-y-8">
       <h1 className="text-3xl font-bold text-indigo-700 text-center">Get Premium Access</h1>

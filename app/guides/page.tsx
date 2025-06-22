@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { FiCode, FiBarChart2, FiZap, FiLink2, FiLayers, FiSmartphone } from 'react-icons/fi';
+import Meta from '@/components/Meta';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -35,6 +36,13 @@ const guideCategories = [
 export default function GuidesPage() {
   return (
     <div className="bg-gradient-to-b from-indigo-50 to-white min-h-screen">
+
+<Meta 
+        title="Branqly Guides | Master URL Shortening"
+        description="Step-by-step guides to help you maximize Branqly's features and link management tools."
+      />
+      <h1 style={{ display: 'none' }}>Branqly URL Shortening Guides</h1>
+
         <Navbar/>
       <motion.main 
         initial="hidden"

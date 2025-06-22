@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import Meta from '@/components/Meta';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -61,6 +62,11 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50 p-4">
+      <Meta 
+        title="Set New Password | Branqly"
+        description="Reset your Branqly account password easily and securely using your verification link."
+      />
+      <h1 style={{ display: 'none' }}>Reset Password - Branqly</h1>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

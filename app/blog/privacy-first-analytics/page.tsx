@@ -8,10 +8,18 @@ import {
   FiCheckCircle, FiBarChart2, FiSmartphone 
 } from "react-icons/fi";
 import Link from "next/link";
+import Meta from '@/components/Meta';
 
 export default function PrivacyFirstAnalytics() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
+
+ <Meta 
+        title="Privacy-First Analytics | Branqly Blog"
+        description="Explore how Branqly prioritizes user privacy while providing advanced analytics for your links."
+      />
+      <h1 style={{ display: 'none' }}>Privacy First Analytics</h1>
+
       <Navbar />
 
       {/* Hero Section */}

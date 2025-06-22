@@ -4,8 +4,9 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Head from "next/head";
+
 import Image from "next/image"; // Important for optimized images
+import Meta from '@/components/Meta';
 
 interface Post {
   title: string;
@@ -68,11 +69,11 @@ export default function BlogPage() {
 
   return (
     <>
-      <Head>
-        <title>Branqly Blog | Insights on Link Management & Digital Marketing</title>
-        <meta name="description" content="Discover expert insights, stories and expertise about link management, digital marketing and web technology" />
-        <link rel="canonical" href="https://ashrtl.vercel.app/blog" />
-      </Head>
+      <Meta 
+        title="Branqly Blog | Tips on Link Management & Marketing"
+        description="Read helpful blogs about link shortening, marketing, and maximizing the power of branded links."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Blog - Latest Updates</h1>
 
       <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
         <Navbar />

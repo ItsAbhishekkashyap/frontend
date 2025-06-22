@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { FiLock, FiLink2, FiBarChart2, FiPieChart, FiAlertTriangle, FiCode } from 'react-icons/fi';
+import Meta from '@/components/Meta';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -47,6 +48,13 @@ const documentationSections = [
 export default function DocumentationPage() {
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
+
+<Meta 
+        title="Branqly Documentation | Setup & API Guides"
+        description="Find comprehensive guides, setup instructions, and API documentation for Branqly URL shortener."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Documentation</h1>
+
         <Navbar/>
       <motion.main 
         initial="hidden"

@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiCheckCircle, FiTrendingUp, FiGlobe, FiLock, FiCode, FiSmartphone } from "react-icons/fi";
+import Meta from '@/components/Meta';
 
 interface SectionProps {
     title: string;
@@ -13,6 +14,13 @@ interface SectionProps {
 export default function MaximizingClicksWithSmartLinks() {
     return (
         <div className="w-screen bg-indigo-50">
+
+            <Meta
+                title="Maximizing Clicks with Smart Links | Branqly Blog"
+                description="Discover smart link strategies to maximize click-through rates using Branqly."
+            />
+            <h1 style={{ display: 'none' }}>Maximizing Clicks with Smart Links</h1>
+
             <Navbar />
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Hero Section */}

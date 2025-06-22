@@ -7,6 +7,7 @@ import { FiCheck, FiZap, FiStar, FiShield, FiBarChart2, FiGlobe } from 'react-ic
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Meta from '@/components/Meta';
 
 // Minimal type declarations for Razorpay
 type RazorpayInstance = {
@@ -141,6 +142,11 @@ export default function PremiumPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <Meta 
+        title="Branqly Premium | Unlock Advanced Features"
+        description="Get access to premium features on Branqly including advanced analytics, custom branding, and more."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Premium Features</h1>
       <Navbar />
       <main className="flex-grow bg-indigo-50 py-12 px-4">
         <div className="max-w-3xl mx-auto text-center">

@@ -5,10 +5,20 @@ import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FiLock, FiPieChart, FiLink2, FiClipboard, FiSliders, FiShare2, FiActivity, FiPrinter, FiMail } from 'react-icons/fi';
+import Meta from '@/components/Meta';
+
+
 
 export default function AboutPage() {
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
+
+ <Meta 
+        title="About Branqly | Simplify Your Links"
+        description="Learn more about Branqly - the smartest way to shorten and manage your URLs easily."
+      />
+      <h1 style={{ display: 'none' }}>About Branqly - Best URL Shortener</h1>
+
       <Navbar />
       <main className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}

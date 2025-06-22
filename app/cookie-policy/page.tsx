@@ -5,10 +5,18 @@ import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import { FiShield, FiSettings, FiPieChart } from 'react-icons/fi';
 import { MdCookie } from 'react-icons/md';
+import Meta from '@/components/Meta';
 
 export default function CookiePolicyPage() {
   return (
     <div className="bg-gradient-to-b from-indigo-50 to-white min-h-screen">
+
+<Meta 
+        title="Branqly Cookie Policy"
+        description="Understand how Branqly uses cookies to enhance your browsing experience."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Cookie Policy</h1>
+
       <Navbar />
       <main className="max-w-4xl mx-auto py-16 px-6 sm:px-8">
         {/* Header */}

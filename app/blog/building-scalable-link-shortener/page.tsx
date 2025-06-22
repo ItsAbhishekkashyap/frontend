@@ -2,10 +2,17 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
+import Meta from '@/components/Meta';
 
 export default function BlogPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
+
+      <Meta 
+        title="Building a Scalable Link Shortener | Branqly Blog"
+        description="Learn how Branqly scales its URL shortening service to handle millions of links efficiently."
+      />
+      <h1 style={{ display: 'none' }}>Building a Scalable Link Shortener</h1>
       <Navbar />
 
       <main className="flex-grow">

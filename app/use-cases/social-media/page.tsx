@@ -3,10 +3,16 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import { FiMessageSquare, FiBarChart2, FiLink, FiGlobe, FiArrowRight } from 'react-icons/fi';
+import Meta from '@/components/Meta';
 
 const SocialMediaUseCase = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
+      <Meta 
+        title="Link Shortening for Social Media | Branqly"
+        description="Share clean, branded, and trackable short links across your social media platforms with Branqly."
+      />
+      <h1 style={{ display: 'none' }}>Branqly for Social Media Links</h1>
       <Navbar />
       
       <main className="flex-grow">

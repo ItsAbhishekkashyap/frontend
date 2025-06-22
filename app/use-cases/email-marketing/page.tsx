@@ -5,10 +5,16 @@ import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FiMail, FiBarChart2, FiShield, FiCode, FiCopy, FiArrowRight } from 'react-icons/fi';
+import Meta from '@/components/Meta';
 
 const EmailMarketingUseCase = () => {
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
+            <Meta 
+        title="Link Shortening for Email Marketing | Branqly"
+        description="Optimize your email campaigns with branded short links from Branqly to increase open rates."
+      />
+      <h1 style={{ display: 'none' }}>Branqly for Email Marketing</h1>
             <Navbar />
 
             <main className="flex-grow">

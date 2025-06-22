@@ -5,9 +5,18 @@ import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import { FiLock, FiShield, FiUser, FiAlertTriangle, FiMail } from 'react-icons/fi';
 
+import Meta from '@/components/Meta';
+
 export default function PrivacyPage() {
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
+      
+      <Meta 
+        title="Branqly Privacy Policy"
+        description="Read the privacy policy to understand how Branqly protects your data and privacy."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Privacy Policy</h1>
+
       <Navbar />
       <main className="max-w-4xl mx-auto py-16 px-6 sm:px-8">
         {/* Header Section */}

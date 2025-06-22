@@ -2,10 +2,16 @@ import React from 'react';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
+import Meta from '@/components/Meta';
 
 const PrintMaterialsUseCase = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <Meta 
+        title="Branded Links for Print Materials | Branqly"
+        description="Create memorable short links for flyers, brochures, and offline marketing with Branqly."
+      />
+      <h1 style={{ display: 'none' }}>Branqly for Print Materials</h1>
       <Navbar />
       
       <main className="flex-grow">

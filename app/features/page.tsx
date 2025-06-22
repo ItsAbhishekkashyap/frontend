@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
-
+import Meta from '@/components/Meta';
 
 interface FeatureCardProps {
   icon: ReactNode;
@@ -98,19 +98,18 @@ export default function FeaturesPage() {
       title: "Advanced Analytics",
       description: "Get detailed insights including location (region, city), device type, and IP address analytics for every link click."
     },
-    // {
-    //   icon: (
-    //     <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    //       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-    //     </svg>
-    //   ),
-    //   title: "Scheduled Links",
-    //   description: "Set activation and expiration dates for your links to control when they're available."
-    // }
+    
   ];
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
+
+<Meta 
+        title="Features of Branqly | Powerful Link Management"
+        description="Discover the powerful features of Branqly that help you shorten, brand, and analyze your URLs."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Features - URL Shortening, Custom Domains, Analytics</h1>
+
       <Navbar />
       
       <main className="flex-grow">

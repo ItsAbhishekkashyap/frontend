@@ -11,6 +11,7 @@ import QrCodeButton from '@/components/QrCodeButton';
 
 import LinkDetailsCard from '@/components/LinkDetailsCard';
 import CustomDomainInput from '@/components/CustomDomainInput';
+import Meta from '@/components/Meta';
 
 
 
@@ -254,6 +255,12 @@ export default function Dashboard() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+
+            <Meta 
+        title="Dashboard | Manage Your Links - Branqly"
+        description="Access your Branqly dashboard to manage, edit, and analyze your shortened links effortlessly."
+      />
+      <h1 style={{ display: 'none' }}>Branqly User Dashboard</h1>
 
             {/* Header  */}
             <Navbar />

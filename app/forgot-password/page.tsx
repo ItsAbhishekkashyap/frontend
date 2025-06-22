@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiMail, FiArrowRight, FiLock } from 'react-icons/fi';
 import Link from 'next/link';
+import Meta from '@/components/Meta';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -40,6 +41,13 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+
+<Meta 
+        title="Reset Your Password | Branqly"
+        description="Recover access to your Branqly account by resetting your password securely."
+      />
+      <h1 style={{ display: 'none' }}>Forgot Password - Branqly</h1>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

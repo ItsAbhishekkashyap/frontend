@@ -7,6 +7,9 @@ import { useState } from 'react';
 import { FiCheck, FiArrowRight } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 
+import Meta from '@/components/Meta';
+
+
 export default function Price() {
     const [upgrading, setUpgrading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -23,6 +26,13 @@ export default function Price() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
+
+ <Meta 
+        title="Branqly Pricing Plans | Affordable Link Management"
+        description="Check Branqly's affordable plans to manage and analyze your links with ease."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Pricing Plans for URL Shortening Services</h1>
+
             <Navbar />
             
             <main className="flex-grow flex items-center justify-center p-4 py-12">

@@ -5,10 +5,16 @@ import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { FiCheck, FiX, FiMail, FiCreditCard, FiClock, FiGlobe } from 'react-icons/fi';
+import Meta from '@/components/Meta';
 
 export default function RefundPolicy() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100">
+      <Meta 
+        title="Refund Policy | Branqly"
+        description="Read our refund policy to understand the terms and conditions for subscription cancellations."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Refund Policy</h1>
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 py-12 max-w-5xl">

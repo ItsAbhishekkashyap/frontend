@@ -4,10 +4,19 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import { FiAlertTriangle, FiShield, FiTerminal, FiZap, FiMail, FiGlobe } from 'react-icons/fi';
+import Meta from '@/components/Meta';
+
 
 export default function TermsPage() {
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
+
+ <Meta 
+        title="Branqly Terms and Conditions"
+        description="Read Branqly's terms and conditions carefully before using our link shortening services."
+      />
+      <h1 style={{ display: 'none' }}>Branqly Terms and Conditions</h1>
+
       <Navbar />
       <main className="max-w-4xl mx-auto py-16 px-6 sm:px-8">
         {/* Header Section */}

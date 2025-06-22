@@ -6,7 +6,7 @@ import { FiSend, FiUser, FiMail, FiMessageSquare, FiClock } from "react-icons/fi
 import {  FaPaperPlane, FaGlobe } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-
+import Meta from '@/components/Meta';
 
 
 
@@ -49,6 +49,11 @@ export default function ContactPage() {
 
     return (
         <div className="min-h-screen flex flex-col">
+             <Meta 
+        title="Contact Branqly | Get in Touch"
+        description="Contact Branqly for any queries, support, or partnership opportunities."
+      />
+      <h1 style={{ display: 'none' }}>Contact Branqly Support Team</h1>
             
             <Navbar />
             <main className="flex-grow bg-gradient-to-br from-blue-50 to-indigo-50">
