@@ -3,7 +3,7 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import React, { useEffect, useState } from 'react';
-import { FiCopy, FiCheck, FiAlertCircle, FiGlobe, FiPlus, FiRefreshCw, FiLink, FiChevronRight, FiSettings } from 'react-icons/fi';
+import { FiCopy, FiCheck, FiAlertCircle, FiGlobe, FiPlus, FiRefreshCw, FiLink, FiChevronRight, FiSettings, FiClock } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 import { FiBook, FiExternalLink, FiMessageSquare, FiCheckCircle, FiServer, FiPlusCircle } from 'react-icons/fi'
@@ -33,97 +33,97 @@ export default function CustomDomainPage() {
     const [copiedDomain, setCopiedDomain] = useState<string | null>(null);
 
 
-interface StepProps {
-  number: number;
-  icon: ReactNode;
-  title: string;
-  description: string;
-  extraContent?: ReactNode;
-}
+    interface StepProps {
+        number: number;
+        icon: ReactNode;
+        title: string;
+        description: string;
+        extraContent?: ReactNode;
+    }
     const Step: React.FC<StepProps> = ({ number, icon, title, description, extraContent }) => (
-  <div className="relative flex group">
-    <div className="flex-shrink-0 bg-white border-2 border-indigo-500 w-12 h-12 flex items-center justify-center rounded-full z-10">
-      <span className="text-indigo-600 font-bold text-lg">{number}</span>
-    </div>
-    <div className="ml-8 flex-1 pb-10">
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-          {icon} {title}
-        </h3>
-        <p className="text-gray-600">{description}</p>
-        {extraContent && <div className="mt-4">{extraContent}</div>}
-      </div>
-    </div>
-  </div>
-);
-
-
-interface DnsCardProps {
-  domain: string;
-  cnameTarget: string;
-}
-
-const DnsCard: React.FC<DnsCardProps> = ({ domain, cnameTarget }) => (
-  <div className="bg-gray-900 rounded-lg overflow-hidden">
-    <div className="flex justify-between items-center bg-gray-800 px-4 py-2">
-      <span className="text-gray-300 text-sm font-mono">DNS Configuration</span>
-      <button
-        onClick={() => navigator.clipboard.writeText(`${domain} CNAME ${cnameTarget}`)}
-        className="text-gray-400 hover:text-white flex items-center"
-      >
-        <FiCopy className="mr-1" /> Copy
-      </button>
-    </div>
-    <div className="p-4 font-mono text-sm text-gray-100 space-y-2">
-      <p><span className="text-gray-400">Type:</span> <span className="text-green-300">CNAME</span></p>
-      <p><span className="text-gray-400">Name:</span> <span className="text-yellow-300">{domain}</span></p>
-      <p><span className="text-gray-400">Value:</span> <span className="text-blue-300">{cnameTarget}</span></p>
-    </div>
-  </div>
-);
-
-const DnsVisualFlow: React.FC = () => (
-  <div className="mt-16 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-    <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">How DNS + SSL Setup Works</h2>
-    <div className="flex flex-col items-center space-y-6">
-      {[
-        { icon: <FiGlobe />, title: "Your Subdomain", desc: "go.yourdomain.com" },
-        { icon: <FiSettings />, title: "CNAME Points to Branqly", desc: "cname.branqly.xyz" },
-        { icon: <FiCheckCircle />, title: "Branqly Verifies", desc: "We check DNS via lookup" },
-        { icon: <FiLink />, title: "SSL & Short Links Ready", desc: "Vercel issues SSL automatically" },
-      ].map((step, idx) => (
-        <div key={idx} className="flex items-center">
-          <div className="bg-indigo-100 text-indigo-600 rounded-full w-10 h-10 flex items-center justify-center">{step.icon}</div>
-          <div className="ml-4">
-            <h3 className="font-medium text-gray-900">{step.title}</h3>
-            <p className="text-sm text-gray-500">{step.desc}</p>
-          </div>
-          {idx < 3 && <FiChevronRight className="mx-4 text-gray-400" />}
+        <div className="relative flex group">
+            <div className="flex-shrink-0 bg-white border-2 border-indigo-500 w-12 h-12 flex items-center justify-center rounded-full z-10">
+                <span className="text-indigo-600 font-bold text-lg">{number}</span>
+            </div>
+            <div className="ml-8 flex-1 pb-10">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
+                        {icon} {title}
+                    </h3>
+                    <p className="text-gray-600">{description}</p>
+                    {extraContent && <div className="mt-4">{extraContent}</div>}
+                </div>
+            </div>
         </div>
-      ))}
-    </div>
-  </div>
-);
+    );
 
-const HelpSection: React.FC = () => (
-  <div className="mt-12 bg-gray-50 p-6 rounded-xl">
-    <h2 className="text-xl font-semibold text-gray-900 mb-4">Need Help?</h2>
-    <div className="grid md:grid-cols-2 gap-6">
-      {[
-        { icon: <FiBook />, title: "Documentation", desc: "Read our detailed guide with screenshots.", link: "#", linkText: "View Docs" },
-        { icon: <FiMessageSquare />, title: "Contact Support", desc: "Need DNS help? Reach out to us.", link: "/contact-us", linkText: "Get Support" },
-      ].map((item, idx) => (
-        <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200">
-          <h3 className="font-medium text-gray-900 mb-2 flex items-center">{item.icon} {item.title}</h3>
-          <p className="text-gray-600 text-sm mb-3">{item.desc}</p>
-          <a href={item.link} className="text-indigo-600 text-sm font-medium flex items-center hover:text-indigo-500">
-            {item.linkText} <FiExternalLink className="ml-1" />
-          </a>
+
+    interface DnsCardProps {
+        domain: string;
+        cnameTarget: string;
+    }
+
+    const DnsCard: React.FC<DnsCardProps> = ({ domain, cnameTarget }) => (
+        <div className="bg-gray-900 rounded-lg overflow-hidden">
+            <div className="flex justify-between items-center bg-gray-800 px-4 py-2">
+                <span className="text-gray-300 text-sm font-mono">DNS Configuration</span>
+                <button
+                    onClick={() => navigator.clipboard.writeText(`${domain} CNAME ${cnameTarget}`)}
+                    className="text-gray-400 hover:text-white flex items-center"
+                >
+                    <FiCopy className="mr-1" /> Copy
+                </button>
+            </div>
+            <div className="p-4 font-mono text-sm text-gray-100 space-y-2">
+                <p><span className="text-gray-400">Type:</span> <span className="text-green-300">CNAME</span></p>
+                <p><span className="text-gray-400">Name:</span> <span className="text-yellow-300">{domain}</span></p>
+                <p><span className="text-gray-400">Value:</span> <span className="text-blue-300">{cnameTarget}</span></p>
+            </div>
         </div>
-      ))}
-    </div>
-  </div>
-);
+    );
+
+    const DnsVisualFlow: React.FC = () => (
+        <div className="mt-16 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">How DNS + SSL Setup Works</h2>
+            <div className="flex flex-col items-center space-y-6">
+                {[
+                    { icon: <FiGlobe />, title: "Your Subdomain", desc: "go.yourdomain.com" },
+                    { icon: <FiSettings />, title: "CNAME Points to Branqly", desc: "cname.branqly.xyz" },
+                    { icon: <FiCheckCircle />, title: "Branqly Verifies", desc: "We check DNS via lookup" },
+                    { icon: <FiLink />, title: "SSL & Short Links Ready", desc: "Vercel issues SSL automatically" },
+                ].map((step, idx) => (
+                    <div key={idx} className="flex items-center">
+                        <div className="bg-indigo-100 text-indigo-600 rounded-full w-10 h-10 flex items-center justify-center">{step.icon}</div>
+                        <div className="ml-4">
+                            <h3 className="font-medium text-gray-900">{step.title}</h3>
+                            <p className="text-sm text-gray-500">{step.desc}</p>
+                        </div>
+                        {idx < 3 && <FiChevronRight className="mx-4 text-gray-400" />}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
+    const HelpSection: React.FC = () => (
+        <div className="mt-12 bg-gray-50 p-6 rounded-xl">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Need Help?</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+                {[
+                    { icon: <FiBook />, title: "Documentation", desc: "Read our detailed guide with screenshots.", link: "#", linkText: "View Docs" },
+                    { icon: <FiMessageSquare />, title: "Contact Support", desc: "Need DNS help? Reach out to us.", link: "/contact-us", linkText: "Get Support" },
+                ].map((item, idx) => (
+                    <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200">
+                        <h3 className="font-medium text-gray-900 mb-2 flex items-center">{item.icon} {item.title}</h3>
+                        <p className="text-gray-600 text-sm mb-3">{item.desc}</p>
+                        <a href={item.link} className="text-indigo-600 text-sm font-medium flex items-center hover:text-indigo-500">
+                            {item.linkText} <FiExternalLink className="ml-1" />
+                        </a>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 
     useEffect(() => {
         async function fetchDomains() {
@@ -334,7 +334,10 @@ const HelpSection: React.FC = () => (
                                                     <div className="p-5">
                                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                                             <div className="flex items-center">
-                                                                <div className={`w-3 h-3 rounded-full mr-3 ${domain.isVerified ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+                                                                <div
+                                                                    className={`w-3 h-3 rounded-full mr-3 ${domain.isVerified ? 'bg-green-500' : 'bg-yellow-500'
+                                                                        }`}
+                                                                ></div>
                                                                 <span className="font-medium text-gray-900">{domain.domain}</span>
                                                                 {domain.isVerified ? (
                                                                     <span className="ml-3 px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 flex items-center">
@@ -346,6 +349,7 @@ const HelpSection: React.FC = () => (
                                                                     </span>
                                                                 )}
                                                             </div>
+
                                                             <div className="flex gap-2">
                                                                 {!domain.isVerified && (
                                                                     <motion.button
@@ -387,7 +391,9 @@ const HelpSection: React.FC = () => (
                                                                             {domain.domain}. <span className="text-gray-500">CNAME</span> {domain.cnameTarget || 'your-cname-target'}
                                                                         </code>
                                                                         <button
-                                                                            onClick={() => copyToClipboard(`${domain.domain}. CNAME ${domain.cnameTarget || 'your-cname-target'}`)}
+                                                                            onClick={() =>
+                                                                                copyToClipboard(`${domain.domain}. CNAME ${domain.cnameTarget || 'your-cname-target'}`)
+                                                                            }
                                                                             className="text-gray-500 hover:text-indigo-600 ml-2"
                                                                         >
                                                                             <FiCopy />
@@ -397,6 +403,20 @@ const HelpSection: React.FC = () => (
                                                                 {copiedDomain === `${domain.domain}. CNAME ${domain.cnameTarget || 'your-cname-target'}` && (
                                                                     <p className="text-xs text-green-600 mt-1">Copied to clipboard!</p>
                                                                 )}
+                                                            </div>
+                                                        )}
+
+                                                        {domain.isVerified && (
+                                                            <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r">
+                                                                <h4 className="font-medium text-yellow-800 mb-2 flex items-center">
+                                                                    <FiClock className="mr-2" />
+                                                                    SSL Setup In Progress
+                                                                </h4>
+                                                                <p className="text-sm text-yellow-700">
+                                                                    Your domain <strong>{domain.domain}</strong> has been verified successfully.
+                                                                    SSL (https://) configuration is handled <strong>manually by our team</strong> and may take up to
+                                                                    <strong> 24 hours</strong> to become fully active. During this period, your link might not work immediately.
+                                                                </p>
                                                             </div>
                                                         )}
 
@@ -410,6 +430,7 @@ const HelpSection: React.FC = () => (
                                                 </motion.li>
                                             ))}
                                         </ul>
+
                                     )}
                                 </div>
                             </div>
