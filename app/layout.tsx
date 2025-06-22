@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     default: 'Branqly | All-in-One Link Management & Analytics Platform',
     template: '%s | Branqly',
   },
-  description: 'Branqly lets you shorten links, generate QR codes, and track detailed analytics with CSV export. Perfect for marketers and growth hackers to optimize campaigns in one place.',
+  description: 'Branqly lets you shorten links, generate QR codes, and track detailed analytics with CSV export. Perfect for marketers to optimize campaigns in one place.',
   alternates: {
-    canonical: 'https://branqly.xyz',
+    canonical: 'https://www.branqly.xyz/',
   },
 
   icons: {

@@ -82,7 +82,7 @@ export default function Home() {
       "url": "https://branqly.xyz",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://ashrtl.xyz/search?q={search_term_string}",
+        "target": "https://branqly.xyz/search?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     })}
@@ -120,7 +120,7 @@ export default function Home() {
             <div className="relative w-[80px] h-[80px] flex items-center justify-center "> {/* Debug border */}
               <Image
                 src="/favicon.svg"
-                alt="AshrtL Logo"
+                alt="Branqly Logo"
                 width={80}
                 height={80}
                 className="object-contain"
