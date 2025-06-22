@@ -4,19 +4,21 @@ import { User, IUser } from '@/models/User';
 import dns from 'dns/promises';
 import { connectToDB } from '@/lib/mongodb';
 
-interface CustomDomain {
+const CNAME_TARGET = 'cname.branqly.xyz';
+
+// ✅ Type for each custom domain object in User model
+export interface CustomDomain {
   domain: string;
   isVerified: boolean;
   cnameTarget?: string;
 }
 
-interface VerifyDomainRequestBody {
+// ✅ Type for incoming request body
+export interface VerifyDomainRequestBody {
   domainToVerify: string;
 }
 
-const CNAME_TARGET = 'cname.branqly.xyz';
-
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   await connectToDB();
 
   const user: IUser | null = await getUserFromRequest(req);
@@ -25,54 +27,51 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const body: VerifyDomainRequestBody = await req.json();
+    const body = (await req.json()) as VerifyDomainRequestBody;
 
-    let domainToVerify = body.domainToVerify;
-    if (!domainToVerify || typeof domainToVerify !== 'string') {
+    const domainToVerify = body.domainToVerify?.trim().toLowerCase();
+
+    if (!domainToVerify) {
       return NextResponse.json({ error: 'Domain to verify is required' }, { status: 400 });
     }
-    domainToVerify = domainToVerify.trim().toLowerCase();
 
+    // Fetch full user with customDomains
     const fullUser = await User.findById(user._id).select('customDomains');
     if (!fullUser) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    if (!Array.isArray(fullUser.customDomains) || fullUser.customDomains.length === 0) {
+    const customDomains = fullUser.customDomains as CustomDomain[];
+
+    if (!Array.isArray(customDomains) || customDomains.length === 0) {
       return NextResponse.json({ error: 'No custom domains found for user' }, { status: 400 });
     }
 
-    const customDomains = fullUser.customDomains as CustomDomain[];
-
-    const domainObj = customDomains.find((d: CustomDomain) => d.domain === domainToVerify);
+    const domainObj = customDomains.find((d) => d.domain === domainToVerify);
 
     if (!domainObj) {
       return NextResponse.json({ error: 'Domain not found in your list' }, { status: 404 });
     }
 
     try {
-      // Perform DNS CNAME lookup
+      // DNS CNAME lookup
       const records: string[] = await dns.resolveCname(domainToVerify);
 
-      if (!records.length) {
+      if (records.length === 0) {
         return NextResponse.json({ verified: false, error: 'No CNAME records found.' }, { status: 400 });
       }
 
-      const cnameTargetLower = CNAME_TARGET.toLowerCase();
-      const foundValidCname = records.some((r) => r.toLowerCase() === cnameTargetLower);
+      const expected = CNAME_TARGET.toLowerCase();
+      const cnameMatch = records.some((record) => record.toLowerCase() === expected);
 
-      if (foundValidCname) {
-        // Mark domain as verified
+      if (cnameMatch) {
         domainObj.isVerified = true;
         await fullUser.save();
 
         return NextResponse.json({ verified: true, domain: domainToVerify });
       } else {
         return NextResponse.json(
-          {
-            verified: false,
-            error: `CNAME mismatch. Found: ${records.join(', ')}`,
-          },
+          { verified: false, error: `CNAME mismatch. Found: ${records.join(', ')}` },
           { status: 400 }
         );
       }

@@ -62,6 +62,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserFromRequest } from '@/lib/auth/getUserFromRequest';
 import { connectToDB } from '@/lib/mongodb';
+import dns from 'dns/promises'; // Node DNS promises API
 
 const VERCEL_API_TOKEN = process.env.VERCEL_API_TOKEN!;
 const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID!;
@@ -80,56 +81,63 @@ export async function POST(req: NextRequest) {
     }
 
     const { customDomain } = await req.json();
-
     if (!customDomain || typeof customDomain !== 'string') {
-      return NextResponse.json({ error: 'Custom domain is required and must be a string.' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid domain provided.' }, { status: 400 });
     }
 
-    // ✅ New: Prevent Root Domain Addition
-    const domainParts = customDomain.split('.');
-    if (domainParts.length <= 2) {  // Means it's root domain like 'abc.com' or 'sayvia.xyz'
-      return NextResponse.json({ 
-        error: 'Only subdomains are allowed. Root domains are not permitted.' 
-      }, { status: 400 });
+    let isVerified = false;
+    let cnameTarget = '';
+
+    if (customDomain.endsWith('.branqly.xyz')) {
+      // ✅ Our own domain — use Vercel API
+      const vercelRes = await fetch(`https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/domains`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${VERCEL_API_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: customDomain })
+      });
+
+      const vercelData = await vercelRes.json();
+
+      if (!vercelRes.ok) {
+        console.error('Vercel API Error:', vercelData);
+        return NextResponse.json({ error: 'Failed to add domain to Vercel.', details: vercelData }, { status: 500 });
+      }
+
+      isVerified = true; // Vercel handles SSL, routing
+    } else {
+      // ✅ User's own domain — Check CNAME pointing to cname.branqly.xyz
+      try {
+        const records = await dns.resolveCname(customDomain);
+        console.log(`DNS CNAME for ${customDomain}:`, records);
+
+        // You expect CNAME to point to your branqly system:
+        if (records.some(r => r.includes('cname.branqly.xyz'))) {
+          isVerified = true;
+          cnameTarget = 'cname.branqly.xyz';
+        } else {
+          return NextResponse.json({ error: 'CNAME record does not point to cname.branqly.xyz.' }, { status: 400 });
+        }
+      } catch (dnsErr) {
+        console.error('DNS Lookup Error:', dnsErr);
+        return NextResponse.json({ error: 'Failed to resolve CNAME record for this domain.' }, { status: 400 });
+      }
     }
 
-    // ✅ New: Block 'www' subdomain explicitly
-    if (customDomain.startsWith('www.')) {
-      return NextResponse.json({ 
-        error: 'Please use a custom subdomain, not "www". Example: go.yourdomain.com' 
-      }, { status: 400 });
-    }
-
-    // ✅ Vercel API call to add subdomain
-    const vercelRes = await fetch(`https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/domains`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${VERCEL_API_TOKEN}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name: customDomain })
-    });
-
-    const vercelData = await vercelRes.json();
-
-    if (!vercelRes.ok) {
-      console.error('Vercel API Error:', vercelData);
-      return NextResponse.json({ error: 'Failed to add domain to Vercel.', details: vercelData }, { status: 500 });
-    }
-
-    // ✅ Save in MongoDB
+    // ✅ Save to DB
     user.customDomains = user.customDomains || [];
-    user.customDomains.push({ domain: customDomain, isVerified: false });
+    user.customDomains.push({ domain: customDomain, isVerified, cnameTarget });
     await user.save();
 
     return NextResponse.json({
       success: true,
-      message: 'Subdomain added to Vercel successfully. Please configure DNS and verify.',
-      vercelData
+      message: `Domain ${customDomain} added and ${isVerified ? 'verified' : 'pending verification'}.`,
     });
 
   } catch (error) {
-    console.error('Custom Domain Add Error:', error);
+    console.error('Domain Add Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

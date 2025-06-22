@@ -5,10 +5,10 @@ import Navbar from '@/components/Navbar';
 import React, { useEffect, useState } from 'react';
 import { FiCopy, FiCheck, FiAlertCircle, FiGlobe, FiPlus, FiRefreshCw, FiLink, FiChevronRight, FiSettings } from 'react-icons/fi';
 import { motion } from 'framer-motion';
-
-import { FiBook, FiExternalLink, FiMessageSquare, FiArrowRight, FiClock, FiCheckCircle, FiHelpCircle, FiServer, FiPlusCircle } from 'react-icons/fi'
+import { ReactNode } from 'react';
+import { FiBook, FiExternalLink, FiMessageSquare, FiCheckCircle, FiServer, FiPlusCircle } from 'react-icons/fi'
 import { BsFillRocketFill } from 'react-icons/bs';
-import Link from 'next/link';
+
 
 interface Domain {
     domain: string;
@@ -31,6 +31,99 @@ export default function CustomDomainPage() {
     const [verifyLoading, setVerifyLoading] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'domains' | 'guide'>('domains');
     const [copiedDomain, setCopiedDomain] = useState<string | null>(null);
+
+
+interface StepProps {
+  number: number;
+  icon: ReactNode;
+  title: string;
+  description: string;
+  extraContent?: ReactNode;
+}
+    const Step: React.FC<StepProps> = ({ number, icon, title, description, extraContent }) => (
+  <div className="relative flex group">
+    <div className="flex-shrink-0 bg-white border-2 border-indigo-500 w-12 h-12 flex items-center justify-center rounded-full z-10">
+      <span className="text-indigo-600 font-bold text-lg">{number}</span>
+    </div>
+    <div className="ml-8 flex-1 pb-10">
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
+          {icon} {title}
+        </h3>
+        <p className="text-gray-600">{description}</p>
+        {extraContent && <div className="mt-4">{extraContent}</div>}
+      </div>
+    </div>
+  </div>
+);
+
+
+interface DnsCardProps {
+  domain: string;
+  cnameTarget: string;
+}
+
+const DnsCard: React.FC<DnsCardProps> = ({ domain, cnameTarget }) => (
+  <div className="bg-gray-900 rounded-lg overflow-hidden">
+    <div className="flex justify-between items-center bg-gray-800 px-4 py-2">
+      <span className="text-gray-300 text-sm font-mono">DNS Configuration</span>
+      <button
+        onClick={() => navigator.clipboard.writeText(`${domain} CNAME ${cnameTarget}`)}
+        className="text-gray-400 hover:text-white flex items-center"
+      >
+        <FiCopy className="mr-1" /> Copy
+      </button>
+    </div>
+    <div className="p-4 font-mono text-sm text-gray-100 space-y-2">
+      <p><span className="text-gray-400">Type:</span> <span className="text-green-300">CNAME</span></p>
+      <p><span className="text-gray-400">Name:</span> <span className="text-yellow-300">{domain}</span></p>
+      <p><span className="text-gray-400">Value:</span> <span className="text-blue-300">{cnameTarget}</span></p>
+    </div>
+  </div>
+);
+
+const DnsVisualFlow: React.FC = () => (
+  <div className="mt-16 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">How DNS + SSL Setup Works</h2>
+    <div className="flex flex-col items-center space-y-6">
+      {[
+        { icon: <FiGlobe />, title: "Your Subdomain", desc: "go.yourdomain.com" },
+        { icon: <FiSettings />, title: "CNAME Points to Branqly", desc: "cname.branqly.xyz" },
+        { icon: <FiCheckCircle />, title: "Branqly Verifies", desc: "We check DNS via lookup" },
+        { icon: <FiLink />, title: "SSL & Short Links Ready", desc: "Vercel issues SSL automatically" },
+      ].map((step, idx) => (
+        <div key={idx} className="flex items-center">
+          <div className="bg-indigo-100 text-indigo-600 rounded-full w-10 h-10 flex items-center justify-center">{step.icon}</div>
+          <div className="ml-4">
+            <h3 className="font-medium text-gray-900">{step.title}</h3>
+            <p className="text-sm text-gray-500">{step.desc}</p>
+          </div>
+          {idx < 3 && <FiChevronRight className="mx-4 text-gray-400" />}
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const HelpSection: React.FC = () => (
+  <div className="mt-12 bg-gray-50 p-6 rounded-xl">
+    <h2 className="text-xl font-semibold text-gray-900 mb-4">Need Help?</h2>
+    <div className="grid md:grid-cols-2 gap-6">
+      {[
+        { icon: <FiBook />, title: "Documentation", desc: "Read our detailed guide with screenshots.", link: "#", linkText: "View Docs" },
+        { icon: <FiMessageSquare />, title: "Contact Support", desc: "Need DNS help? Reach out to us.", link: "/contact-us", linkText: "Get Support" },
+      ].map((item, idx) => (
+        <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200">
+          <h3 className="font-medium text-gray-900 mb-2 flex items-center">{item.icon} {item.title}</h3>
+          <p className="text-gray-600 text-sm mb-3">{item.desc}</p>
+          <a href={item.link} className="text-indigo-600 text-sm font-medium flex items-center hover:text-indigo-500">
+            {item.linkText} <FiExternalLink className="ml-1" />
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
     useEffect(() => {
         async function fetchDomains() {
@@ -102,6 +195,31 @@ export default function CustomDomainPage() {
             setVerifyLoading(null);
         }
     }
+
+    async function deleteDomain(domainToDelete: string) {
+        if (!confirm(`Are you sure you want to delete ${domainToDelete}?`)) return;
+
+        try {
+            const res = await fetch('/api/user/custom-domain/delete', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ domainToDelete }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                // Remove from local state
+                setDomains(prev => prev.filter(d => d.domain !== domainToDelete));
+            } else {
+                setError(data.error || 'Failed to delete domain');
+            }
+        } catch (err) {
+            console.error(err);
+            setError('Error deleting domain');
+        }
+    }
+
 
     function copyToClipboard(text: string) {
         navigator.clipboard.writeText(text);
@@ -228,24 +346,34 @@ export default function CustomDomainPage() {
                                                                     </span>
                                                                 )}
                                                             </div>
+                                                            <div className="flex gap-2">
+                                                                {!domain.isVerified && (
+                                                                    <motion.button
+                                                                        whileHover={{ scale: 1.03 }}
+                                                                        whileTap={{ scale: 0.97 }}
+                                                                        onClick={() => verifyDomain(domain.domain)}
+                                                                        disabled={verifyLoading === domain.domain}
+                                                                        className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50 flex items-center"
+                                                                    >
+                                                                        {verifyLoading === domain.domain ? (
+                                                                            <>
+                                                                                <FiRefreshCw className="animate-spin mr-2" /> Verifying...
+                                                                            </>
+                                                                        ) : (
+                                                                            'Verify Now'
+                                                                        )}
+                                                                    </motion.button>
+                                                                )}
 
-                                                            {!domain.isVerified && (
                                                                 <motion.button
                                                                     whileHover={{ scale: 1.03 }}
                                                                     whileTap={{ scale: 0.97 }}
-                                                                    onClick={() => verifyDomain(domain.domain)}
-                                                                    disabled={verifyLoading === domain.domain}
-                                                                    className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50 flex items-center"
+                                                                    onClick={() => deleteDomain(domain.domain)}
+                                                                    className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center"
                                                                 >
-                                                                    {verifyLoading === domain.domain ? (
-                                                                        <>
-                                                                            <FiRefreshCw className="animate-spin mr-2" /> Verifying...
-                                                                        </>
-                                                                    ) : (
-                                                                        'Verify Now'
-                                                                    )}
+                                                                    Delete
                                                                 </motion.button>
-                                                            )}
+                                                            </div>
                                                         </div>
 
                                                         {!domain.isVerified && (
@@ -377,233 +505,59 @@ export default function CustomDomainPage() {
                                 {/* Hero Section */}
                                 <div className="text-center mb-12">
                                     <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                                        Configure Your Custom Domain
+                                        Connect Your Custom Domain to Branqly
                                     </h1>
                                     <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                                        Connect your domain to Branqly in just a few simple steps. Follow this guide to set up DNS records correctly.
+                                        Follow these 4 simple steps to connect and secure your domain with SSL, automatically handled by Branqly.
                                     </p>
                                 </div>
 
-                                {/* Visual Timeline */}
-                                <div className="relative">
-                                    {/* Vertical line */}
-                                    <div className="absolute left-6 top-0 h-full w-0.5 bg-gray-200" aria-hidden="true"></div>
+                                {/* Timeline Steps */}
+                                <div className="space-y-10">
 
-                                    <div className="space-y-10">
-                                        {/* Step 1 */}
-                                        <div className="relative flex group">
-                                            <div className="flex-shrink-0 bg-white rounded-full border-2 border-indigo-500 w-12 h-12 flex items-center justify-center z-10 transition-all duration-300 group-hover:bg-indigo-50 group-hover:scale-110">
-                                                <span className="text-indigo-600 font-bold text-lg">1</span>
-                                            </div>
-                                            <div className="ml-8 flex-1 pb-10">
-                                                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-all duration-300">
-                                                    <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                                                        <FiPlusCircle className="text-indigo-500 mr-2" />
-                                                        Add your domain
-                                                    </h3>
-                                                    <p className="text-gray-600">
-                                                        Enter your domain in the &#34;Your Domains&#34; section. We&#34;ll generate a unique CNAME record for you to configure.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    {/* Step 1 */}
+                                    <Step
+                                        number={1}
+                                        icon={<FiPlusCircle className="text-indigo-500 mr-2" />}
+                                        title="Add Your Subdomain in Branqly"
+                                        description="Enter your subdomain (like go.yourdomain.com) in the 'Custom Domains' section in Branqly Dashboard. This will generate a CNAME configuration for you."
+                                    />
 
-                                        {/* Step 2 */}
-                                        {/* Step 2 */}
-                                        <div className="relative flex group">
-                                            <div className="flex-shrink-0 bg-white rounded-full border-2 border-indigo-500 w-12 h-12 flex items-center justify-center z-10 transition-all duration-300 group-hover:bg-indigo-50 group-hover:scale-110">
-                                                <span className="text-indigo-600 font-bold text-lg">2</span>
-                                            </div>
-                                            <div className="ml-8 flex-1 pb-10">
-                                                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-all duration-300">
-                                                    <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                                                        <FiServer className="text-indigo-500 mr-2" />
-                                                        Configure DNS Records
-                                                    </h3>
-                                                    <p className="text-gray-600 mb-4">
-                                                        To use your custom domain with Branqly, log in to your domain registrar&#39;s dashboard (such as GoDaddy, Namecheap, or Cloudflare) and add the following DNS record:
-                                                    </p>
+                                    {/* Step 2 */}
+                                    <Step
+                                        number={2}
+                                        icon={<FiServer className="text-indigo-500 mr-2" />}
+                                        title="Set DNS Record at Your Domain Provider (e.g., Namecheap)"
+                                        description="Login to your domain provider (like GoDaddy, Cloudflare, or Namecheap) and set the following CNAME record in DNS:"
+                                        extraContent={
+                                            <DnsCard domain="go.yourdomain.com" cnameTarget="cname.branqly.xyz" />
+                                        }
+                                    />
 
-                                                    {/* Interactive DNS Record Card */}
-                                                    <div className="bg-gray-900 rounded-lg overflow-hidden">
-                                                        <div className="flex items-center justify-between bg-gray-800 px-4 py-2">
-                                                            <span className="text-gray-300 text-sm font-mono">DNS Configuration</span>
-                                                            <button
-                                                                onClick={() => copyToClipboard("yourdomain.com CNAME cname.branqly.com")}
-                                                                className="text-gray-400 hover:text-white transition-colors flex items-center"
-                                                            >
-                                                                <FiCopy className="mr-1" /> Copy
-                                                            </button>
-                                                        </div>
-                                                        <div className="p-4 font-mono text-sm text-gray-100">
-                                                            <div className="grid grid-cols-3 gap-4 mb-2">
-                                                                <span className="text-gray-400">Type:</span>
-                                                                <span className="col-span-2 text-green-300">CNAME</span>
-                                                            </div>
-                                                            <div className="grid grid-cols-3 gap-4 mb-2">
-                                                                <span className="text-gray-400">Name:</span>
-                                                                <span className="col-span-2 text-yellow-300">yourdomain.com</span>
-                                                            </div>
-                                                            <div className="grid grid-cols-3 gap-4">
-                                                                <span className="text-gray-400">Value:</span>
-                                                                <span className="col-span-2 text-blue-300">cname.branqly.com</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                    {/* Step 3 */}
+                                    <Step
+                                        number={3}
+                                        icon={<FiCheckCircle className="text-indigo-500 mr-2" />}
+                                        title="Verify Domain in Branqly"
+                                        description="After DNS setup, return to Branqly and click 'Verify' for the domain. We'll automatically check the CNAME record to confirm setup. DNS changes may take 5 min to 24 hrs to propagate."
+                                    />
 
-                                                    {/* Registrar Instructions */}
-                                                    <div className="mt-4 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r">
-                                                        <h4 className="font-medium text-blue-800 mb-2 flex items-center">
-                                                            <FiHelpCircle className="mr-2" />
-                                                            Where to add this in popular registrars:
-                                                        </h4>
-                                                        <ul className="text-sm text-blue-700 space-y-1">
-                                                            <li>• GoDaddy: DNS Management → Records → Add CNAME Record</li>
-                                                            <li>• Cloudflare: DNS → Add Record → Type: CNAME</li>
-                                                            <li>• Namecheap: Advanced DNS → Host Records → Add CNAME Record</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        {/* Step 3 */}
-                                        <div className="relative flex group">
-                                            <div className="flex-shrink-0 bg-white rounded-full border-2 border-indigo-500 w-12 h-12 flex items-center justify-center z-10 transition-all duration-300 group-hover:bg-indigo-50 group-hover:scale-110">
-                                                <span className="text-indigo-600 font-bold text-lg">3</span>
-                                            </div>
-                                            <div className="ml-8 flex-1 pb-10">
-                                                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-all duration-300">
-                                                    <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                                                        <FiCheckCircle className="text-indigo-500 mr-2" />
-                                                        Verify your domain
-                                                    </h3>
-                                                    <p className="text-gray-600">
-                                                        After adding the DNS record (propagation may take up to 48 hours), click &#34;Verify&#34; in your Branqly domains list.
-                                                    </p>
-                                                    <div className="mt-4 flex items-center text-sm text-gray-500">
-                                                        <FiClock className="mr-2" />
-                                                        <span>DNS changes typically propagate within 1-2 hours</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Step 4 */}
-                                        <div className="relative flex group">
-                                            <div className="flex-shrink-0 bg-white rounded-full border-2 border-indigo-500 w-12 h-12 flex items-center justify-center z-10 transition-all duration-300 group-hover:bg-indigo-50 group-hover:scale-110">
-                                                <span className="text-indigo-600 font-bold text-lg">4</span>
-                                            </div>
-                                            <div className="ml-8 flex-1">
-                                                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-indigo-100 transition-all duration-300">
-                                                    <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">
-                                                        <BsFillRocketFill className="text-indigo-500 mr-2" />
-                                                        Start using your domain
-                                                    </h3>
-                                                    <p className="text-gray-600 mb-3">
-                                                        Once verified, your custom domain is ready to use for all Branqly short links!
-                                                    </p>
-                                                    <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                        Create your first link
-                                                        <FiArrowRight className="ml-2" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {/* Step 4 */}
+                                    <Step
+                                        number={4}
+                                        icon={<BsFillRocketFill className="text-indigo-500 mr-2" />}
+                                        title="Start Using Your Custom Domain"
+                                        description="Once verified, Branqly will automatically provide SSL via our server (Vercel). No extra setup or SSL purchase needed — your short links are now secure!"
+                                    />
                                 </div>
 
-                                {/* Visual Flow Representation */}
-                                <div className="mt-16 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                                    <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">
-                                        How DNS Setup Works
-                                    </h2>
-                                    <div className="flex flex-col items-center">
-                                        <div className="w-full max-w-md">
-                                            <div className="flex flex-col items-center space-y-6">
-                                                {/* Step 1 */}
-                                                <div className="flex items-center w-full">
-                                                    <div className="flex-shrink-0 bg-indigo-100 text-indigo-600 rounded-full w-10 h-10 flex items-center justify-center">
-                                                        <FiGlobe className="w-5 h-5" />
-                                                    </div>
-                                                    <div className="ml-4">
-                                                        <h3 className="font-medium text-gray-900">Your Domain</h3>
-                                                        <p className="text-sm text-gray-500">example.com</p>
-                                                    </div>
-                                                    <FiChevronRight className="mx-4 text-gray-400 flex-shrink-0" />
-                                                </div>
-
-                                                {/* Step 2 */}
-                                                <div className="flex items-center w-full">
-                                                    <div className="flex-shrink-0 bg-indigo-100 text-indigo-600 rounded-full w-10 h-10 flex items-center justify-center">
-                                                        <FiSettings className="w-5 h-5" />
-                                                    </div>
-                                                    <div className="ml-4">
-                                                        <h3 className="font-medium text-gray-900">DNS Configuration</h3>
-                                                        <p className="text-sm text-gray-500">CNAME Record</p>
-                                                    </div>
-                                                    <FiChevronRight className="mx-4 text-gray-400 flex-shrink-0" />
-                                                </div>
-
-                                                {/* Step 3 */}
-                                                <div className="flex items-center w-full">
-                                                    <div className="flex-shrink-0 bg-indigo-100 text-indigo-600 rounded-full w-10 h-10 flex items-center justify-center">
-                                                        <FiCheckCircle className="w-5 h-5" />
-                                                    </div>
-                                                    <div className="ml-4">
-                                                        <h3 className="font-medium text-gray-900">Verification</h3>
-                                                        <p className="text-sm text-gray-500">Branqly checks DNS</p>
-                                                    </div>
-                                                    <FiChevronRight className="mx-4 text-gray-400 flex-shrink-0" />
-                                                </div>
-
-                                                {/* Step 4 */}
-                                                <div className="flex items-center w-full">
-                                                    <div className="flex-shrink-0 bg-indigo-100 text-indigo-600 rounded-full w-10 h-10 flex items-center justify-center">
-                                                        <FiLink className="w-5 h-5" />
-                                                    </div>
-                                                    <div className="ml-4">
-                                                        <h3 className="font-medium text-gray-900">Ready to Use</h3>
-                                                        <p className="text-sm text-gray-500">Short links active</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {/* How DNS Works Visual Flow */}
+                                <DnsVisualFlow />
 
                                 {/* Help Section */}
-                                <div className="mt-12 bg-gray-50 rounded-xl p-6">
-                                    <h2 className="text-xl font-semibold text-gray-900 mb-4">Need help?</h2>
-                                    <div className="grid md:grid-cols-2 gap-6">
-                                        <div className="bg-white p-4 rounded-lg border border-gray-200">
-                                            <h3 className="font-medium text-gray-900 mb-2 flex items-center">
-                                                <FiBook className="text-indigo-500 mr-2" />
-                                                Documentation
-                                            </h3>
-                                            <p className="text-gray-600 text-sm mb-3">
-                                                Read our detailed domain setup guide with screenshots for all major registrars.
-                                            </p>
-                                            <Link href="#" className="text-indigo-600 text-sm font-medium hover:text-indigo-500 inline-flex items-center">
-                                                View docs <FiExternalLink className="ml-1" />
-                                            </Link>
-                                        </div>
-                                        <div className="bg-white p-4 rounded-lg border border-gray-200">
-                                            <h3 className="font-medium text-gray-900 mb-2 flex items-center">
-                                                <FiMessageSquare className="text-indigo-500 mr-2" />
-                                                Contact Support
-                                            </h3>
-                                            <p className="text-gray-600 text-sm mb-3">
-                                                Our team is ready to help you with any DNS configuration issues.
-                                            </p>
-                                            <Link href="/contact-us" className="text-indigo-600 text-sm font-medium hover:text-indigo-500 inline-flex items-center">
-                                                Get support <FiExternalLink className="ml-1" />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
+                                <HelpSection />
                             </div>
+
                         )}
                     </div>
                 </motion.div>
