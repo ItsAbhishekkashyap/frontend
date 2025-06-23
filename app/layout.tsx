@@ -25,12 +25,12 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: '/favicon.png', // Path from /public
+    icon: '/favicon.png', 
     shortcut: '/shortcut-icon.png',
-    apple: '/apple-icon.png', // Apple touch icon
+    apple: '/apple-icon.png', 
     other: {
       rel: 'icon',
-      url: '/favicon.ico', // Fallback for old browsers
+      url: '/favicon.ico', 
     },
   },
 };

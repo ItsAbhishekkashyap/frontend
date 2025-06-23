@@ -66,7 +66,7 @@ export default function Price() {
                                     
                                     <li className="flex items-start">
                                         <FiCheck className="mt-1 mr-3 text-green-500 flex-shrink-0" />
-                                        <span className="text-gray-700">Community support</span>
+                                        <span className="text-gray-700">branqly support</span>
                                     </li>
                                 </ul>
 
@@ -121,6 +121,10 @@ export default function Price() {
                                 <ul className="mt-8 space-y-3">
                                     <li className="flex items-start">
                                         <FiCheck className="mt-1 mr-3 text-green-500 flex-shrink-0" />
+                                        <span className="text-gray-700">Click Counts</span>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <FiCheck className="mt-1 mr-3 text-green-500 flex-shrink-0" />
                                         <span className="text-gray-700">Advanced analytics</span>
                                     </li>
                                     <li className="flex items-start">
@@ -129,15 +133,19 @@ export default function Price() {
                                     </li>
                                     <li className="flex items-start">
                                         <FiCheck className="mt-1 mr-3 text-green-500 flex-shrink-0" />
+                                        <span className="text-gray-700">Custom domain support</span>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <FiCheck className="mt-1 mr-3 text-green-500 flex-shrink-0" />
                                         <span className="text-gray-700">Priority support</span>
                                     </li>
                                     <li className="flex items-start">
                                         <FiCheck className="mt-1 mr-3 text-green-500 flex-shrink-0" />
-                                        <span className="text-gray-700">Team members</span>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <FiCheck className="mt-1 mr-3 text-green-500 flex-shrink-0" />
                                         <span className="text-gray-700">QR code</span>
+                                    </li>
+                                     <li className="flex items-start">
+                                        <FiCheck className="mt-1 mr-3 text-green-500 flex-shrink-0" />
+                                        <span className="text-gray-700">Export all data in CSV</span>
                                     </li>
                                 </ul>
                             </div>
