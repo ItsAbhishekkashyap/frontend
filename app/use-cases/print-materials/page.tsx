@@ -97,7 +97,7 @@ const PrintMaterialsUseCase = () => {
                   <div>
                     <h3 className="text-xl font-semibold text-gray-800 mb-3">Branded Links</h3>
                     <p className="text-gray-600">
-                      Customizable links (e.g., <span className="font-mono bg-gray-100 px-2 py-1 rounded-md text-sm border border-gray-200">ashrtl.vercel.app/summer</span>) that match your campaign theme.
+                      Customizable links (e.g., <span className="font-mono bg-gray-100 px-2 py-1 rounded-md text-sm border border-gray-200">branqly.xyz/summer</span>) that match your campaign theme.
                     </p>
                   </div>
                 </div>
@@ -126,7 +126,7 @@ const PrintMaterialsUseCase = () => {
                       Include both QR code and short URL for maximum accessibility.
                     </p>
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                      <span className="font-mono text-orange-600">ashrtl.vercel.app/summer-fest</span>
+                      <span className="font-mono text-orange-600">branqly.xyz/summer-fest</span>
                     </div>
                   </div>
                 </div>

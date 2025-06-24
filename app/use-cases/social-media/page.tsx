@@ -104,7 +104,7 @@ const SocialMediaUseCase = () => {
                 <div className="md:w-1/3 flex justify-center">
                   <div className="bg-white p-4 md:p-5 rounded-2xl shadow-lg border border-blue-200 w-full max-w-xs">
                     <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl p-3 md:p-4 text-center">
-                      <p className="font-mono text-xs md:text-sm truncate">ashrtl.vercel.app/summer-sale</p>
+                      <p className="font-mono text-xs md:text-sm truncate">branqly.xyz/summer-sale</p>
                     </div>
                     <div className="mt-2 md:mt-3 text-center">
                       <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Twitter Post</span>

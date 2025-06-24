@@ -76,7 +76,7 @@ export default function FeaturesPage() {
         </svg>
       ),
       title: "Secure & Private",
-      description: "End-to-end encrypted links with password protection and expiration dates for sensitive content."
+      description: "End-to-end encrypted links with password protection ."
     },
     {
       icon: (
@@ -86,7 +86,7 @@ export default function FeaturesPage() {
         </svg>
       ),
       title: "Customization",
-      description: "Branded custom aliases, QR codes, and UTM parameters for complete link control."
+      description: "Branded custom Domain & aliases, QR codes, and UTM parameters for complete link control."
     },
     {
       icon: (

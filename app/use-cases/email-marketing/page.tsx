@@ -164,7 +164,7 @@ const EmailMarketingUseCase = () => {
 
                                         <div className="bg-gray-100 rounded-lg p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-2 shadow-inner">
                                             <span className="font-mono text-blue-600 text-sm sm:text-base truncate w-full sm:w-auto text-center sm:text-left">
-                                                ashrtl.vercel.app/summer-sale
+                                                branqly.xyz/summer-sale
                                             </span>
                                             <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-all shadow flex items-center gap-1">
                                                 <FiCopy className="w-3 h-3 sm:w-4 sm:h-4" />
