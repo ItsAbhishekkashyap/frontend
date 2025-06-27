@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     await connectToDB();
     const { email, password } = await req.json();
 
-    const user = await User.findOne({ email }).select('+password'); // Important fix
+    const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });

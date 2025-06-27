@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 import { connectToDB } from '@/lib/mongodb';
-import {Payment} from '@/models/Payment'; // Your payment schema
-import {User} from '@/models/User'; // Your user schema
+import {Payment} from '@/models/Payment'; 
+import {User} from '@/models/User'; 
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID!,
